@@ -1,7 +1,7 @@
 #include "minirt.h"
 
-int main(void)
+int	main(void)
 {
-	printf("hello world");
-	return 0;
+	printf("hello world\n");
+	return (0);
 }
