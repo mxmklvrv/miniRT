@@ -20,14 +20,20 @@ HDR = $(addprefix $(HDR_DIR)/, \
 	minirt.h \
 	structs.h \
 	macros.h \
-	)
+	camera.h \
+	scene.h \
+	sphere.h \
+	vector.h)
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
 	main.c \
 	visuals.c \
 	hooks.c \
-	)
+	scene.c \
+	sphere.c \
+	camera.c \
+	vector.c)
 
 OBJ_DIR = obj
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

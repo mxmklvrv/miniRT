@@ -1,6 +1,7 @@
 #ifndef SPHERE_H
 # define SPHERE_H
 
+#include "vector.h"
 typedef struct s_sphere
 {
 	t_vec3	*center;

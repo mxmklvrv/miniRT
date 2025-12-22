@@ -1,6 +1,8 @@
 #ifndef SCENE_H
 # define SCENE_H
 
+#include "camera.h"
+#include "sphere.h"
 typedef struct s_scene
 {
 	t_camera	*cam;
