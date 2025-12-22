@@ -3,33 +3,50 @@ NAME = miniRT
 CC = cc
 
 CFLAGS = -Wall -Wextra -Werror
+HEADERS = $(addprefix -I, $(LIBFT_DIR) $(MLX_DIR) $(HDR_DIR) /usr/include) -O3
+LINKDIR = $(addprefix -L, $(LIBFT_DIR) $(MLX_DIR) /usr/lib)
+LINKFLAGS = $(addprefix -l, ft mlx_Linux) -lXext -lX11 -lm -lz
 
-LIBFT_DIR = ./libft
+# ------------  LIBFT  ------------------------------------------------------- #
+LIBFT_DIR = src/libs/libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
+# ------------  MLX  --------------------------------------------------------- #
+MLX_DIR = src/libs/minilibx-linux
+MLX = $(MLX_DIR)/libmlx_Linux.a
 
-OBJ_DIR = obj/
-SRC_DIR = src/
+HDR_DIR = inc
+HDR = $(addprefix $(HDR_DIR)/, \
+	minirt.h \
+	structs.h \
+	macros.h \
+	)
 
-HEADERS = -I ./inc  -I $(LIBFT_DIR)
+SRC_DIR = src
+SRC = $(addprefix $(SRC_DIR)/, \
+	main.c \
+	visuals.c \
+	hooks.c \
+	)
 
-SRC = main.c 
+OBJ_DIR = obj
+OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-
-OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
-.SECONDARY: $(OBJ)
-
+# ------------  RULES  ------------------------------------------------------- #
 all: $(NAME)
+
+$(NAME): $(OBJ) $(LIBFT) $(MLX)
+	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LINKDIR) $(LINKFLAGS)
 
 $(LIBFT):
 	make -C $(LIBFT_DIR)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@ $(HEADERS)
+$(MLX):
+	make -C $(MLX_DIR)
 
-$(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDR)
+	mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
 
 clean:
 	rm -rf $(OBJ_DIR)
@@ -37,7 +54,10 @@ clean:
 
 fclean: clean
 	rm -f $(NAME) $(LIBFT)
+	make clean -C $(MLX_DIR)
 
 re: fclean all
 
+# ------------  EXTRA  ------------------------------------------------------- #
+.SECONDARY: $(OBJ_DIR) $(OBJ)
 .PHONY: all re clean fclean
