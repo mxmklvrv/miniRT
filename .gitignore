@@ -54,6 +54,8 @@ dkms.conf
 # debug information files
 *.dwo
 
+.gitignore
+
 # miniRT specific
 miniRT
 
@@ -62,4 +64,4 @@ obj/
 build/
 
 # libft build output
-libft/libft.a
+minilibx-linux
