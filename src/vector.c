@@ -64,6 +64,9 @@ void	vec_norm(t_vec3 *vec)
 
 /**
  * to measure how aligned two directions are.
+ * Скалярное произведение используется в miniRT для определения,
+	насколько поверхность
+ * направлена к источнику света, и для расчёта освещения.
  */
 float	vec_dot(t_vec3 *vec1, t_vec3 *vec2)
 {
