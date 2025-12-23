@@ -23,7 +23,8 @@ HDR = $(addprefix $(HDR_DIR)/, \
 	camera.h \
 	scene.h \
 	sphere.h \
-	vector.h)
+	vector.h \
+	vplane.h)
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
@@ -33,7 +34,8 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	scene.c \
 	sphere.c \
 	camera.c \
-	vector.c)
+	vector.c \
+	ray_tr.c)
 
 OBJ_DIR = obj
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

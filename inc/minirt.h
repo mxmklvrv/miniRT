@@ -10,11 +10,15 @@
 # include "sphere.h"
 # include "structs.h"
 # include "vector.h"
+# include "vplane.h"
 # include <fcntl.h>
 # include <math.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <sys/stat.h>
+# ifndef M_PI
+#  define M_PI 3.14159265358979323846F
+# endif
 
 int		handle_error(void);
 bool	check_args(int argc, char **argv, char **format);
