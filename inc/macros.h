@@ -9,6 +9,7 @@
 # define HEIGHT 1080
 
 # define ERR_MSG "Error"
+# define ERR_AC "Usage: ./miniRT file.rt"
 
 # define ESCAPE 0xFF1B
 # define ON_DESTROY 17
