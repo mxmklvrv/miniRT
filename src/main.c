@@ -63,7 +63,7 @@ int	main(void)
 	t_scene		*scene;
 
 	mlx = mlx_init();
-	sphere_center = vec_new(3, 2, -32);
+	sphere_center = vec_new(3, 2, 32);
 	sphere = sphere_new(sphere_center, 12.6 / 2);
 	cam_origin = vec_new(0, 0, 0);
 	cam_dir = vec_new(0, 0, -1);
