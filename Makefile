@@ -24,7 +24,7 @@ HDR = $(addprefix $(HDR_DIR)/, \
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
-	main.c \
+	mainm.c \
 	visuals.c \
 	hooks.c \
 	)

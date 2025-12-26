@@ -1,51 +1,55 @@
 #include "minirt.h"
 
-
-// will expand for sure later, depending on needs.
-void	set_to_null(t_rt *rt)
-{
-	rt->mlx = NULL;
-	rt->window = NULL;
-}
-
-// void	pars_input(int ac, char **av, t_rt *rt)
+// int	main(int argc, char **argv)
 // {
+// 	char	*format;
+
+// 	if (!check_args(argc, argv, &format))
+// 		return (handle_error());
+// 	if (!visuals_loop(&format))
+// 		return (handle_error());
+// 	return (EXIT_SUCCESS);
 // }
 
-void	error_exit(char *msg)
-{
-	ft_putendl_fd(ERR_MSG, 2);
-	ft_putendl_fd(msg, 2);
-	exit(EXIT_FAILURE);
-}
-bool	rt_file_extension(char *filename)
-{
-	size_t	len;
+// bool	check_args(int argc, char **argv, char **format)
+// {
+// 	(void)argc;
+// 	(void)argv;
+// 	*format = ft_strdup("Hello world!");
+// 	if (*format == NULL)
+// 		return (false);
+// 	return (true);
+// }
 
-	if (!filename)
-		return (false);
-	len = ft_strlen(filename);
-	if (len < 3)
-		return (false);
-	if (ft_strncmp(filename + len - 3, ".rt", 3) != 0)
-		return (false);
-	return (true);
-}
+// int	handle_error(void)
+// {
+// 	ft_putendl_fd(ERR_MSG, STDERR_FILENO);
+// 	return (EXIT_FAILURE);
+// }
 
-void	confirm_input(int ac, char **av)
-{
-	if (ac != 2)
-		error_exit(ERR_AC);
-	if (!rt_file_extension(av[1]))
-		error_exit(ERR_EXT);
-	printf("cool");
-}
+// bool	visuals_loop(char **format)
+// {
+// 	t_vars	vars;
+// 	t_data	data;
 
-int	main(int ac, char **av)
-{
-	// t_rt rt;
+// 	if (!set_visuals(&vars, &data))
+// 	{
+// 		free_format(format);
+// 		return (false);
+// 	}
+// 	set_hooks(&vars);
+// 	mlx_put_image_to_window(vars.mlx, vars.win, data.img, 0, 0);
+// 	mlx_loop(vars.mlx);
+// 	free_visuals(&vars, &data);
+// 	free_format(format);
+// 	return (true);
+// }
 
-	// set_to_null(&rt);
-	confirm_input(ac, av);
-	// pars_input(ac, av, &rt);
-}
+// void	free_format(char **format)
+// {
+// 	if (*format != NULL)
+// 		free(*format);
+// }
+
+
+
