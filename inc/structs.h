@@ -23,19 +23,37 @@
 // 	int		color;
 // }			t_point;
 
+typedef enum e_otype
+{
+    SP,
+    CY,
+    PL
+
+}t_otype;
+
+
+
+// linked list with objects
+typedef struct s_olist
+{
+	void			*obj;
+    t_otype         *obj_type;
+    int             obj_id;
+	struct s_olist	*next;
+
+}					t_olist;
+
+
 // main struct
-typedef struct s_mrt
+typedef struct s_scene
 {
 	void			*mlx;
 	void			*window;
+    t_olist         *obj_list;
 
-}					t_mrt;
+}					t_scene;
 
-// typedef struct s_list
-// {
-// 	void			*content;
-// 	struct s_list	*next;
 
-// }					t_list;
+
 
 #endif
