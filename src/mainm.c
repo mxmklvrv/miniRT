@@ -2,51 +2,44 @@
 
 // below maxim
 
-void	error_exit(char *msg)
+void	error(char *msg)
 {
 	ft_putendl_fd(ERR_MSG, 2);
 	ft_putendl_fd(msg, 2);
-	exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE); // will remove 
 }
 
-// first time opne to count numb of strs in file
-// so we can allocate necessary memmory to store strs
-int	count_file_strs(char *file)
+int dispatch(char *line, t_scene *scene)
 {
-	int		fd;
-	int		res;
-	char	*str;
+    while(*line == ' ')
+        line++;
+    if(*line == '\0' || *line == '\n')
+        return (0);
+    // check for A C L PL CY SP etc
+}
 
-	res = 0;
-	fd = open(file, O_RDONLY);
+int 	pars_input_file(char *file, t_scene *scene)
+{
+    int     fd;
+    int     check;
+    char    *line;
+
+    check = 1;
+    fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (-1);
-	str = get_next_line(fd);
-	while (str)
-	{
-		if (str[0] != '\0' && str[0] != '\n' && str[0] != '#')
-			res++;
-		free(str);
-		str = get_next_line(fd);
-	}
-	close(fd);
-	return (res);
-}
+		return (error("cannot open file for reading"), 1);
+    line = get_next_line(fd);
+    while(line)
+    {
+        check = dispatch(line, scene);
+        if(check != 0)
+        {
+            close(fd);
+            free(line);
+            return(1) // fail
+        }       
+    }
 
-void	pars_input_file(char *file, t_mrt *rt)
-{
-	int		str_num;
-	//char	**strings;
-
-	str_num = count_file_strs(file);
-	if (str_num < 0)
-	{
-		free(rt); // for now
-		error_exit("Cannot open file");
-	}
-	printf("%d ", str_num);
-	// open agaim, malloc mem * str_num
-	// sabe them
 }
 
 
@@ -67,18 +60,28 @@ bool	rt_file_extension(char *file)
 void	confirm_input(int ac, char **av)
 {
 	if (ac != 2)
-		error_exit(ERR_AC);
+		error(ERR_AC);
 	if (!rt_file_extension(av[1]))
-		error_exit(ERR_EXT);
+		error(ERR_EXT);
+}
+
+void    init_scene(t_scene *scene)
+{
+    scene->mlx = NULL;
+    scene->window = NULL;
+    scene->obj_list = NULL;
 }
 
 int	main(int ac, char **av)
 {
-	t_mrt	*rt;
+	t_scene scene;
 
-	confirm_input(ac, av);
-	rt = ft_calloc(1, sizeof(t_mrt));
-	if (!rt)
-		error_exit(ERR_ALLOC);
-	pars_input_file(av[1], rt);
+	
+    init_scene(&scene);
+    confirm_input(ac, av);
+	if (pars_input_file(av[1], &scene) == 1)
+    {
+        // free scene and everything 
+        return(EXIT_FAILURE);
+    }
 }
