@@ -36,12 +36,73 @@ int count_elements(char line)
     }
     return (res);
 }
-
-
-int pars_ambient(char *line, t_scene scene)
+// checks the validity of int
+int check_int(char *line, int i)
 {
+    while(line[i])
+    {
+        if(ft_isdigit(line[i]) == 0)
+            return ("An int num is not correct", 1);
+        i++;
+    }
+    return (0);
+}
+
+
+// checks the validity of the float nubmer
+// '-' accepted
+// ony digits before and after '.'
+int check_float(char *line)
+{
+    int i;
+
+    i = 0;
+    if(line[i] == '-')
+        i++;
+    if(ft_strchr(line, '.') == NULL)
+        return (check_int(line, i));
+    while(line[i] && line[i] != '.')
+    {
+        if(ft_isdigit(line[i]) == 0)
+            return ("Float num is not correct", 1);
+    }
+    i++;
+    while(line[i] && ft_isspace(line[i]) != 1)
+    {
+        if(ft_isdigit(line[i]) == 0)
+            return ("Float number is not correct", 1);
+            i++;
+    }
+    return (0);
+}
+
+int ft_isspace(char ch)
+{
+    if((ch >= 8 && ch <= 13) || ch == 32)
+        return (1);
+    return (0);
+}
+
+
+// [0.0 - 1.0] [0-255]  <0,2 255,255,255>
+// floats 
+
+int pars_ambient(char *line, t_scene *scene)
+{
+    char **res;
+
+    res = NULL;
     if(count_elements(line) != 2)
         return (1);
+    res = ft_split(' '); // 
+    if(!res)
+        return(ERR_ALLOC, 1);
+
+    // rgb colors confirmation 
+    if (check_float(res[0]) == 1|| check_colors(res[1]) == 1)
+        return(free(res), 1); 
+    
+    
 
 }
 
@@ -50,25 +111,21 @@ int pars_ambient(char *line, t_scene scene)
 // if ch == L -> pars_lignt
 // if ch == A -> pars_ambient
 // need to know that we have 1 of each, else, err
-int pars_cam_light(char *line, char ch, t_scene scene)
+int pars_cam_light(char *line, char ch, t_scene *scene)
 {
-    int cam; // need to safe qty 
-    int amb; // either make it static (not sure if ok)
-    int light; // or add to struct scene (makes sense atm)
-
     if(ch == 'C')
     {
-        cam++;
+        scene->qt_cam++;
         return(pars_cam(++line, scene));
     }
     else if(ch == 'A')
     {
-        amb++;
+        scene->qt_ambiant++;
         return(pars_ambient(++line, scene));
     }
     else if(ch == 'L')
     {
-        light++;
+        scene->qt_light++;
         return(pars_light(++line, scene));
     }
 }
@@ -86,9 +143,9 @@ int dispatch(char *line, t_scene *scene)
     else if(ft_strncmp(line, "sp", 2) == 0)
         return (pars_sphere());
     else if (ft_strncmp(line, "cy", 2) == 0)
-        return (pars_cylinder);
+        return (pars_cylinder());
     else if (ft_strncmp(line, "pl", 2) == 0)
-        return (pars_plane);
+        return (pars_plane());
     else
         return(error("Unknown char detected in .rt"), 1);
 }
@@ -114,6 +171,8 @@ int 	pars_input_file(char *file, t_scene *scene)
             return(1) // fail
         }       
     }
+    // another func to check amb/cam/light
+    // should have qty == 1 of each.
 
 }
 
