@@ -2,6 +2,19 @@
 
 // below maxim
 
+void	free_array(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i])
+		free(arr[i++]);
+	free(arr);
+}
+
+
 void	error(char *msg)
 {
 	ft_putendl_fd(ERR_MSG, 2);
@@ -52,7 +65,7 @@ int check_int(char *line, int i)
 // checks the validity of the float nubmer
 // '-' accepted
 // ony digits before and after '.'
-int check_float(char *line)
+int check_float_format(char *line)
 {
     int i;
 
@@ -64,13 +77,13 @@ int check_float(char *line)
     while(line[i] && line[i] != '.')
     {
         if(ft_isdigit(line[i]) == 0)
-            return ("Float num is not correct", 1);
+            return (error("Float num is not correct"), 1);
     }
     i++;
     while(line[i] && ft_isspace(line[i]) != 1)
     {
         if(ft_isdigit(line[i]) == 0)
-            return ("Float number is not correct", 1);
+            return (error("Float number is not correct"), 1);
             i++;
     }
     return (0);
@@ -82,7 +95,45 @@ int ft_isspace(char ch)
         return (1);
     return (0);
 }
+//255,255,255 = 11 || 0,0,0 = 5
+// checks rgb format
+// creates 2d arr with 3 inputs
+int check_rgb_format(char *line)
+{
+    char **rgb;
+    int i;
 
+    rgb = ft_split(line, ',');
+    if(!rgb)
+        return(error("Wrong format of RGB"), 1);
+    i = 0;
+    while(i < 3)
+    {
+        if(!rgb[i])
+            return(free_array(rgb),error("Wrong format of RGB"), 1);
+        if(check_int(rgb[i], 0))
+            return(free_array(rgb),error("Wrong format of RGB"), 1);
+        if (check_rgb_range(rgb[i]))
+            return(free_array(rgb),error("Out of range for RGB"), 1);
+        i++;
+    }
+    if(rgb[3])
+        return(free_array(rgb),error("Wrong format of RGB"), 1);
+    free_array(rgb);
+}
+
+// checks if num is in 0-255 rage
+int check_rgb_range(char *line)
+{
+    int val;
+
+    if(!line)
+        return (1);
+    val = ft_atoi(line);
+    if(val < 0 || val > 255)
+        return(error("Out of range for RGB"), 1);
+    return (0);
+}
 
 // [0.0 - 1.0] [0-255]  <0,2 255,255,255>
 // floats 
@@ -97,11 +148,11 @@ int pars_ambient(char *line, t_scene *scene)
     res = ft_split(' '); // 
     if(!res)
         return(ERR_ALLOC, 1);
-
-    // rgb colors confirmation 
-    if (check_float(res[0]) == 1|| check_colors(res[1]) == 1)
+    // rgb  and floats format confirmation 
+    if (check_float_format(res[0]) == 1|| check_rgb(res[1]) == 1)
         return(free(res), 1); 
-    
+    //floats range confiramtion
+    if (check_float_range() == 1)
     
 
 }
