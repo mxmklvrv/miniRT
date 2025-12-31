@@ -1,5 +1,6 @@
 #include "minirt.h"
 
+
 // below maxim
 
 void	free_array(char **arr)
@@ -70,7 +71,7 @@ int check_float_format(char *line)
     int i;
 
     i = 0;
-    if(line[i] == '-')
+    if(line[i] == '-' || line[i] == '+')
         i++;
     if(ft_strchr(line, '.') == NULL)
         return (check_int(line, i));
@@ -122,6 +123,65 @@ int check_rgb_format(char *line)
     free_array(rgb);
 }
 
+// ascii to float converter
+// detects sign
+// if overflow happens, still writes garbage value to res
+// returns 0 on success, 1 otherwise
+int   ft_atof(const char *line, float *res)
+{
+    int sign;
+    int i;
+    float temp;
+    int overflow;
+
+    i = 0;
+    sign = 1;
+    temp = 0.0f;
+    overflow = 0;
+    if(line[i] == '-' || line[i] == '+')
+    {
+        if (line[i] == '-')
+            sign *= -1;
+        i++;
+    }
+    get_whole_part(line, &i, &temp, &overflow);
+    get_fraction_part(line, &i, &temp, &overflow);
+    *res = temp * sign;
+    return (overflow);
+}
+// part of ft_atof function.
+// gets the whole part of float num (before '.')
+// modifies passed params
+void get_whole_part(const char *line, int *i, float *temp, int *overflow)
+{
+    while(ft_isdigit(line[*i]))
+    {
+        *temp = *temp * 10 + (line[*i] - '0');
+        if(*temp > __FLT_MAX__)
+            *overflow = 1;
+        (*i)++;
+    }
+}
+// part of ft_atof function.
+// gets the fractional part of float num (after '.')
+// modifies passed params
+void get_fraction_part(const char *line, int *i, float *temp, int *overflow)
+{
+    float fraction;
+
+    fraction = 0.1f;
+    if(line[*i] == '.')
+        (*i)++;
+    while(ft_isdigit(line[*i]))
+    {
+        *temp += (line[*i] - '0') * fraction;
+        fraction *= 0.1f;
+        if(*temp > __FLT_MAX__)
+            *overflow = 1;
+        (*i)++;
+    }
+}
+
 // checks if num is in 0-255 rage
 int check_rgb_range(char *line)
 {
@@ -148,15 +208,53 @@ int pars_ambient(char *line, t_scene *scene)
     res = ft_split(' '); // 
     if(!res)
         return(ERR_ALLOC, 1);
-    // rgb  and floats format confirmation 
+    // floats format confirmation && rgb full validity
     if (check_float_format(res[0]) == 1|| check_rgb(res[1]) == 1)
-        return(free(res), 1); 
+        return(free_array(res), 1); 
+    // converting str to float num
+    if (ft_atof(res[0], scene->ambient.amb))
+        return(free_array(res), 1);
     //floats range confiramtion
-    if (check_float_range() == 1)
-    
+    if (check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
+        return (free_array(res), 1);
+    scene->ambient.colour = ft_atorgb(res[1]);
+}
+// converting 
+int ft_atorgb(const char *line)
+{
+    int i;
+    int r;
+    int g;
+    int b;
 
+    i = 0;
+    r = ft_atoi(line);
+    while(line[i] != ',')
+        i++;
+    g = ft_atoi(line + (i + 1));
+    while(line[i] != ',')
+        i++;
+    b = ft_atoi(line + (i + 1));
+    return(ft_rgbtoint(255,r,g,b));
+}
+// with bitshifting storing rgb into singl int
+int ft_rgbtoint(int t, int r, int g, int b)
+{
+    return (t << 24 | r << 16 |  g << 8 | b);
 }
 
+
+
+// Function which confirms the range of the float num
+// min_value == min possible starting value 
+// max-value == max possible ending value 
+// returns 0 on success, 1 otherwise
+int check_float_range(float value, float min_value, float max_value)
+{
+    if(min_value <= value && value <= max_value)
+        return (0);
+    return (1);
+}
 
 // if ch == C -> pars_cam
 // if ch == L -> pars_lignt
