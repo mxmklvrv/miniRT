@@ -64,7 +64,7 @@ int check_int(char *line, int i)
 
 
 // checks the validity of the float nubmer
-// '-' accepted
+// '-' accepted, also '+';
 // ony digits before and after '.'
 int check_float_format(char *line)
 {
@@ -121,6 +121,7 @@ int check_rgb_format(char *line)
     if(rgb[3])
         return(free_array(rgb),error("Wrong format of RGB"), 1);
     free_array(rgb);
+    return (0);
 }
 
 // ascii to float converter
@@ -199,24 +200,98 @@ int pars_light(char *line, t_scene *scene)
 {
     char **res;
 
-    res = NULL;
+
+    res = NULL; // might remove this
     if(count_elements(line) != 3) // mb 2 for mand. part, for now 3 
         return (1);
-    res = ft_split(' ');
+    res = ft_split(line, ' ');
     if(!res)
         return (error(ERR_ALLOC), 1);
     // add light linked list to the front, seems we will have more than that. 
 
     // get floats as a vector. 
-    extract_floats(res[0], &scene->light->pos);  
+    if(extract_floats(res[0], &scene->light->pos))
+    {
+        free_array(res);
+        return (1);
+    }
+    if(check_float_format(res[1]) == 1) 
+    {
+        free_array(res);
+        return (1);
+    }
+    if (ft_atof(res[1], &scene->light->bright) == 1)
+    {
+        free_array(res);
+        return (1);
+    }
+    if(check_float_range(scene->light->bright, 0.0f, 1.0f,) == 1)
+    {
+        free_array(res);
+        return (1);
+    }
+    if(check_rgb_format(res[2]) == 0)
+        scene->light->color = ft_atorgb(res[2]);
+    else
+        return (free_array(res),1)
+    return(free_array(res), 0);
     // confirm the float of light brightnes value 
     // confirm the rgb color range  
 }
 
-
+// [-40.0][50.0][0.0]
 int extract_floats(const char *line, t_vec3 *vec3)
 {
-    // divide input with split 
+    char **res;
+    float x;
+    float y;
+    float z;
+
+    res = ft_split(line, ',');
+    if(!res)
+        return(error(ERR_ALLOC),1);
+    if(check_split_res(res) == 1)
+        return(error("wrong float format"),1);
+    x = 0;
+    y = 0;
+    z = 0;
+    if(ft_atof(res[0], &x) == 1 || ft_atof(res[1], &y) == 1 || ft_atof(res[2], &z) == 1)
+        return (free_array(res), error("float overflow"), 1);
+    *vec3 = creat_vec3(x, y, z);
+    free_array(res);
+    return (0);
+}
+
+
+t_vec3  creat_vec3(float x, float y, float z)
+{
+    t_vec3 vector;
+
+    vector.x = x;
+    vector.y = y;
+    vector.z = z;
+
+    return (vector);
+}
+
+// function which confirms that we got exactly
+// 3 non empty arrays with valid float format nums
+int check_split_res(char **split_res)
+{
+    int i;
+
+    i = 0;
+    while(i < 3)
+    {
+        if(!split_res[i])
+            return (1);
+        if(check_float_format(split_res[i]) == 1)
+            return (1);
+        i++;
+    }
+    if(split_res[3])
+        return (1);
+    return (0);
 }
 
 // [0.0 - 1.0] [0-255]  <0,2 255,255,255>
@@ -263,7 +338,7 @@ int ft_atorgb(const char *line)
 // t - transparency (always to max value = 255)
 int ft_rgbtoint(int transp, int red, int green, int blue)
 {
-    return (transp << 24 | red << 16 |  green << 8 | blue);
+    return (transp << 24 | red << 16 | green << 8 | blue);
 }
 
 
