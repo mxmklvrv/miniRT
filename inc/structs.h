@@ -23,6 +23,15 @@
 // 	int		color;
 // }			t_point;
 
+typedef struct s_vec3
+{
+    float x;
+    float y;
+    float z;
+
+}   t_vec3;
+
+
 typedef enum e_otype
 {
     SP,
@@ -43,6 +52,22 @@ typedef struct s_olist
 
 }					t_olist;
 
+typedef struct s_ambient
+{
+    float   amb;
+    int colour;
+} t_ambient;
+
+typedef struct s_light
+{
+    t_vec3 pos;
+    float bright;
+    int color;
+    struct s_light *next;
+
+} t_light;
+
+
 
 // main struct
 typedef struct s_scene
@@ -50,6 +75,12 @@ typedef struct s_scene
 	void			*mlx;
 	void			*window;
     t_olist         *obj_list;
+    t_ambient       ambient;
+    t_light         *light;
+    int             qt_ambiant;
+    int             qt_cam;
+    int             qt_light;
+
 
 }					t_scene;
 
