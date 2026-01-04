@@ -157,7 +157,7 @@ void get_whole_part(const char *line, int *i, float *temp, int *overflow)
     while(ft_isdigit(line[*i]))
     {
         *temp = *temp * 10 + (line[*i] - '0');
-        if(*temp > __FLT_MAX__)
+        if(*temp > __FLT_MAX__) // for now, need to define by myself mb
             *overflow = 1;
         (*i)++;
     }
@@ -176,7 +176,7 @@ void get_fraction_part(const char *line, int *i, float *temp, int *overflow)
     {
         *temp += (line[*i] - '0') * fraction;
         fraction *= 0.1f;
-        if(*temp > __FLT_MAX__)
+        if(*temp > __FLT_MAX__) // for now, need to define by myself mb
             *overflow = 1;
         (*i)++;
     }
@@ -194,10 +194,33 @@ int check_rgb_range(char *line)
         return(error("Out of range for RGB"), 1);
     return (0);
 }
+// <-40.0,50.0,0.0     0.6     10,0,255>
+int pars_light(char *line, t_scene *scene)
+{
+    char **res;
+
+    res = NULL;
+    if(count_elements(line) != 3) // mb 2 for mand. part, for now 3 
+        return (1);
+    res = ft_split(' ');
+    if(!res)
+        return (error(ERR_ALLOC), 1);
+    // add light linked list to the front, seems we will have more than that. 
+
+    // get floats as a vector. 
+    extract_floats(res[0], &scene->light->pos);  
+    // confirm the float of light brightnes value 
+    // confirm the rgb color range  
+}
+
+
+int extract_floats(const char *line, t_vec3 *vec3)
+{
+    // divide input with split 
+}
 
 // [0.0 - 1.0] [0-255]  <0,2 255,255,255>
-// floats 
-
+// main parsing ambient light function
 int pars_ambient(char *line, t_scene *scene)
 {
     char **res;
@@ -205,42 +228,42 @@ int pars_ambient(char *line, t_scene *scene)
     res = NULL;
     if(count_elements(line) != 2)
         return (1);
-    res = ft_split(' '); // 
+    res = ft_split(' ');
     if(!res)
-        return(ERR_ALLOC, 1);
-    // floats format confirmation && rgb full validity
+        return(error(ERR_ALLOC), 1);
     if (check_float_format(res[0]) == 1|| check_rgb(res[1]) == 1)
         return(free_array(res), 1); 
-    // converting str to float num
     if (ft_atof(res[0], scene->ambient.amb))
         return(free_array(res), 1);
-    //floats range confiramtion
     if (check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
         return (free_array(res), 1);
     scene->ambient.colour = ft_atorgb(res[1]);
+    free_array(res);
+    return (0);
 }
-// converting 
+// converting ascii to rgb values
 int ft_atorgb(const char *line)
 {
     int i;
-    int r;
-    int g;
-    int b;
+    int red;
+    int green;
+    int blue;
 
     i = 0;
-    r = ft_atoi(line);
+    red = ft_atoi(line);
     while(line[i] != ',')
         i++;
-    g = ft_atoi(line + (i + 1));
+    green = ft_atoi(line + (i + 1));
     while(line[i] != ',')
         i++;
-    b = ft_atoi(line + (i + 1));
-    return(ft_rgbtoint(255,r,g,b));
+    blue = ft_atoi(line + (i + 1));
+    return(ft_rgbtoint(255,red,green,blue));
 }
 // with bitshifting storing rgb into singl int
-int ft_rgbtoint(int t, int r, int g, int b)
+// t - transparency (always to max value = 255)
+int ft_rgbtoint(int transp, int red, int green, int blue)
 {
-    return (t << 24 | r << 16 |  g << 8 | b);
+    return (transp << 24 | red << 16 |  green << 8 | blue);
 }
 
 
@@ -255,6 +278,8 @@ int check_float_range(float value, float min_value, float max_value)
         return (0);
     return (1);
 }
+
+
 
 // if ch == C -> pars_cam
 // if ch == L -> pars_lignt
@@ -353,6 +378,7 @@ void    init_scene(t_scene *scene)
     scene->mlx = NULL;
     scene->window = NULL;
     scene->obj_list = NULL;
+    scene->light = NULL;
 }
 
 int	main(int ac, char **av)
