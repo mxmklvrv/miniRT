@@ -1,6 +1,6 @@
 NAME = miniRT
 
-CC = cc
+CC = cc -g
 
 CFLAGS = -Wall -Wextra -Werror
 HEADERS = $(addprefix -I, $(LIBFT_DIR) $(MLX_DIR) $(HDR_DIR) /usr/include) -O3
