@@ -63,7 +63,7 @@ typedef struct s_light
     t_vec3 pos;
     float bright;
     int color;
-    struct s_light *next;
+    // struct s_light *next;
 
 } t_light;
 
@@ -76,7 +76,8 @@ typedef struct s_scene
 	void			*window;
     t_olist         *obj_list;
     t_ambient       ambient;
-    t_light         *light;
+    // t_light         *light;
+    t_light         light;
     int             qt_ambiant;
     int             qt_cam;
     int             qt_light;

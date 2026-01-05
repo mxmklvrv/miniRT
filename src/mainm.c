@@ -78,8 +78,10 @@ int	check_int(char *line, int i)
 {
 	while (line[i] && !ft_isspace(line[i]))
 	{
+		if (line[i] =='-' || line[i] == '+')
+			i++;
 		if (ft_isdigit(line[i]) == 0)
-			return (error("An int num is not correct"), 1);
+			return (1);
 		i++;
 	}
 	return (0);
@@ -215,7 +217,7 @@ int	check_rgb_range(char *line)
 		return (1);
 	val = ft_atoi(line);
 	if (val < 0 || val > 255)
-		return (error("Out of range for RGB"), 1);
+		return (1);
 	return (0);
 }
 // <-40.0,50.0,0.0     0.6     10,0,255>
@@ -229,9 +231,16 @@ int	pars_light(char *line, t_scene *scene)
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), 1);
+	int i = 0;
+	while(res[i])
+	{ 
+		printf("%s", res[i]);
+		i++;
+	}
 	// add light linked list to the front, seems we will have more than that.
+	// should we ?? 
 	// get floats as a vector.
-	if (extract_floats(res[0], &scene->light->pos))
+	if (extract_floats(res[0], &scene->light.pos))
 	{
 		free_array(res);
 		return (1);
@@ -241,18 +250,18 @@ int	pars_light(char *line, t_scene *scene)
 		free_array(res);
 		return (1);
 	}
-	if (ft_atof(res[1], &scene->light->bright) == 1)
+	if (ft_atof(res[1], &scene->light.bright) == 1)
 	{
 		free_array(res);
 		return (1);
 	}
-	if (check_float_range(scene->light->bright, 0.0f, 1.0f) == 1)
+	if (check_float_range(scene->light.bright, 0.0f, 1.0f) == 1)
 	{
 		free_array(res);
 		return (1);
 	}
 	if (check_rgb_format(res[2]) == 0)
-		scene->light->color = ft_atorgb(res[2]);
+		scene->light.color = ft_atorgb(res[2]);
 	else
 		return (free_array(res), 1);
 	return (free_array(res), 0);
@@ -322,7 +331,7 @@ int	pars_ambient(char *line, t_scene *scene)
 
 	res = NULL;
 	if (count_elements(line) != 2)
-		return (1);
+		return (error("Wrong ambient specs"),1);
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), 1);
@@ -373,7 +382,7 @@ int	check_float_range(float value, float min_value, float max_value)
 {
 	if (min_value <= value && value <= max_value)
 		return (0);
-	return (1);
+	return (error("Range of float is not correect"),1);
 }
 
 // if ch == C -> pars_cam
@@ -440,6 +449,7 @@ int	pars_input_file(char *file, t_scene *scene)
 			free(line);
 			return (1);
 		}
+		free(line);
         line = get_next_line(fd);
 	}
 	close(fd);
@@ -476,7 +486,7 @@ void	init_scene(t_scene *scene)
 	scene->mlx = NULL;
 	scene->window = NULL;
 	scene->obj_list = NULL;
-	scene->light = NULL;
+	// scene->light = NULL;
 }
 
 int	main(int ac, char **av)
@@ -493,9 +503,11 @@ int	main(int ac, char **av)
 	{
 		return (EXIT_FAILURE);
 	}
-	printf("amb: float amb: %f, int colour: %d", scene.ambient.amb,
+	printf("amb: float amb: %f, int colour: %d\n", scene.ambient.amb,
 		scene.ambient.colour);
+	printf("light: float bright: %f, int colour: %d, vector pos x=%f  y=%f z=%f", scene.light.bright, scene.light.color, scene.light.pos.x, scene.light.pos.y, scene.light.pos.z);
 	return (0);
 }
 
-// 255,123,222\n
+// tabs are still passed to the L which gives wrong output
+// tabs are not accepted in A 
