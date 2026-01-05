@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+// TODO: pars cam
+
 // below maxim
 void	free_array(char **arr);
 void	error(char *msg);
@@ -76,7 +78,7 @@ int	count_elements(char *line)
 // checks the validity of int
 int	check_int(char *line, int i)
 {
-	while (line[i] && !ft_isspace(line[i]))
+	while (line[i] && line[i] != '\n') // !ft_isspace(line[i])
 	{
 		if (line[i] =='-' || line[i] == '+')
 			i++;
@@ -227,7 +229,7 @@ int	pars_light(char *line, t_scene *scene)
 
 	res = NULL;                    // might remove this
 	if (count_elements(line) != 3) // mb 2 for mand. part, for now 3
-		return (1);
+		return (error("Wrong specs for light"),1);
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), 1);
@@ -509,5 +511,4 @@ int	main(int ac, char **av)
 	return (0);
 }
 
-// tabs are still passed to the L which gives wrong output
-// tabs are not accepted in A 
+
