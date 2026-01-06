@@ -25,67 +25,66 @@
 
 typedef struct s_vec3
 {
-    float x;
-    float y;
-    float z;
+	float			x;
+	float			y;
+	float			z;
 
-}   t_vec3;
-
+}					t_vec3;
 
 typedef enum e_otype
 {
-    SP,
-    CY,
-    PL
+	SP,
+	CY,
+	PL
 
-}t_otype;
-
-
+}					t_otype;
 
 // linked list with objects
 typedef struct s_olist
 {
 	void			*obj;
-    t_otype         *obj_type;
-    int             obj_id;
+	t_otype			*obj_type;
+	int				obj_id;
 	struct s_olist	*next;
 
 }					t_olist;
 
+typedef struct s_cam
+{
+	t_vec3			view_point;
+	t_vec3			orient;
+	float			fov;
+}					t_cam;
+
 typedef struct s_ambient
 {
-    float   amb;
-    int colour;
-} t_ambient;
+	float			amb;
+	int				colour;
+}					t_ambient;
 
 typedef struct s_light
 {
-    t_vec3 pos;
-    float bright;
-    int color;
-    // struct s_light *next;
+	t_vec3			pos;
+	float			bright;
+	int				color;
+	// struct s_light *next;
 
-} t_light;
-
-
+}					t_light;
 
 // main struct
 typedef struct s_scene
 {
 	void			*mlx;
 	void			*window;
-    t_olist         *obj_list;
-    t_ambient       ambient;
-    // t_light         *light;
-    t_light         light;
-    int             qt_ambiant;
-    int             qt_cam;
-    int             qt_light;
-
+	t_olist			*obj_list;
+	t_ambient		ambient;
+	// t_light         *light;
+	t_light			light;
+	t_cam			cam;
+	int				qt_ambiant;
+	int				qt_cam;
+	int				qt_light;
 
 }					t_scene;
-
-
-
 
 #endif

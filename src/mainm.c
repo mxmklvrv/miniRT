@@ -1,6 +1,7 @@
 #include "minirt.h"
 
 // TODO: pars cam
+// TODO: probably after parsing need to check
 
 // below maxim
 void	free_array(char **arr);
@@ -15,7 +16,7 @@ void	get_whole_part(const char *line, int *i, float *temp, int *overflow);
 void	get_fraction_part(const char *line, int *i, float *temp, int *overflow);
 int		check_rgb_range(char *line);
 int		pars_light(char *line, t_scene *scene);
-int		extract_floats(const char *line, t_vec3 *vec3);
+int		extract_floats(const char *line, t_vec3 *vec3, char flag);
 t_vec3	creat_vec3(float x, float y, float z);
 int		check_split_res(char **split_res);
 int		pars_ambient(char *line, t_scene *scene);
@@ -80,7 +81,7 @@ int	check_int(char *line, int i)
 {
 	while (line[i] && line[i] != '\n') // !ft_isspace(line[i])
 	{
-		if (line[i] =='-' || line[i] == '+')
+		if (line[i] == '-' || line[i] == '+')
 			i++;
 		if (ft_isdigit(line[i]) == 0)
 			return (1);
@@ -229,20 +230,20 @@ int	pars_light(char *line, t_scene *scene)
 
 	res = NULL;                    // might remove this
 	if (count_elements(line) != 3) // mb 2 for mand. part, for now 3
-		return (error("Wrong specs for light"),1);
+		return (error("Wrong specs for light"), 1);
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), 1);
-	int i = 0;
-	while(res[i])
-	{ 
-		printf("%s", res[i]);
-		i++;
-	}
+	// int i = 0;
+	// while(res[i])
+	// {
+	// 	printf("%s", res[i]);
+	// 	i++;
+	// }
 	// add light linked list to the front, seems we will have more than that.
-	// should we ?? 
+	// should we ??
 	// get floats as a vector.
-	if (extract_floats(res[0], &scene->light.pos))
+	if (extract_floats(res[0], &scene->light.pos, 'M'))
 	{
 		free_array(res);
 		return (1);
@@ -267,12 +268,50 @@ int	pars_light(char *line, t_scene *scene)
 	else
 		return (free_array(res), 1);
 	return (free_array(res), 0);
-	// confirm the float of light brightnes value
-	// confirm the rgb color range
+}
+
+//  <-50.0,0,20 0,0,1 70>
+int	pars_cam(char *line, t_scene *scene)
+{
+	char	**res;
+
+	res = NULL;
+	if (count_elements(line) != 3)
+		return (error("Wrong specs for cam"), 1);
+	res = ft_split(line, ' ');
+	if (!res)
+		return (error(ERR_ALLOC), 1);
+	if (extract_floats(res[0], &scene->cam.view_point, 'M'))
+	{
+		free_array(res);
+		return (1);
+	}
+	if (extract_floats(res[1], &scene->cam.orient, 'N'))
+	{
+		free_array(res);
+		return (1);
+	}
+	if (check_float_format(res[2]) == 1)
+	{
+		free_array(res);
+		return (1);
+	}
+	if (ft_atof(res[2], &scene->cam.fov) == 1)
+	{
+		free_array(res);
+		return (1);
+	}
+	if (check_float_range(scene->cam.fov, 0.0f, 180.0f) == 1)
+	{
+		free_array(res);
+		return (1);
+	}
+	free_array(res);
+	return (0);
 }
 
 // [-40.0][50.0][0.0]
-int	extract_floats(const char *line, t_vec3 *vec3)
+int	extract_floats(const char *line, t_vec3 *vec3, char flag)
 {
 	char	**res;
 	float	x;
@@ -290,6 +329,12 @@ int	extract_floats(const char *line, t_vec3 *vec3)
 	if (ft_atof(res[0], &x) == 1 || ft_atof(res[1], &y) == 1 || ft_atof(res[2],
 			&z) == 1)
 		return (free_array(res), error("float overflow"), 1);
+	if (flag == 'N')
+	{
+		if (check_float_range(x, -1.0f, 1.0f) == 1 || check_float_range(y,
+				-1.0f, 1.0f) == 1 || check_float_range(z, -1.0f, 1.0f) == 1)
+			return (free_array(res), 1);
+	}
 	*vec3 = creat_vec3(x, y, z);
 	free_array(res);
 	return (0);
@@ -333,7 +378,7 @@ int	pars_ambient(char *line, t_scene *scene)
 
 	res = NULL;
 	if (count_elements(line) != 2)
-		return (error("Wrong ambient specs"),1);
+		return (error("Wrong ambient specs"), 1);
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), 1);
@@ -384,7 +429,7 @@ int	check_float_range(float value, float min_value, float max_value)
 {
 	if (min_value <= value && value <= max_value)
 		return (0);
-	return (error("Range of float is not correect"),1);
+	return (error("Range of float is not correect"), 1);
 }
 
 // if ch == C -> pars_cam
@@ -396,7 +441,7 @@ int	pars_cam_light(char *line, char ch, t_scene *scene)
 	if (ch == 'C')
 	{
 		scene->qt_cam++;
-		// return (pars_cam(++line, scene));
+		return (pars_cam(++line, scene));
 	}
 	else if (ch == 'A')
 	{
@@ -408,6 +453,7 @@ int	pars_cam_light(char *line, char ch, t_scene *scene)
 		scene->qt_light++;
 		return (pars_light(++line, scene));
 	}
+	// we need a func to count CAL at the end of pars
 	return (0);
 }
 
@@ -452,7 +498,7 @@ int	pars_input_file(char *file, t_scene *scene)
 			return (1);
 		}
 		free(line);
-        line = get_next_line(fd);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (0);
@@ -507,8 +553,10 @@ int	main(int ac, char **av)
 	}
 	printf("amb: float amb: %f, int colour: %d\n", scene.ambient.amb,
 		scene.ambient.colour);
-	printf("light: float bright: %f, int colour: %d, vector pos x=%f  y=%f z=%f", scene.light.bright, scene.light.color, scene.light.pos.x, scene.light.pos.y, scene.light.pos.z);
+	printf("light: float bright: %f, int colour: %d,vector pos x = % f y = %f z = %f\n", scene.light.bright, scene.light.color, scene.light.pos.x,
+		scene.light.pos.y, scene.light.pos.z);
+	printf("Cam: FOV: %f, VP_x: %f, VP_y: %f, VP_z: %f, OV_x: %f, OV_y: %f,OV_z: %f\n", scene.cam.fov, scene.cam.view_point.x,
+		scene.cam.view_point.y, scene.cam.view_point.z, scene.cam.orient.x,
+		scene.cam.orient.y, scene.cam.orient.z);
 	return (0);
 }
-
-
