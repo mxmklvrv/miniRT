@@ -7,8 +7,8 @@
 void	free_array(char **arr);
 void	error(char *msg);
 int		count_elements(char *line);
-int		check_int(char *line, int i);
-int		check_float_format(char *line);
+// int		check_int(char *line, int i);
+// int		check_float_format(char *line);
 int		ft_isspace(char ch);
 int		check_rgb_format(char *line);
 int		ft_atof(const char *line, float *res);
@@ -29,6 +29,7 @@ int		pars_input_file(char *file, t_scene *scene);
 bool	rt_file_extension(char *file);
 int		confirm_input(int ac, char **av);
 void	init_scene(t_scene *scene);
+int is_valid_comas(const char *line);
 
 void	free_array(char **arr)
 {
@@ -76,43 +77,64 @@ int	count_elements(char *line)
 	}
 	return (res);
 }
+// int count_elements(char *line)
+// {
+// 	char **res;
+// 	int i;
+
+// 	res = ft_split(line, ' ');
+// 	if(!res)
+// 		return (-1);
+// 	i = 0;
+// 	while(res[i])
+// 		i++;
+// 	free(res);
+// 	return (i);
+// }
 // checks the validity of int
-int	check_int(char *line, int i)
+
+int is_valid_int(char *line)
 {
-	while (line[i] && line[i] != '\n') // !ft_isspace(line[i])
-	{
-		if (line[i] == '-' || line[i] == '+')
-			i++;
-		if (ft_isdigit(line[i]) == 0)
-			return (1);
+	int i;
+
+	i = 0;
+	if (!line || line[0] == '\0')
+		return (1);
+	if(line[i] == '+' || line[i] == '-')
 		i++;
-	}
+	if(ft_isdigit(line[i]) == 0)
+		return (1);
+	while(ft_isdigit(line[i]) == 1)
+		i++;
+	if (line[i] != '\0' && line[i] != '\n')
+		return (1);
 	return (0);
 }
-
 // checks the validity of the float nubmer
 // '-' accepted, also '+';
 // ony digits before and after '.'
-int	check_float_format(char *line)
+int	is_valid_float(char *line)
 {
-	int	i;
+	int i;
+	int dot;
 
 	i = 0;
+	dot = 0;
+	
 	if (line[i] == '-' || line[i] == '+')
 		i++;
-	if (ft_strchr(line, '.') == NULL)
-		return (check_int(line, i));
-	while (line[i] && line[i] != '.')
+	if (ft_isdigit(line[i]) == 0)
+		return (error("Float num is not correct"), 1);
+	while(line[i])
 	{
-		if (ft_isdigit(line[i]) == 0)
+		if(line[i] == '.')
+		{
+			if(dot == 1)
+				return (error("Float num is not correct"), 1);
+			dot = 1;
+		}
+		else if(ft_isdigit(line[i]) == 0)
 			return (error("Float num is not correct"), 1);
-		i++;
-	}
-	i++;
-	while (line[i] && ft_isspace(line[i]) != 1)
-	{
-		if (ft_isdigit(line[i]) == 0)
-			return (error("Float number is not correct"), 1);
 		i++;
 	}
 	return (0);
@@ -132,15 +154,17 @@ int	check_rgb_format(char *line)
 	char	**rgb;
 	int		i;
 
+	if (is_valid_comas(line) == 1)
+		return (error("Wrong format of RGB"), 1);
 	rgb = ft_split(line, ',');
 	if (!rgb)
 		return (error("Wrong format of RGB"), 1);
 	i = 0;
 	while (i < 3)
 	{
-		if (!rgb[i])
+		if (!rgb[i] || rgb[i][0] == '\0')
 			return (free_array(rgb), error("Wrong format of RGB"), 1);
-		if (check_int(rgb[i], 0))
+		if (is_valid_int(rgb[i]))
 			return (free_array(rgb), error("Wrong format of RGB"), 1);
 		if (check_rgb_range(rgb[i]))
 			return (free_array(rgb), error("Out of range for RGB"), 1);
@@ -211,6 +235,24 @@ void	get_fraction_part(const char *line, int *i, float *temp, int *overflow)
 	}
 }
 
+int is_valid_comas(const char *line)
+{
+	int i;
+	int coma;
+
+	i = 0;
+	coma = 0;
+	while(line[i])
+	{
+		if(line[i] == ',')
+			coma++;
+		i++;
+	}
+	if(coma != 2)
+		return (1);
+	return (0);
+}
+
 // checks if num is in 0-255 rage
 int	check_rgb_range(char *line)
 {
@@ -234,21 +276,12 @@ int	pars_light(char *line, t_scene *scene)
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), 1);
-	// int i = 0;
-	// while(res[i])
-	// {
-	// 	printf("%s", res[i]);
-	// 	i++;
-	// }
-	// add light linked list to the front, seems we will have more than that.
-	// should we ??
-	// get floats as a vector.
 	if (extract_floats(res[0], &scene->light.pos, 'M'))
 	{
 		free_array(res);
 		return (1);
 	}
-	if (check_float_format(res[1]) == 1)
+	if (is_valid_float(res[1]) == 1)
 	{
 		free_array(res);
 		return (1);
@@ -291,7 +324,7 @@ int	pars_cam(char *line, t_scene *scene)
 		free_array(res);
 		return (1);
 	}
-	if (check_float_format(res[2]) == 1)
+	if (is_valid_float(res[2]) == 1)
 	{
 		free_array(res);
 		return (1);
@@ -318,6 +351,8 @@ int	extract_floats(const char *line, t_vec3 *vec3, char flag)
 	float	y;
 	float	z;
 
+	if(is_valid_comas(line)== 1)
+		return (error("wrong float format"), 1);
 	res = ft_split(line, ',');
 	if (!res)
 		return (error(ERR_ALLOC), 1);
@@ -361,7 +396,7 @@ int	check_split_res(char **split_res)
 	{
 		if (!split_res[i])
 			return (1);
-		if (check_float_format(split_res[i]) == 1)
+		if (is_valid_float(split_res[i]) == 1)
 			return (1);
 		i++;
 	}
@@ -372,6 +407,30 @@ int	check_split_res(char **split_res)
 
 // [0.0 - 1.0] [0-255]  <0,2 255,255,255>
 // main parsing ambient light function
+// int	pars_ambient(char *line, t_scene *scene)
+// {
+// 	char	**res;
+
+// 	res = NULL;
+// 	if (count_elements(line) != 2)
+// 		return (error("Wrong ambient specs"), 1);
+// 	res = ft_split(line, ' ');
+// 	if (!res)
+// 		return (error(ERR_ALLOC), 1);
+// 	if (check_float_format(res[0]) == 1)
+// 		return (free_array(res), 1);
+// 	if (check_rgb_format(res[1]) == 1)
+// 		return (free_array(res), 1);
+// 	if (ft_atof(res[0], &scene->ambient.amb))
+// 		return (free_array(res), 1);
+// 	if (check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
+// 		return (free_array(res), 1);
+// 	scene->ambient.colour = ft_atorgb(res[1]);
+// 	free_array(res);
+// 	return (0);
+// }
+
+// new version
 int	pars_ambient(char *line, t_scene *scene)
 {
 	char	**res;
@@ -382,18 +441,18 @@ int	pars_ambient(char *line, t_scene *scene)
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), 1);
-	if (check_float_format(res[0]) == 1)
+	if(is_valid_float(res[0]) == 1 || ft_atof(res[0],&scene->ambient.amb) == 1)
 		return (free_array(res), 1);
-	if (check_rgb_format(res[1]) == 1)
+	if(check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
 		return (free_array(res), 1);
-	if (ft_atof(res[0], &scene->ambient.amb))
-		return (free_array(res), 1);
-	if (check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
+	if(check_rgb_format(res[1]) == 1)
 		return (free_array(res), 1);
 	scene->ambient.colour = ft_atorgb(res[1]);
 	free_array(res);
 	return (0);
 }
+
+
 // converting ascii to rgb values
 int	ft_atorgb(const char *line)
 {
@@ -482,7 +541,7 @@ int	pars_input_file(char *file, t_scene *scene)
 	int		fd;
 	int		check;
 	char	*line;
-
+	char 	*trimmed;
 	check = 1;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
@@ -490,14 +549,20 @@ int	pars_input_file(char *file, t_scene *scene)
 	line = get_next_line(fd);
 	while (line)
 	{
-		check = dispatch(line, scene);
+		trimmed = ft_strtrim(line, " \n");
+		free(line);
+		if(!trimmed)
+		{
+			close(fd);
+			return(error(ERR_ALLOC),1);
+		}
+		check = dispatch(trimmed, scene);
+		free(trimmed);
 		if (check != 0)
 		{
 			close(fd);
-			free(line);
 			return (1);
 		}
-		free(line);
 		line = get_next_line(fd);
 	}
 	close(fd);
