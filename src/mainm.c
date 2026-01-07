@@ -77,21 +77,7 @@ int	count_elements(char *line)
 	}
 	return (res);
 }
-// int count_elements(char *line)
-// {
-// 	char **res;
-// 	int i;
 
-// 	res = ft_split(line, ' ');
-// 	if(!res)
-// 		return (-1);
-// 	i = 0;
-// 	while(res[i])
-// 		i++;
-// 	free(res);
-// 	return (i);
-// }
-// checks the validity of int
 
 int is_valid_int(char *line)
 {
@@ -113,6 +99,7 @@ int is_valid_int(char *line)
 // checks the validity of the float nubmer
 // '-' accepted, also '+';
 // ony digits before and after '.'
+
 int	is_valid_float(char *line)
 {
 	int i;
@@ -124,17 +111,17 @@ int	is_valid_float(char *line)
 	if (line[i] == '-' || line[i] == '+')
 		i++;
 	if (ft_isdigit(line[i]) == 0)
-		return (error("Float num is not correct"), 1);
+		return (1);
 	while(line[i])
 	{
 		if(line[i] == '.')
 		{
 			if(dot == 1)
-				return (error("Float num is not correct"), 1);
+				return (1);
 			dot = 1;
 		}
 		else if(ft_isdigit(line[i]) == 0)
-			return (error("Float num is not correct"), 1);
+			return (1);
 		i++;
 	}
 	return (0);
@@ -146,40 +133,13 @@ int	ft_isspace(char ch)
 		return (1);
 	return (0);
 }
-// 255,255,255 = 11 || 0,0,0 = 5
-// checks rgb format
-// creates 2d arr with 3 inputs
-int	check_rgb_format(char *line)
-{
-	char	**rgb;
-	int		i;
 
-	if (is_valid_comas(line) == 1)
-		return (error("Wrong format of RGB"), 1);
-	rgb = ft_split(line, ',');
-	if (!rgb)
-		return (error("Wrong format of RGB"), 1);
-	i = 0;
-	while (i < 3)
-	{
-		if (!rgb[i] || rgb[i][0] == '\0')
-			return (free_array(rgb), error("Wrong format of RGB"), 1);
-		if (is_valid_int(rgb[i]))
-			return (free_array(rgb), error("Wrong format of RGB"), 1);
-		if (check_rgb_range(rgb[i]))
-			return (free_array(rgb), error("Out of range for RGB"), 1);
-		i++;
-	}
-	if (rgb[3])
-		return (free_array(rgb), error("Wrong format of RGB"), 1);
-	free_array(rgb);
-	return (0);
-}
 
 // ascii to float converter
 // detects sign
 // if overflow happens, still writes garbage value to res
 // returns 0 on success, 1 otherwise
+// might need to make res = 0;
 int	ft_atof(const char *line, float *res)
 {
 	int		sign;
@@ -343,37 +303,7 @@ int	pars_cam(char *line, t_scene *scene)
 	return (0);
 }
 
-// [-40.0][50.0][0.0]
-int	extract_floats(const char *line, t_vec3 *vec3, char flag)
-{
-	char	**res;
-	float	x;
-	float	y;
-	float	z;
 
-	if(is_valid_comas(line)== 1)
-		return (error("wrong float format"), 1);
-	res = ft_split(line, ',');
-	if (!res)
-		return (error(ERR_ALLOC), 1);
-	if (check_split_res(res) == 1)
-		return (error("wrong float format"), 1);
-	x = 0;
-	y = 0;
-	z = 0;
-	if (ft_atof(res[0], &x) == 1 || ft_atof(res[1], &y) == 1 || ft_atof(res[2],
-			&z) == 1)
-		return (free_array(res), error("float overflow"), 1);
-	if (flag == 'N')
-	{
-		if (check_float_range(x, -1.0f, 1.0f) == 1 || check_float_range(y,
-				-1.0f, 1.0f) == 1 || check_float_range(z, -1.0f, 1.0f) == 1)
-			return (free_array(res), 1);
-	}
-	*vec3 = creat_vec3(x, y, z);
-	free_array(res);
-	return (0);
-}
 
 t_vec3	creat_vec3(float x, float y, float z)
 {
@@ -405,52 +335,7 @@ int	check_split_res(char **split_res)
 	return (0);
 }
 
-// [0.0 - 1.0] [0-255]  <0,2 255,255,255>
-// main parsing ambient light function
-// int	pars_ambient(char *line, t_scene *scene)
-// {
-// 	char	**res;
 
-// 	res = NULL;
-// 	if (count_elements(line) != 2)
-// 		return (error("Wrong ambient specs"), 1);
-// 	res = ft_split(line, ' ');
-// 	if (!res)
-// 		return (error(ERR_ALLOC), 1);
-// 	if (check_float_format(res[0]) == 1)
-// 		return (free_array(res), 1);
-// 	if (check_rgb_format(res[1]) == 1)
-// 		return (free_array(res), 1);
-// 	if (ft_atof(res[0], &scene->ambient.amb))
-// 		return (free_array(res), 1);
-// 	if (check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
-// 		return (free_array(res), 1);
-// 	scene->ambient.colour = ft_atorgb(res[1]);
-// 	free_array(res);
-// 	return (0);
-// }
-
-// new version
-int	pars_ambient(char *line, t_scene *scene)
-{
-	char	**res;
-
-	res = NULL;
-	if (count_elements(line) != 2)
-		return (error("Wrong ambient specs"), 1);
-	res = ft_split(line, ' ');
-	if (!res)
-		return (error(ERR_ALLOC), 1);
-	if(is_valid_float(res[0]) == 1 || ft_atof(res[0],&scene->ambient.amb) == 1)
-		return (free_array(res), 1);
-	if(check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
-		return (free_array(res), 1);
-	if(check_rgb_format(res[1]) == 1)
-		return (free_array(res), 1);
-	scene->ambient.colour = ft_atorgb(res[1]);
-	free_array(res);
-	return (0);
-}
 
 
 // converting ascii to rgb values
@@ -488,7 +373,7 @@ int	check_float_range(float value, float min_value, float max_value)
 {
 	if (min_value <= value && value <= max_value)
 		return (0);
-	return (error("Range of float is not correect"), 1);
+	return (1);
 }
 
 // if ch == C -> pars_cam
@@ -526,12 +411,21 @@ int	dispatch(char *line, t_scene *scene)
 		return (0);
 	else if (ft_strchr("CAL", *line))
 		return (pars_cam_light(line, *line, scene));
-	// else if (ft_strncmp(line, "sp", 2) == 0)
-	// 	return (pars_sphere());
-	// else if (ft_strncmp(line, "cy", 2) == 0)
-	// 	return (pars_cylinder());
-	// else if (ft_strncmp(line, "pl", 2) == 0)
-	// 	return (pars_plane());
+	else if (ft_strncmp(line, "sp", 2) == 0)
+    {
+        line +=2;
+        return (parse_sphere(line,scene));
+    }
+    else if (ft_strncmp(line, "pl", 2) == 0)
+    {
+        line +=2;
+        return (parse_plane(line, scene));
+    }
+	else if (ft_strncmp(line, "cy", 2) == 0)
+	{
+        line += 2;
+        return (parse_cylinder(line, scene));
+    }
 	else
 		return (error("Unknown char detected in .rt"), 1);
 }
@@ -601,6 +495,397 @@ void	init_scene(t_scene *scene)
 	scene->obj_list = NULL;
 	// scene->light = NULL;
 }
+
+
+// [-40.0][50.0][0.0]
+int	extract_floats(const char *line, t_vec3 *vec3, char flag)
+{
+	char	**res;
+	
+
+	if(is_valid_comas(line)== 1)
+		return (error("wrong float format"), 1);
+	res = ft_split(line, ',');
+	if (!res)
+		return (error(ERR_ALLOC), 1);
+	if (check_split_res(res) == 1)
+		return (error("wrong float format"), 1);
+	x = 0;
+	y = 0;
+	z = 0;
+	if (ft_atof(res[0], &x) == 1 || ft_atof(res[1], &y) == 1 || ft_atof(res[2],
+			&z) == 1)
+		return (free_array(res), error("float overflow"), 1);
+	if (flag == 'N')
+	{
+		if (check_float_range(x, -1.0f, 1.0f) == 1 || check_float_range(y,
+				-1.0f, 1.0f) == 1 || check_float_range(z, -1.0f, 1.0f) == 1)
+			return (free_array(res), 1);
+	}
+	*vec3 = creat_vec3(x, y, z);
+	free_array(res);
+	return (0);
+}
+
+// 255,255,255 = 11 || 0,0,0 = 5
+// checks rgb format
+// creates 2d arr with 3 inputs
+int	check_rgb_format(char *line)
+{
+	char	**rgb;
+	int		i;
+
+	if (is_valid_comas(line) == 1)
+		return (error("Wrong format of RGB"), 1);
+	rgb = ft_split(line, ',');
+	if (!rgb)
+		return (error("Wrong format of RGB"), 1);
+	i = 0;
+	while (i < 3)
+	{
+		if (!rgb[i] || rgb[i][0] == '\0')
+			return (free_array(rgb), error("Wrong format of RGB"), 1);
+		if (is_valid_int(rgb[i]))
+			return (free_array(rgb), error("Wrong format of RGB"), 1);
+		if (check_rgb_range(rgb[i]))
+			return (free_array(rgb), error("Out of range for RGB"), 1);
+		i++;
+	}
+	if (rgb[3])
+		return (free_array(rgb), error("Wrong format of RGB"), 1);
+	free_array(rgb);
+	return (0);
+}
+
+
+// [0.0 - 1.0] [0-255]  
+// main parsing ambient light function
+// new version
+int	pars_ambient(char *line, t_scene *scene)
+{
+	char	**res;
+
+	res = NULL;
+	if (count_elements(line) != 2)
+		return (error("Wrong ambient specs"), 1);
+	res = ft_split(line, ' ');
+	if (!res)
+		return (error(ERR_ALLOC), 1);
+	if(is_valid_float(res[0]) == 1 || ft_atof(res[0],&scene->ambient.amb) == 1)
+		return (error("Invalid ambient ratio"),free_array(res), 1);
+	if(check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
+		return (error("Ambient ratio out of range [0,1]")free_array(res), 1);
+	if(check_rgb_format(res[1]) == 1)
+		return (free_array(res), 1);
+	scene->ambient.colour = ft_atorgb(res[1]);
+	free_array(res);
+	return (0);
+}
+
+
+
+
+// 0.0,0.0,20.6 12.6 10,0,255
+int parse_sphere(char *line, t_scene *scene)
+{
+    char **res;
+    t_sp *sphere;
+    float diameter;
+    int colour;
+
+    if(count_elements(line) != 3)
+        return(error("Invalid specs for sphere"), 1);
+    sphere = malloc(sizeof(t_sp));
+    if(!sphere)
+        return(error(ERR_ALLOC), 1);
+    res = ft_split(line, ' ');
+    if(!res)
+        return (error(ERR_ALLOC),free(sphere), 1);
+    if(parse_vector(res[0], &sphere->sp_center, -100.0f, 100.0f) == 1)
+        return (error("Invalid sphere center"), free(sphere), free_array(res), 1);
+    diameter = 0;
+    colour = 0;
+    if(parse_float(res[1], 0.0f, 100.0f, &diameter) == 1)
+        return (error("Invalid sphere diameter"), free(sphere), free_array(res), 1);
+    if(parse_rgb(res[2], &colour) == 1)
+        return (error("Invalid sphere colour"), free(sphere), free_array(res), 1);
+    sphere->diameter = diameter;
+    sphere->colour = colour;
+    if(add_to_list(&scene->obj_list, sphere, SP, sphere->colour) == 1)
+        return(error("Failed adding sphere to the list"), free_array(res), free(sphere), 1);
+    return(free_array(res), 0);
+}
+
+// 0.0,0.0,-10.0  0.0,1.0,0.0  0,0,225
+int parse_plane(char *line, t_scene *scene)
+{
+    char **res;
+    t_pl *plane;
+    int colour;
+
+    if(count_elements(line) != 3)
+        return(error("Invalid specs for plane"), 1);
+    plane = malloc(sizeof(t_pl));
+    if(!res)
+        return(error(ERR_ALLOC), 1);
+    res = ft_split(line, ' ');
+    if(!res)
+        return(error(ERR_ALLOC), free(plane), 1);
+    if(parse_vector(res[0], &plane->pl_point, -100.0f, 100.0f) == 1)
+        return(error("Invalid coordinates of a point in plane"), free(plane), free_array(res), 1);
+    if(parse_vector(res[1], &plane->normal, 0.0f, 1.0f) == 1)
+        return(error("Invalid normal vector for plane"), free(plane), free_array(res), 1);
+    colour = 0;
+    if(parse_rgb(res[2], &colour) == 1)
+        return(error("Invalid plane colour"), free(plane), free_array(res), 1);
+    plane->colour = colour;
+    if(add_to_list(&scene->obj_list, plane, PL, plane->colour) == 1)
+         return(error("Failed adding plane to the list"), free(plane), free_array(res), 1);
+    return(free_array(res), 0);
+}
+// 50.0,0.0,20.6    0.0,0.0,1.0    14.2    21.42   10,0,255
+int parse_cylinder(char *line, t_scene *scene)
+{
+    char **res;
+    t_cy *cylinder;
+    float diameter;
+    float height;
+    int colour;
+
+    if(count_elements(line) != 5)
+        return(error("Invalid specs for cylinder"), 1);
+    cylinder = malloc(sizeof(t_cy));
+    if(!cylinder)
+        return(error(ERR_ALLOC), 1);
+    res = ft_split(line, ' ');
+    if(!res)
+        return(error(ERR_ALLOC), free(cylinder), 1);
+    if(parse_vector(res[0], &cylinder->cy_center, -100.0f, 100.0f) == 1)
+        return(error("Invalid coordinates of the center of the cylinder"), free(cylinder), free_array(res), 1);
+    if(parse_vector(res[1], &cylinder->normal, 0.0f, 1.0f) == 1)
+        return(error("Invalid coordinates of the center of the cylinder"), free(cylinder), free_array(res), 1);
+    diameter = 0.0f;
+    height = 0.0f;
+    colour = 0;
+    if(parse_float(res[2], 0.0f, 100.0f, &diameter) == 1)
+        return(error("Invalid cylinder diameter"), free(cylinder), free_array(res), 1);
+    if(parse_float(res[3], 0.0f, 100.0f, &height) == 1)
+        return(error("Invalid cylinder height"), free(cylinder), free_array(res), 1);
+    if(parse_rgb(res[4], &colour) == 1)
+        return(error("Invalid cylinder colour"), free(cylinder), free_array(res), 1);
+    cylinder->diameter = diameter;
+    cylinder->height = height;
+    cylinder->colour = colour;
+    if(add_to_list(&scene->obj_list, cylinder, CY, cylinder->colour) == 1)
+        return(error("Failed adding cylinder to the list"), free(cylinder), free_array(res), 1);
+    free_array(res);
+    return(0);
+}
+
+
+int add_to_list(t_olist **list, void *object, t_otype type, int colour)
+{
+    t_olist *new;
+    t_olist *temp;
+
+    new = malloc(sizeof(t_olist));
+    if(!new)
+        return (1);
+    new->obj_type = type;
+    new->obj = object;
+    new->colour = colour;
+    // id ?? 
+    if(*list == NULL)
+        *list = new;
+    else
+    {
+        temp = *list;
+        while(temp->next)
+            temp = temp->next;
+        temp->next = new;
+    }
+    return (1);
+}
+
+void    free_list(t_olist *list)
+{
+    t_olist *temp;
+
+    if(!list)
+        return;
+    while (list)
+    {
+        temp = list->next;
+        if(list->obj)
+            free(list->obj);
+        free(list);
+        list = temp; 
+    }
+    list = NULL;
+}
+
+// refractors below
+//<0,2 255,255,255>
+int parse_ambient(char *line, t_scene *scene)
+{
+    char **res;
+    float ratio;
+    int colour;
+
+    if(count_elements(line) != 2)
+        return(error("Wrong Ambient specs"), 1);
+    res = ft_split(line, ' ');
+    if(!res)
+        return (error(ERR_ALLOC), 1);
+    ratio = 0.0f;
+    colour = 0;
+    if(parse_float(res[0], 0.0f, 1.0f, &ratio) == 1)
+        return(error("Invalid Ambient ratio"), free_array(res), 1);
+    if(parse_rgb(res[1], &colour) == 1)
+        return(error("Invalid Ambient colour"), free_array(res), 1);
+    scene->ambient.amb = ratio;
+    scene->ambient.colour = colour;
+    free_array(res);
+    return (0);
+}
+int parse_light(char *line, t_scene *scene)
+{
+    char **res;
+    float bright;
+    int colour;
+
+    if(count_elements(line) != 3) // or 2 for mandotary
+        return(error("Invalid light specs"),1);
+    res = ft_split(line, ' ');
+    if (!res)
+        return (error(ERR_ALLOC), 1);
+    bright = 0.0f;
+    colour = 0;
+    if(parse_vector(res[0], &scene->light.pos, -100.0f, 100.0f) == 1)
+        return(error("Invalid light position"), free_array(res), 1);
+    if(parse_float(res[1], 0.0f, 1.0f, &bright) == 1);
+        return(error("Invalid light brightness"), free_array(res), 1);
+    if(parse_rgb(line, &colour) == 1) // this is for bonus
+        return(error("Invalid light colour"), free_array(res), 1);
+    scene->light.bright = bright;
+    scene->light.color = colour; // this is for bonus
+    free_array(res);
+    return (0);
+}
+int parse_cam(char *line, t_scene *scene)
+{
+    char **res;
+    float fov;
+
+    if(count_elements(line) != 3)
+        return(error("Wrong specs for camera"), 1);
+    res = ft_split(line, ' ');
+    if (!res)
+        return (error(ERR_ALLOC), 1);
+    if(parse_vector(res[0], &scene->cam.view_point, -100.0f, 100.0f) == 1)
+        return(error("Invalid camera view point"), free_array(res), 1);
+    if(parse_vector(res[1], &scene->cam.orient, 0.0f, 1.0f) == 1)
+        return(error("Invalid camera orientation"), free_array(res),1);
+    fov = 0;
+    if(parse_float(res[2], 0.0f, 180.0f,&fov) == 1)
+        return(error("Invalid camera FOV"), free_array(res), 1);
+    scene->cam.fov = fov;
+    free_array(res);
+    return (0);
+}
+
+int parse_rgb(char *str, int *color)
+{
+    char **rgb;
+    int r;
+    int g;
+    int b;
+
+    if(!str || is_valid_comas(str))
+        return (1);
+    rgb = ft_split(str, ',');
+    if(!rgb)
+        return (error(ERR_ALLOC), 1);
+     if(!rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
+        return (free_array(rgb), 1);
+    r = 0;
+    g = 0;
+    b = 0;
+    if(parse_int(rgb[0], 0, 255, &r) == 1 || parse_int(rgb[1], 0, 255, &g) == 1 ||parse_int(rgb[2], 0, 255, &b) == 1)
+        return (free_array(rgb), 1);
+    *color = ft_rgbtoint(255, r, g, b);
+    free_array(rgb);
+    return (0);
+}
+
+int parse_vector(char *str, t_vec3 *vector, float min, float max)
+{
+    char **res;
+    float	x;
+	float	y;
+	float	z;
+
+    if(!str || is_valid_comas(str) == 1)
+        return (1);
+    res= ft_split(str, ',');
+    if(!res)
+        return (error(ERR_ALLOC), 1);
+    if(!res[0] || !res[1] || !res[2] || res[3])
+        return (free_array(res), 1);
+    x = 0;
+    y = 0;
+    z = 0;
+    if(parse_float(res[0], min, max, &x) == 1|| parse_float(res[1], min, max, &y) == 1 || parse_float(res[2], min, max, &z) == 1)
+        return (free_array(res), 1);
+    *vector = creat_vec3(x,y,z);
+    free_array(res);
+    return (0);
+}
+
+
+int parse_int(char *str, int min, int max, int *res)
+{
+    int temp;
+
+    temp = 0;
+    if(!str || is_valid_int(str) == 1)
+        return (1);
+    temp = ft_atoi(str);
+    if(temp < min || temp > max)
+        return (1);
+    *res = temp;
+    return (0);
+}
+
+
+int parse_float(char *str, float min, float max, float *res)
+{
+    if(!str || is_valid_float(str) == 1)
+        return (1);
+    if(ft_atof(str, res))
+        return (1);
+    if(*res < min || *res > max)
+        return (1);
+    return (0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int	main(int ac, char **av)
 {
