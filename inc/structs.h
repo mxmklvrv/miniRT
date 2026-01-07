@@ -45,9 +45,35 @@ typedef struct s_olist
 	void			*obj;
 	t_otype			*obj_type;
 	int				obj_id;
+    int             colour;
 	struct s_olist	*next;
 
 }					t_olist;
+
+typedef struct s_sp
+{
+    t_vec3  sp_center;
+    float diameter;
+    float radius;
+    int colour;
+} t_sp;
+
+typedef struct s_pl
+{
+    t_vec3 pl_point;
+    t_vec3 normal;
+    int colour;
+} t_pl;
+
+typedef struct s_cy
+{
+    t_vec3 cy_center;
+    t_vec3 normal;
+    float diameter;
+    float height;
+    int colour;
+} t_cy;
+
 
 typedef struct s_cam
 {
