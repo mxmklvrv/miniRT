@@ -1,8 +1,8 @@
 #include "minirt.h"
 
-// TODO: pars cam
 // TODO: probably after parsing need to check
-
+// how many ACL we have atm
+// probably the correctness of the vectors etc..
 // new version
 int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
 void	free_list(t_olist *list);
@@ -38,6 +38,7 @@ void	kill_all(t_scene *scene);
 
 // test functions
 void	print_vars(t_scene *scene);
+void	print_list(t_scene *scene);
 
 //
 /*
@@ -767,6 +768,8 @@ int	parse_ambient(char *line, t_scene *scene)
 	float	ratio;
 	int		colour;
 
+	if (scene->qt_ambiant > 1)
+		return (error("Only 1 Ambient is allowed"), 1);
 	if (count_elements(line) != 2)
 		return (error("Wrong Ambient specs"), 1);
 	res = ft_split(line, ' ');
@@ -789,6 +792,8 @@ int	parse_light(char *line, t_scene *scene)
 	float	bright;
 	int		colour;
 
+	if (scene->qt_light > 1)
+		return (error("Only 1 light is allowed"), 1);
 	if (count_elements(line) != 3) // or 2 for mandotary
 		return (error("Invalid light specs"), 1);
 	res = ft_split(line, ' ');
@@ -812,6 +817,8 @@ int	parse_cam(char *line, t_scene *scene)
 	char	**res;
 	float	fov;
 
+	if (scene->qt_cam > 1)
+		return (error("Only 1 camera is alowed"), 1);
 	if (count_elements(line) != 3)
 		return (error("Wrong specs for camera"), 1);
 	res = ft_split(line, ' ');
@@ -863,8 +870,8 @@ int	pars_cam_light(char *line, char ch, t_scene *scene)
 
 int	dispatch(char *line, t_scene *scene)
 {
-	while (*line == ' ') // what about tabs here ??
-		line++;
+	// while (*line == ' ') // what about tabs here ??
+	// 	line++;
 	if (*line == '\0' || *line == '\n')
 		// what else is ok?  probably # (comments)
 		return (0);
@@ -958,6 +965,9 @@ void	init_scene(t_scene *scene)
 	scene->mlx = NULL;
 	scene->window = NULL;
 	scene->obj_list = NULL;
+	scene->qt_ambiant = 0;
+	scene->qt_cam = 0;
+	scene->qt_light = 0;
 	// scene->light = NULL;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -978,8 +988,26 @@ int	main(int ac, char **av)
 		return (EXIT_FAILURE);
 	}
 	print_vars(&scene);
+	print_list(&scene);
 	kill_all(&scene);
 	return (0);
+}
+
+void	print_list(t_scene *scene)
+{
+	t_olist *curr;
+	int	i;
+
+	curr = scene->obj_list;
+	i = 0;
+	while (curr)
+	{
+		printf("Objects num  %d in object list\n", i);
+		printf("Object enunm num %d\n", curr->obj_type);
+		curr = curr->next;
+		i++;
+	}
+	printf("End printing object list");
 }
 
 void	kill_all(t_scene *scene)
