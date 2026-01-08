@@ -53,7 +53,7 @@ typedef struct s_sp
 {
 	t_vec3			sp_center;
 	float			diameter;
-	float			radius;
+	//float			radius;
 	int				colour;
 }					t_sp;
 

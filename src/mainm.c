@@ -34,7 +34,12 @@ int		pars_input_file(char *file, t_scene *scene);
 bool	rt_file_extension(char *file);
 int		confirm_input(int ac, char **av);
 void	init_scene(t_scene *scene);
+void	kill_all(t_scene *scene);
 
+// test functions
+void	print_vars(t_scene *scene);
+
+//
 /*
 // below maxim
 void	free_array(char **arr);
@@ -296,7 +301,6 @@ int	ft_atorgb(const char *line)
 	return (ft_rgbtoint(255, red, green, blue));
 }
 
-
 */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -324,7 +328,7 @@ int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
 			temp = temp->next;
 		temp->next = new;
 	}
-	return (1);
+	return (0);
 }
 
 void	free_list(t_olist *list)
@@ -653,6 +657,11 @@ int	parse_sphere(char *line, t_scene *scene)
 	if (add_to_list(&scene->obj_list, sphere, SP, sphere->colour) == 1)
 		return (error("Failed adding sphere to the list"), free_array(res),
 			free(sphere), 1);
+	printf("SPHERE\n");
+	printf("cent %f %f %f\n", sphere->sp_center.x, sphere->sp_center.y,
+		sphere->sp_center.z);
+	printf("diam %f\n", sphere->diameter);
+	printf("color %d\n", sphere->colour);
 	return (free_array(res), 0);
 }
 
@@ -684,6 +693,12 @@ int	parse_plane(char *line, t_scene *scene)
 	if (add_to_list(&scene->obj_list, plane, PL, plane->colour) == 1)
 		return (error("Failed adding plane to the list"), free(plane),
 			free_array(res), 1);
+	printf("PLANE\n");
+	printf("pl point %f %f %f\n", plane->pl_point.x, plane->pl_point.y,
+		plane->pl_point.z);
+	printf("norm %f %f %f\n", plane->normal.x, plane->normal.y,
+		plane->normal.z);
+	printf("color %d\n", plane->colour);
 	return (free_array(res), 0);
 }
 // 50.0,0.0,20.6    0.0,0.0,1.0    14.2    21.42   10,0,255
@@ -727,6 +742,14 @@ int	parse_cylinder(char *line, t_scene *scene)
 	if (add_to_list(&scene->obj_list, cylinder, CY, cylinder->colour) == 1)
 		return (error("Failed adding cylinder to the list"), free(cylinder),
 			free_array(res), 1);
+	printf("CYLINDR\n");
+	printf("cy cent %f %f %f\n", cylinder->cy_center.x, cylinder->cy_center.y,
+		cylinder->cy_center.z);
+	printf("norm %f %f %f\n", cylinder->normal.x, cylinder->normal.y,
+		cylinder->normal.z);
+	printf("diam %f\n", cylinder->diameter);
+	printf("height %f", cylinder->height);
+	printf("color %d\n", cylinder->colour);
 	free_array(res);
 	return (0);
 }
@@ -776,9 +799,8 @@ int	parse_light(char *line, t_scene *scene)
 	if (parse_vector(res[0], &scene->light.pos, -100.0f, 100.0f) == 1)
 		return (error("Invalid light position"), free_array(res), 1);
 	if (parse_float(res[1], 0.0f, 1.0f, &bright) == 1)
-		;
-	return (error("Invalid light brightness"), free_array(res), 1);
-	if (parse_rgb(line, &colour) == 1) // this is for bonus
+		return (error("Invalid light brightness"), free_array(res), 1);
+	if (parse_rgb(res[2], &colour) == 1) // this is for bonus
 		return (error("Invalid light colour"), free_array(res), 1);
 	scene->light.bright = bright;
 	scene->light.color = colour; // this is for bonus
@@ -952,14 +974,48 @@ int	main(int ac, char **av)
 	}
 	if (pars_input_file(av[1], &scene) == 1)
 	{
+		kill_all(&scene);
 		return (EXIT_FAILURE);
 	}
-	printf("amb: float amb: %f, int colour: %d\n", scene.ambient.amb,
-		scene.ambient.colour);
-	printf("light: float bright: %f, int colour: %d,vector pos x = % f y =%f z =%f\n", scene.light.bright, scene.light.color, scene.light.pos.x,
-		scene.light.pos.y, scene.light.pos.z);
-	printf("Cam: FOV: %f, VP_x: %f, VP_y: %f, VP_z: %f, OV_x: %f, OV_y: %f,OV_z:%f\n", scene.cam.fov, scene.cam.view_point.x, scene.cam.view_point.y,
-		scene.cam.view_point.z, scene.cam.orient.x, scene.cam.orient.y,
-		scene.cam.orient.z);
+	print_vars(&scene);
+	kill_all(&scene);
 	return (0);
+}
+
+void	kill_all(t_scene *scene)
+{
+	free_list(scene->obj_list);
+}
+
+void	print_vars(t_scene *scene)
+{
+	printf("TESTING PARSING\n");
+	printf("---------------------------------------------------\n");
+	printf("Ambient Parsing\n");
+	printf("Ambient lighting ratio in the range [0.0,1.0]: ");
+	printf("%f\n", scene->ambient.amb);
+	printf("Ambient R, G, B colors in the range [0-255]: ");
+	printf("%d\n", scene->ambient.colour);
+	printf("---------------------------------------------------\n");
+	printf("Camera Parsing\n");
+	printf("x, y, z coordinates of the viewpoint: ");
+	printf("%f ", scene->cam.view_point.x);
+	printf("%f ", scene->cam.view_point.y);
+	printf("%f \n", scene->cam.view_point.z);
+	printf("3D norm orientation vector, in the range [-1,1] for x, y, z axis:");
+	printf("%f ", scene->cam.orient.x);
+	printf("%f ", scene->cam.orient.y);
+	printf("%f\n", scene->cam.orient.z);
+	printf("FOV: Horizontal field of view in degrees in the range [0,180]: ");
+	printf("%f\n", scene->cam.fov);
+	printf("---------------------------------------------------\n");
+	printf("Light Parsing\n");
+	printf("x, y, z coordinates of the light point: ");
+	printf("%f ", scene->light.pos.x);
+	printf("%f ", scene->light.pos.y);
+	printf("%f \n", scene->light.pos.z);
+	printf("the light brightness ratio in the range [0.0,1.0]: ");
+	printf("%f \n", scene->light.bright);
+	printf("(BONUS) R, G, B colors in the range [0-255]: ");
+	printf("%d\n", scene->light.color);
 }
