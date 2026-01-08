@@ -31,6 +31,298 @@ int		confirm_input(int ac, char **av);
 void	init_scene(t_scene *scene);
 int is_valid_comas(const char *line);
 
+
+
+// checks if num is in 0-255 rage
+int	check_rgb_range(char *line)
+{
+	int	val;
+
+	if (!line)
+		return (1);
+	val = ft_atoi(line);
+	if (val < 0 || val > 255)
+		return (1);
+	return (0);
+}
+// <-40.0,50.0,0.0     0.6     10,0,255>
+int	pars_light(char *line, t_scene *scene)
+{
+	char	**res;
+
+	res = NULL;                    // might remove this
+	if (count_elements(line) != 3) // mb 2 for mand. part, for now 3
+		return (error("Wrong specs for light"), 1);
+	res = ft_split(line, ' ');
+	if (!res)
+		return (error(ERR_ALLOC), 1);
+	if (extract_floats(res[0], &scene->light.pos, 'M'))
+	{
+		free_array(res);
+		return (1);
+	}
+	if (is_valid_float(res[1]) == 1)
+	{
+		free_array(res);
+		return (1);
+	}
+	if (ft_atof(res[1], &scene->light.bright) == 1)
+	{
+		free_array(res);
+		return (1);
+	}
+	if (check_float_range(scene->light.bright, 0.0f, 1.0f) == 1)
+	{
+		free_array(res);
+		return (1);
+	}
+	if (check_rgb_format(res[2]) == 0)
+		scene->light.color = ft_atorgb(res[2]);
+	else
+		return (free_array(res), 1);
+	return (free_array(res), 0);
+}
+
+//  <-50.0,0,20 0,0,1 70>
+int	pars_cam(char *line, t_scene *scene)
+{
+	char	**res;
+
+	res = NULL;
+	if (count_elements(line) != 3)
+		return (error("Wrong specs for cam"), 1);
+	res = ft_split(line, ' ');
+	if (!res)
+		return (error(ERR_ALLOC), 1);
+	if (extract_floats(res[0], &scene->cam.view_point, 'M'))
+	{
+		free_array(res);
+		return (1);
+	}
+	if (extract_floats(res[1], &scene->cam.orient, 'N'))
+	{
+		free_array(res);
+		return (1);
+	}
+	if (is_valid_float(res[2]) == 1)
+	{
+		free_array(res);
+		return (1);
+	}
+	if (ft_atof(res[2], &scene->cam.fov) == 1)
+	{
+		free_array(res);
+		return (1);
+	}
+	if (check_float_range(scene->cam.fov, 0.0f, 180.0f) == 1)
+	{
+		free_array(res);
+		return (1);
+	}
+	free_array(res);
+	return (0);
+}
+
+
+// function which confirms that we got exactly
+// 3 non empty arrays with valid float format nums
+int	check_split_res(char **split_res)
+{
+	int	i;
+
+	i = 0;
+	while (i < 3)
+	{
+		if (!split_res[i])
+			return (1);
+		if (is_valid_float(split_res[i]) == 1)
+			return (1);
+		i++;
+	}
+	if (split_res[3])
+		return (1);
+	return (0);
+}
+
+
+
+// Function which confirms the range of the float num
+// min_value == min possible starting value
+// max-value == max possible ending value
+// returns 0 on success, 1 otherwise
+int	check_float_range(float value, float min_value, float max_value)
+{
+	if (min_value <= value && value <= max_value)
+		return (0);
+	return (1);
+}
+
+
+
+// [-40.0][50.0][0.0]
+int	extract_floats(const char *line, t_vec3 *vec3, char flag)
+{
+	char	**res;
+	
+
+	if(is_valid_comas(line)== 1)
+		return (error("wrong float format"), 1);
+	res = ft_split(line, ',');
+	if (!res)
+		return (error(ERR_ALLOC), 1);
+	if (check_split_res(res) == 1)
+		return (error("wrong float format"), 1);
+	x = 0;
+	y = 0;
+	z = 0;
+	if (ft_atof(res[0], &x) == 1 || ft_atof(res[1], &y) == 1 || ft_atof(res[2],
+			&z) == 1)
+		return (free_array(res), error("float overflow"), 1);
+	if (flag == 'N')
+	{
+		if (check_float_range(x, -1.0f, 1.0f) == 1 || check_float_range(y,
+				-1.0f, 1.0f) == 1 || check_float_range(z, -1.0f, 1.0f) == 1)
+			return (free_array(res), 1);
+	}
+	*vec3 = creat_vec3(x, y, z);
+	free_array(res);
+	return (0);
+}
+
+// 255,255,255 = 11 || 0,0,0 = 5
+// checks rgb format
+// creates 2d arr with 3 inputs
+int	check_rgb_format(char *line)
+{
+	char	**rgb;
+	int		i;
+
+	if (is_valid_comas(line) == 1)
+		return (error("Wrong format of RGB"), 1);
+	rgb = ft_split(line, ',');
+	if (!rgb)
+		return (error("Wrong format of RGB"), 1);
+	i = 0;
+	while (i < 3)
+	{
+		if (!rgb[i] || rgb[i][0] == '\0')
+			return (free_array(rgb), error("Wrong format of RGB"), 1);
+		if (is_valid_int(rgb[i]))
+			return (free_array(rgb), error("Wrong format of RGB"), 1);
+		if (check_rgb_range(rgb[i]))
+			return (free_array(rgb), error("Out of range for RGB"), 1);
+		i++;
+	}
+	if (rgb[3])
+		return (free_array(rgb), error("Wrong format of RGB"), 1);
+	free_array(rgb);
+	return (0);
+}
+
+
+// [0.0 - 1.0] [0-255]  
+// main parsing ambient light function
+// new version
+int	pars_ambient(char *line, t_scene *scene)
+{
+	char	**res;
+
+	res = NULL;
+	if (count_elements(line) != 2)
+		return (error("Wrong ambient specs"), 1);
+	res = ft_split(line, ' ');
+	if (!res)
+		return (error(ERR_ALLOC), 1);
+	if(is_valid_float(res[0]) == 1 || ft_atof(res[0],&scene->ambient.amb) == 1)
+		return (error("Invalid ambient ratio"),free_array(res), 1);
+	if(check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
+		return (error("Ambient ratio out of range [0,1]")free_array(res), 1);
+	if(check_rgb_format(res[1]) == 1)
+		return (free_array(res), 1);
+	scene->ambient.colour = ft_atorgb(res[1]);
+	free_array(res);
+	return (0);
+}
+// converting ascii to rgb values
+int	ft_atorgb(const char *line)
+{
+	int	i;
+	int	red;
+	int	green;
+	int	blue;
+
+	i = 0;
+	red = ft_atoi(line);
+	while (line[i] && line[i] != ',')
+		i++;
+	i++;
+	green = ft_atoi(line + i);
+	while (line[i] && line[i] != ',')
+		i++;
+	i++;
+	blue = ft_atoi(line + i);
+	return (ft_rgbtoint(255, red, green, blue));
+}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// STEP 5: Helper functions
+
+int add_to_list(t_olist **list, void *object, t_otype type, int colour)
+{
+    t_olist *new;
+    t_olist *temp;
+
+    new = malloc(sizeof(t_olist));
+    if(!new)
+        return (1);
+    new->obj_type = type;
+    new->obj = object;
+    new->colour = colour;
+    // id ?? 
+    if(*list == NULL)
+        *list = new;
+    else
+    {
+        temp = *list;
+        while(temp->next)
+            temp = temp->next;
+        temp->next = new;
+    }
+    return (1);
+}
+
+void    free_list(t_olist *list)
+{
+    t_olist *temp;
+
+    if(!list)
+        return;
+    while (list)
+    {
+        temp = list->next;
+        if(list->obj)
+            free(list->obj);
+        free(list);
+        list = temp; 
+    }
+    list = NULL;
+}
+
+
+
+t_vec3	creat_vec3(float x, float y, float z)
+{
+	t_vec3	vector;
+
+	vector.x = x;
+	vector.y = y;
+	vector.z = z;
+	return (vector);
+}
+
 void	free_array(char **arr)
 {
 	int	i;
@@ -135,6 +427,31 @@ int	ft_isspace(char ch)
 }
 
 
+int is_valid_comas(const char *line)
+{
+	int i;
+	int coma;
+
+	i = 0;
+	coma = 0;
+	while(line[i])
+	{
+		if(line[i] == ',')
+			coma++;
+		i++;
+	}
+	if(coma != 2)
+		return (1);
+	return (0);
+}
+
+// with bitshifting storing rgb into singl int
+// t - transparency (always to max value = 255)
+int	ft_rgbtoint(int transp, int red, int green, int blue)
+{
+	return (transp << 24 | red << 16 | green << 8 | blue);
+}
+
 // ascii to float converter
 // detects sign
 // if overflow happens, still writes garbage value to res
@@ -195,394 +512,90 @@ void	get_fraction_part(const char *line, int *i, float *temp, int *overflow)
 	}
 }
 
-int is_valid_comas(const char *line)
-{
-	int i;
-	int coma;
 
-	i = 0;
-	coma = 0;
-	while(line[i])
-	{
-		if(line[i] == ',')
-			coma++;
-		i++;
-	}
-	if(coma != 2)
-		return (1);
-	return (0);
+int parse_rgb(char *str, int *color)
+{
+    char **rgb;
+    int r;
+    int g;
+    int b;
+
+    if(!str || is_valid_comas(str))
+        return (1);
+    rgb = ft_split(str, ',');
+    if(!rgb)
+        return (error(ERR_ALLOC), 1);
+     if(!rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
+        return (free_array(rgb), 1);
+    r = 0;
+    g = 0;
+    b = 0;
+    if(parse_int(rgb[0], 0, 255, &r) == 1 || parse_int(rgb[1], 0, 255, &g) == 1 ||parse_int(rgb[2], 0, 255, &b) == 1)
+        return (free_array(rgb), 1);
+    *color = ft_rgbtoint(255, r, g, b);
+    free_array(rgb);
+    return (0);
 }
 
-// checks if num is in 0-255 rage
-int	check_rgb_range(char *line)
+int parse_vector(char *str, t_vec3 *vector, float min, float max)
 {
-	int	val;
+    char **res;
+    float	x;
+	float	y;
+	float	z;
 
-	if (!line)
-		return (1);
-	val = ft_atoi(line);
-	if (val < 0 || val > 255)
-		return (1);
-	return (0);
-}
-// <-40.0,50.0,0.0     0.6     10,0,255>
-int	pars_light(char *line, t_scene *scene)
-{
-	char	**res;
-
-	res = NULL;                    // might remove this
-	if (count_elements(line) != 3) // mb 2 for mand. part, for now 3
-		return (error("Wrong specs for light"), 1);
-	res = ft_split(line, ' ');
-	if (!res)
-		return (error(ERR_ALLOC), 1);
-	if (extract_floats(res[0], &scene->light.pos, 'M'))
-	{
-		free_array(res);
-		return (1);
-	}
-	if (is_valid_float(res[1]) == 1)
-	{
-		free_array(res);
-		return (1);
-	}
-	if (ft_atof(res[1], &scene->light.bright) == 1)
-	{
-		free_array(res);
-		return (1);
-	}
-	if (check_float_range(scene->light.bright, 0.0f, 1.0f) == 1)
-	{
-		free_array(res);
-		return (1);
-	}
-	if (check_rgb_format(res[2]) == 0)
-		scene->light.color = ft_atorgb(res[2]);
-	else
-		return (free_array(res), 1);
-	return (free_array(res), 0);
-}
-
-//  <-50.0,0,20 0,0,1 70>
-int	pars_cam(char *line, t_scene *scene)
-{
-	char	**res;
-
-	res = NULL;
-	if (count_elements(line) != 3)
-		return (error("Wrong specs for cam"), 1);
-	res = ft_split(line, ' ');
-	if (!res)
-		return (error(ERR_ALLOC), 1);
-	if (extract_floats(res[0], &scene->cam.view_point, 'M'))
-	{
-		free_array(res);
-		return (1);
-	}
-	if (extract_floats(res[1], &scene->cam.orient, 'N'))
-	{
-		free_array(res);
-		return (1);
-	}
-	if (is_valid_float(res[2]) == 1)
-	{
-		free_array(res);
-		return (1);
-	}
-	if (ft_atof(res[2], &scene->cam.fov) == 1)
-	{
-		free_array(res);
-		return (1);
-	}
-	if (check_float_range(scene->cam.fov, 0.0f, 180.0f) == 1)
-	{
-		free_array(res);
-		return (1);
-	}
-	free_array(res);
-	return (0);
+    if(!str || is_valid_comas(str) == 1)
+        return (1);
+    res= ft_split(str, ',');
+    if(!res)
+        return (error(ERR_ALLOC), 1);
+    if(!res[0] || !res[1] || !res[2] || res[3])
+        return (free_array(res), 1);
+    x = 0;
+    y = 0;
+    z = 0;
+    if(parse_float(res[0], min, max, &x) == 1|| parse_float(res[1], min, max, &y) == 1 || parse_float(res[2], min, max, &z) == 1)
+        return (free_array(res), 1);
+    *vector = creat_vec3(x,y,z);
+    free_array(res);
+    return (0);
 }
 
 
-
-t_vec3	creat_vec3(float x, float y, float z)
+int parse_int(char *str, int min, int max, int *res)
 {
-	t_vec3	vector;
+    int temp;
 
-	vector.x = x;
-	vector.y = y;
-	vector.z = z;
-	return (vector);
-}
-
-// function which confirms that we got exactly
-// 3 non empty arrays with valid float format nums
-int	check_split_res(char **split_res)
-{
-	int	i;
-
-	i = 0;
-	while (i < 3)
-	{
-		if (!split_res[i])
-			return (1);
-		if (is_valid_float(split_res[i]) == 1)
-			return (1);
-		i++;
-	}
-	if (split_res[3])
-		return (1);
-	return (0);
+    temp = 0;
+    if(!str || is_valid_int(str) == 1)
+        return (1);
+    temp = ft_atoi(str);
+    if(temp < min || temp > max)
+        return (1);
+    *res = temp;
+    return (0);
 }
 
 
-
-
-// converting ascii to rgb values
-int	ft_atorgb(const char *line)
+int parse_float(char *str, float min, float max, float *res)
 {
-	int	i;
-	int	red;
-	int	green;
-	int	blue;
-
-	i = 0;
-	red = ft_atoi(line);
-	while (line[i] && line[i] != ',')
-		i++;
-	i++;
-	green = ft_atoi(line + i);
-	while (line[i] && line[i] != ',')
-		i++;
-	i++;
-	blue = ft_atoi(line + i);
-	return (ft_rgbtoint(255, red, green, blue));
+    if(!str || is_valid_float(str) == 1)
+        return (1);
+    if(ft_atof(str, res))
+        return (1);
+    if(*res < min || *res > max)
+        return (1);
+    return (0);
 }
-// with bitshifting storing rgb into singl int
-// t - transparency (always to max value = 255)
-int	ft_rgbtoint(int transp, int red, int green, int blue)
-{
-	return (transp << 24 | red << 16 | green << 8 | blue);
-}
-
-// Function which confirms the range of the float num
-// min_value == min possible starting value
-// max-value == max possible ending value
-// returns 0 on success, 1 otherwise
-int	check_float_range(float value, float min_value, float max_value)
-{
-	if (min_value <= value && value <= max_value)
-		return (0);
-	return (1);
-}
-
-// if ch == C -> pars_cam
-// if ch == L -> pars_lignt
-// if ch == A -> pars_ambient
-// need to know that we have 1 of each, else, err
-int	pars_cam_light(char *line, char ch, t_scene *scene)
-{
-	if (ch == 'C')
-	{
-		scene->qt_cam++;
-		return (pars_cam(++line, scene));
-	}
-	else if (ch == 'A')
-	{
-		scene->qt_ambiant++;
-		return (pars_ambient(++line, scene));
-	}
-	else if (ch == 'L')
-	{
-		scene->qt_light++;
-		return (pars_light(++line, scene));
-	}
-	// we need a func to count CAL at the end of pars
-	return (0);
-}
-
-// checks the first meaningful char(s) in the line.
-// if found, goes to corresponding function
-int	dispatch(char *line, t_scene *scene)
-{
-	while (*line == ' ') // what about tabs here ??
-		line++;
-	if (*line == '\0' || *line == '\n') // what else is ok
-		return (0);
-	else if (ft_strchr("CAL", *line))
-		return (pars_cam_light(line, *line, scene));
-	else if (ft_strncmp(line, "sp", 2) == 0)
-    {
-        line +=2;
-        return (parse_sphere(line,scene));
-    }
-    else if (ft_strncmp(line, "pl", 2) == 0)
-    {
-        line +=2;
-        return (parse_plane(line, scene));
-    }
-	else if (ft_strncmp(line, "cy", 2) == 0)
-	{
-        line += 2;
-        return (parse_cylinder(line, scene));
-    }
-	else
-		return (error("Unknown char detected in .rt"), 1);
-}
-
-int	pars_input_file(char *file, t_scene *scene)
-{
-	int		fd;
-	int		check;
-	char	*line;
-	char 	*trimmed;
-	check = 1;
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (error("cannot open file for reading"), 1);
-	line = get_next_line(fd);
-	while (line)
-	{
-		trimmed = ft_strtrim(line, " \n");
-		free(line);
-		if(!trimmed)
-		{
-			close(fd);
-			return(error(ERR_ALLOC),1);
-		}
-		check = dispatch(trimmed, scene);
-		free(trimmed);
-		if (check != 0)
-		{
-			close(fd);
-			return (1);
-		}
-		line = get_next_line(fd);
-	}
-	close(fd);
-	return (0);
-	// another func to check amb/cam/light
-	// should have qty == 1 of each.
-}
-
-bool	rt_file_extension(char *file)
-{
-	size_t	len;
-
-	if (!file)
-		return (false);
-	len = ft_strlen(file);
-	if (len < 3)
-		return (false);
-	if (ft_strncmp(file + len - 3, ".rt", 3) != 0)
-		return (false);
-	return (true);
-}
-
-int	confirm_input(int ac, char **av)
-{
-	if (ac != 2)
-		return (error(ERR_AC), 1);
-	if (!rt_file_extension(av[1]))
-		return (error(ERR_EXT), 1);
-	return (0);
-}
-
-void	init_scene(t_scene *scene)
-{
-	scene->mlx = NULL;
-	scene->window = NULL;
-	scene->obj_list = NULL;
-	// scene->light = NULL;
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// [-40.0][50.0][0.0]
-int	extract_floats(const char *line, t_vec3 *vec3, char flag)
-{
-	char	**res;
-	
-
-	if(is_valid_comas(line)== 1)
-		return (error("wrong float format"), 1);
-	res = ft_split(line, ',');
-	if (!res)
-		return (error(ERR_ALLOC), 1);
-	if (check_split_res(res) == 1)
-		return (error("wrong float format"), 1);
-	x = 0;
-	y = 0;
-	z = 0;
-	if (ft_atof(res[0], &x) == 1 || ft_atof(res[1], &y) == 1 || ft_atof(res[2],
-			&z) == 1)
-		return (free_array(res), error("float overflow"), 1);
-	if (flag == 'N')
-	{
-		if (check_float_range(x, -1.0f, 1.0f) == 1 || check_float_range(y,
-				-1.0f, 1.0f) == 1 || check_float_range(z, -1.0f, 1.0f) == 1)
-			return (free_array(res), 1);
-	}
-	*vec3 = creat_vec3(x, y, z);
-	free_array(res);
-	return (0);
-}
-
-// 255,255,255 = 11 || 0,0,0 = 5
-// checks rgb format
-// creates 2d arr with 3 inputs
-int	check_rgb_format(char *line)
-{
-	char	**rgb;
-	int		i;
-
-	if (is_valid_comas(line) == 1)
-		return (error("Wrong format of RGB"), 1);
-	rgb = ft_split(line, ',');
-	if (!rgb)
-		return (error("Wrong format of RGB"), 1);
-	i = 0;
-	while (i < 3)
-	{
-		if (!rgb[i] || rgb[i][0] == '\0')
-			return (free_array(rgb), error("Wrong format of RGB"), 1);
-		if (is_valid_int(rgb[i]))
-			return (free_array(rgb), error("Wrong format of RGB"), 1);
-		if (check_rgb_range(rgb[i]))
-			return (free_array(rgb), error("Out of range for RGB"), 1);
-		i++;
-	}
-	if (rgb[3])
-		return (free_array(rgb), error("Wrong format of RGB"), 1);
-	free_array(rgb);
-	return (0);
-}
 
 
-// [0.0 - 1.0] [0-255]  
-// main parsing ambient light function
-// new version
-int	pars_ambient(char *line, t_scene *scene)
-{
-	char	**res;
-
-	res = NULL;
-	if (count_elements(line) != 2)
-		return (error("Wrong ambient specs"), 1);
-	res = ft_split(line, ' ');
-	if (!res)
-		return (error(ERR_ALLOC), 1);
-	if(is_valid_float(res[0]) == 1 || ft_atof(res[0],&scene->ambient.amb) == 1)
-		return (error("Invalid ambient ratio"),free_array(res), 1);
-	if(check_float_range(scene->ambient.amb, 0.0f, 1.0f) == 1)
-		return (error("Ambient ratio out of range [0,1]")free_array(res), 1);
-	if(check_rgb_format(res[1]) == 1)
-		return (free_array(res), 1);
-	scene->ambient.colour = ft_atorgb(res[1]);
-	free_array(res);
-	return (0);
-}
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// STEP 4: Main parsing functions for sphere cylinder plane
+// Extracting basic data
+// Adding each to the linked list of objects
 
 
 // 0.0,0.0,20.6 12.6 10,0,255
@@ -681,48 +694,20 @@ int parse_cylinder(char *line, t_scene *scene)
     free_array(res);
     return(0);
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int add_to_list(t_olist **list, void *object, t_otype type, int colour)
-{
-    t_olist *new;
-    t_olist *temp;
 
-    new = malloc(sizeof(t_olist));
-    if(!new)
-        return (1);
-    new->obj_type = type;
-    new->obj = object;
-    new->colour = colour;
-    // id ?? 
-    if(*list == NULL)
-        *list = new;
-    else
-    {
-        temp = *list;
-        while(temp->next)
-            temp = temp->next;
-        temp->next = new;
-    }
-    return (1);
-}
 
-void    free_list(t_olist *list)
-{
-    t_olist *temp;
 
-    if(!list)
-        return;
-    while (list)
-    {
-        temp = list->next;
-        if(list->obj)
-            free(list->obj);
-        free(list);
-        list = temp; 
-    }
-    list = NULL;
-}
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// STEP 3: Main parsing functions for Cam Ambient Light
+// Extracting basic data 
+
 
 // refractors below
 //<0,2 255,255,255>
@@ -793,96 +778,147 @@ int parse_cam(char *line, t_scene *scene)
     free_array(res);
     return (0);
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
-int parse_rgb(char *str, int *color)
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// STEP 2: Read lines from input file with  gnl(need to change version)
+// Trims spaces and newlines
+// Passes trimmed line to dispatcher
+// Based on identifier C L A sp pl cy to corresponding parsing function
+
+
+
+
+// if ch == C -> pars_cam
+// if ch == L -> pars_lignt
+// if ch == A -> pars_ambient
+// need to know that we have 1 of each, else, err
+int	pars_cam_light(char *line, char ch, t_scene *scene)
 {
-    char **rgb;
-    int r;
-    int g;
-    int b;
-
-    if(!str || is_valid_comas(str))
-        return (1);
-    rgb = ft_split(str, ',');
-    if(!rgb)
-        return (error(ERR_ALLOC), 1);
-     if(!rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
-        return (free_array(rgb), 1);
-    r = 0;
-    g = 0;
-    b = 0;
-    if(parse_int(rgb[0], 0, 255, &r) == 1 || parse_int(rgb[1], 0, 255, &g) == 1 ||parse_int(rgb[2], 0, 255, &b) == 1)
-        return (free_array(rgb), 1);
-    *color = ft_rgbtoint(255, r, g, b);
-    free_array(rgb);
-    return (0);
+	if (ch == 'C')
+	{
+		scene->qt_cam++;
+		return (pars_cam(++line, scene));
+	}
+	else if (ch == 'A')
+	{
+		scene->qt_ambiant++;
+		return (pars_ambient(++line, scene));
+	}
+	else if (ch == 'L')
+	{
+		scene->qt_light++;
+		return (pars_light(++line, scene));
+	}
+	// we need a func to count CAL at the end of pars
+	return (0);
 }
 
-int parse_vector(char *str, t_vec3 *vector, float min, float max)
+int	dispatch(char *line, t_scene *scene)
 {
-    char **res;
-    float	x;
-	float	y;
-	float	z;
+	while (*line == ' ') // what about tabs here ?? 
+		line++;
+	if (*line == '\0' || *line == '\n') // what else is ok?  probably # (comments)
+		return (0);
+	else if (ft_strchr("CAL", *line))
+		return (pars_cam_light(line, *line, scene));
+	else if (ft_strncmp(line, "sp", 2) == 0)
+    {
+        line +=2;
+        return (parse_sphere(line,scene));
+    }
+    else if (ft_strncmp(line, "pl", 2) == 0)
+    {
+        line +=2;
+        return (parse_plane(line, scene));
+    }
+	else if (ft_strncmp(line, "cy", 2) == 0)
+	{
+        line += 2;
+        return (parse_cylinder(line, scene));
+    }
+	else
+		return (error("Unknown char detected in .rt"), 1);
+}
 
-    if(!str || is_valid_comas(str) == 1)
-        return (1);
-    res= ft_split(str, ',');
-    if(!res)
-        return (error(ERR_ALLOC), 1);
-    if(!res[0] || !res[1] || !res[2] || res[3])
-        return (free_array(res), 1);
-    x = 0;
-    y = 0;
-    z = 0;
-    if(parse_float(res[0], min, max, &x) == 1|| parse_float(res[1], min, max, &y) == 1 || parse_float(res[2], min, max, &z) == 1)
-        return (free_array(res), 1);
-    *vector = creat_vec3(x,y,z);
-    free_array(res);
-    return (0);
+int	pars_input_file(char *file, t_scene *scene)
+{
+	int		fd;
+	int		check;
+	char	*line;
+	char 	*trimmed;
+	check = 1;
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (error("cannot open file for reading"), 1);
+	line = get_next_line(fd);
+	while (line)
+	{
+		trimmed = ft_strtrim(line, " \n");
+		free(line);
+		if(!trimmed)
+		{
+			close(fd);
+			return(error(ERR_ALLOC),1);
+		}
+		check = dispatch(trimmed, scene);
+		free(trimmed);
+		if (check != 0)
+		{
+			close(fd);
+			return (1);
+		}
+		line = get_next_line(fd);
+	}
+	close(fd);
+	return (0);
+	// another func to check amb/cam/light
+	// should have qty == 1 of each.
 }
 
 
-int parse_int(char *str, int min, int max, int *res)
-{
-    int temp;
 
-    temp = 0;
-    if(!str || is_valid_int(str) == 1)
-        return (1);
-    temp = ft_atoi(str);
-    if(temp < min || temp > max)
-        return (1);
-    *res = temp;
-    return (0);
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// STEP 1: Checks ac and file extension 
+
+bool	rt_file_extension(char *file)
+{
+	size_t	len;
+
+	if (!file)
+		return (false);
+	len = ft_strlen(file);
+	if (len < 3)
+		return (false);
+	if (ft_strncmp(file + len - 3, ".rt", 3) != 0)
+		return (false);
+	return (true);
 }
 
-
-int parse_float(char *str, float min, float max, float *res)
+int	confirm_input(int ac, char **av)
 {
-    if(!str || is_valid_float(str) == 1)
-        return (1);
-    if(ft_atof(str, res))
-        return (1);
-    if(*res < min || *res > max)
-        return (1);
-    return (0);
+	if (ac != 2)
+		return (error(ERR_AC), 1);
+	if (!rt_file_extension(av[1]))
+		return (error(ERR_EXT), 1);
+	return (0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void	init_scene(t_scene *scene)
+{
+	scene->mlx = NULL;
+	scene->window = NULL;
+	scene->obj_list = NULL;
+	// scene->light = NULL;
+}
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
