@@ -307,6 +307,13 @@ int	ft_atorgb(const char *line)
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // STEP 5: Helper functions
 
+
+void	kill_all(t_scene *scene)
+{
+	free_list(scene->obj_list);
+}
+
+
 int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
 {
 	t_olist	*new;
@@ -1010,10 +1017,7 @@ void	print_list(t_scene *scene)
 	printf("End printing object list");
 }
 
-void	kill_all(t_scene *scene)
-{
-	free_list(scene->obj_list);
-}
+
 
 void	print_vars(t_scene *scene)
 {
