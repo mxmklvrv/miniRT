@@ -24,6 +24,7 @@ HDR = $(addprefix $(HDR_DIR)/, \
 	)
 
 PARS_DIR = src/parsing
+PARS_OBJ_DIR = $(PARS_DIR)/obj_parsing
 PARS_SRC = $(addprefix $(PARS_DIR)/, \
 	dispatch.c \
 	input_validation.c \
@@ -36,19 +37,19 @@ PARS_SRC = $(addprefix $(PARS_DIR)/, \
 	read_file.c \
 	utils.c \
 	)
-
+PARS_OBJ = $(PARS_SRC:$(PARS_DIR)/%c=$(PARS_OBJ_DIR)/%.o)
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
 	mainm.c \
 	visuals.c \
 	hooks.c \
-	) \
-	$(PARS_SRC)
+	)
 
 
 OBJ_DIR = obj
-OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o) \
+	$(PARS_OBJ)
 
 # ------------  RULES  ------------------------------------------------------- #
 all: $(NAME)
@@ -65,9 +66,12 @@ $(MLX):
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDR)
 	mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
+$(PARS_OBJ_DIR)/%.o: $(PARS_DIR)/%.c $(HDR)
+	mkdir -p $(PARS_OBJ_DIR)
+	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
 
 clean:
-	rm -rf $(OBJ_DIR)
+	rm -rf $(OBJ_DIR) $(PARS_OBJ_DIR)
 	make clean -C $(LIBFT_DIR)
 
 fclean: clean
@@ -77,5 +81,5 @@ fclean: clean
 re: fclean all
 
 # ------------  EXTRA  ------------------------------------------------------- #
-.SECONDARY: $(OBJ_DIR) $(OBJ)
+.SECONDARY: $(OBJ_DIR) $(OBJ) $(PARS_OBJ_DIR)
 .PHONY: all re clean fclean
