@@ -1,9 +1,18 @@
 #include "minirt.h"
 
-// TODO: probably after parsing need to check
-// how many ACL we have atm
-// probably the correctness of the vectors etc..
-// new version
+// TODO: probably after parsing
+/**
+ * 1. scene lvl validation:
+ * -1 cam 1 amb 1 light
+ * - at list 1 object probably
+ * 2. obj lvl validation:
+ * - no trash values 
+ * - no zeros 
+ * Sphere
+ * 
+ *  
+ * */ 
+
 int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
 void	free_list(t_olist *list);
 t_vec3	creat_vec3(float x, float y, float z);
@@ -669,7 +678,7 @@ int	parse_sphere(char *line, t_scene *scene)
 	printf("cent %f %f %f\n", sphere->sp_center.x, sphere->sp_center.y,
 		sphere->sp_center.z);
 	printf("diam %f\n", sphere->diameter);
-	printf("color %d\n", sphere->colour);
+	printf("color %d\n\n", sphere->colour);
 	return (free_array(res), 0);
 }
 
@@ -706,7 +715,7 @@ int	parse_plane(char *line, t_scene *scene)
 		plane->pl_point.z);
 	printf("norm %f %f %f\n", plane->normal.x, plane->normal.y,
 		plane->normal.z);
-	printf("color %d\n", plane->colour);
+	printf("color %d\n\n", plane->colour);
 	return (free_array(res), 0);
 }
 // 50.0,0.0,20.6    0.0,0.0,1.0    14.2    21.42   10,0,255
@@ -757,7 +766,7 @@ int	parse_cylinder(char *line, t_scene *scene)
 		cylinder->normal.z);
 	printf("diam %f\n", cylinder->diameter);
 	printf("height %f", cylinder->height);
-	printf("color %d\n", cylinder->colour);
+	printf("color %d\n\n", cylinder->colour);
 	free_array(res);
 	return (0);
 }
@@ -986,7 +995,7 @@ int	main(int ac, char **av)
 	init_scene(&scene);
 	if (confirm_input(ac, av) == 1)
 	{
-		// free scene and everything
+		kill_all(&scene);
 		return (EXIT_FAILURE);
 	}
 	if (pars_input_file(av[1], &scene) == 1)
@@ -1014,7 +1023,7 @@ void	print_list(t_scene *scene)
 		curr = curr->next;
 		i++;
 	}
-	printf("End printing object list");
+	printf("End printing object list\n");
 }
 
 
@@ -1049,5 +1058,6 @@ void	print_vars(t_scene *scene)
 	printf("the light brightness ratio in the range [0.0,1.0]: ");
 	printf("%f \n", scene->light.bright);
 	printf("(BONUS) R, G, B colors in the range [0-255]: ");
-	printf("%d\n", scene->light.color);
+	printf("%d\n\n", scene->light.color);
+
 }
