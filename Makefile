@@ -1,6 +1,6 @@
 NAME = miniRT
 
-CC = cc
+CC = cc -g
 
 CFLAGS = -Wall -Wextra -Werror
 HEADERS = $(addprefix -I, $(LIBFT_DIR) $(MLX_DIR) $(HDR_DIR) /usr/include) -O3
@@ -24,7 +24,7 @@ HDR = $(addprefix $(HDR_DIR)/, \
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
-	main.c \
+	mainm.c \
 	visuals.c \
 	hooks.c \
 	)
