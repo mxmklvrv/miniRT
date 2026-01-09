@@ -6,12 +6,12 @@
  * -1 cam 1 amb 1 light
  * - at list 1 object probably
  * 2. obj lvl validation:
- * - no trash values 
- * - no zeros 
+ * - no trash values
+ * - no zeros
  * Sphere
- * 
- *  
- * */ 
+ *
+ *
+ * */
 
 int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
 void	free_list(t_olist *list);
@@ -316,12 +316,10 @@ int	ft_atorgb(const char *line)
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // STEP 5: Helper functions
 
-
 void	kill_all(t_scene *scene)
 {
 	free_list(scene->obj_list);
 }
-
 
 int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
 {
@@ -442,7 +440,7 @@ int	is_valid_int(char *line)
 // checks the validity of the float nubmer
 // '-' accepted, also '+';
 // ony digits before and after '.'
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!0. fixe 
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!0. fixe
 
 int	is_valid_float(char *line)
 {
@@ -1012,8 +1010,8 @@ int	main(int ac, char **av)
 
 void	print_list(t_scene *scene)
 {
-	t_olist *curr;
-	int	i;
+	t_olist	*curr;
+	int		i;
 
 	curr = scene->obj_list;
 	i = 0;
@@ -1026,8 +1024,6 @@ void	print_list(t_scene *scene)
 	}
 	printf("End printing object list\n");
 }
-
-
 
 void	print_vars(t_scene *scene)
 {
@@ -1060,5 +1056,4 @@ void	print_vars(t_scene *scene)
 	printf("%f \n", scene->light.bright);
 	printf("(BONUS) R, G, B colors in the range [0-255]: ");
 	printf("%d\n\n", scene->light.color);
-
 }
