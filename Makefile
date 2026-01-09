@@ -37,7 +37,7 @@ PARS_SRC = $(addprefix $(PARS_DIR)/, \
 	read_file.c \
 	utils.c \
 	)
-PARS_OBJ = $(PARS_SRC:$(PARS_DIR)/%c=$(PARS_OBJ_DIR)/%.o)
+PARS_OBJ = $(PARS_SRC:$(PARS_DIR)/%.c=$(PARS_OBJ_DIR)/%.o)
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
