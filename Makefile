@@ -20,14 +20,32 @@ HDR = $(addprefix $(HDR_DIR)/, \
 	minirt.h \
 	structs.h \
 	macros.h \
+	parsing.h \
 	)
+
+PARS_DIR = src/parsing
+PARS_SRC = $(addprefix $(PARS_DIR)/, \
+	dispatch.c \
+	input_validation.c \
+	parse_ambient.c \
+	parse_camera.c \
+	parse_cy.c \
+	parse_light.c \
+	parse_pl.c \
+	parse_sp.c \
+	read_file.c \
+	utils.c \
+	)
+
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
 	mainm.c \
 	visuals.c \
 	hooks.c \
-	)
+	) \
+	$(PARS_SRC)
+
 
 OBJ_DIR = obj
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
