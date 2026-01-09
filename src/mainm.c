@@ -442,7 +442,7 @@ int	is_valid_int(char *line)
 // checks the validity of the float nubmer
 // '-' accepted, also '+';
 // ony digits before and after '.'
-
+//0. pases but .0 is not ???? 
 int	is_valid_float(char *line)
 {
 	int	i;
