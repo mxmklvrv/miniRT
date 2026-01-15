@@ -1,27 +1,23 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-// typedef struct s_vars
-// {
-// 	void	*mlx;
-// 	void	*win;
-// }			t_vars;
+ typedef struct s_data
+ {
+	void	*mlx;
+ 	void	*win;
+ 	void	*img;
+ 	char	*addr;
+ 	int		bits_per_pixel;
+ 	int		line_length;
+ 	int		endian;
+ }			t_data;
 
-// typedef struct s_data
-// {
-// 	void	*img;
-// 	char	*addr;
-// 	int		bits_per_pixel;
-// 	int		line_length;
-// 	int		endian;
-// }			t_data;
-
-// typedef struct s_point
-// {
-// 	int		x;
-// 	int		y;
-// 	int		color;
-// }			t_point;
+ typedef struct s_point
+ {
+ 	int		x;
+ 	int		y;
+ 	int		color;
+ }			t_point;
 
 typedef struct s_vec3
 {
@@ -53,7 +49,6 @@ typedef struct s_sp
 {
 	t_vec3			sp_center;
 	float			diameter;
-	//float			radius;
 	int				colour;
 }					t_sp;
 
@@ -98,17 +93,13 @@ typedef struct s_light
 // main struct
 typedef struct s_scene
 {
-	void			*mlx;
-	void			*window;
 	t_olist			*obj_list;
 	t_ambient		ambient;
-	// t_light         *light;
 	t_light			light;
 	t_cam			cam;
 	int				qt_ambiant;
 	int				qt_cam;
 	int				qt_light;
-
 }					t_scene;
 
 #endif

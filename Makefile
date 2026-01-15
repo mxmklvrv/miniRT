@@ -24,9 +24,15 @@ HDR = $(addprefix $(HDR_DIR)/, \
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
-	mainm.c \
+	main.c \
+	input.c \
+	parser.c \
+	parser_utils.c \
 	visuals.c \
 	hooks.c \
+	draw.c \
+	vector.c \
+	print.c \
 	)
 
 OBJ_DIR = obj

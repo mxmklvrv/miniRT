@@ -985,7 +985,6 @@ void	init_scene(t_scene *scene)
 	scene->qt_ambiant = 0;
 	scene->qt_cam = 0;
 	scene->qt_light = 0;
-	// scene->light = NULL;
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
