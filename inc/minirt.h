@@ -57,7 +57,11 @@ void	set_hooks(t_data *data);
  void	redraw_scene(t_data *data, t_scene *scene);
 
  //draw
- 
+
+ //vector
+ bool	vector_is_zero(t_vec3 vec);
+ void	vector_to_zero(t_vec3 *vec);
+ t_vec3	vector_add(t_vec3 from, t_vec3 to);
 
 // test functions
 void	print_vars(t_scene *scene);

@@ -25,26 +25,29 @@ void	draw_scene(t_data *data, t_scene *scene)
 static void	normalize_pos(t_scene *scene)
 {
 	t_olist	*obj_list;
-	void	*obj;
+	t_sp	*sp;
+	t_cy	*cy;
+	t_pl	*pl;
 
 	if (vector_is_zero(scene->cam.view_point))
 		return ;
+	scene->light.pos = vector_add(scene->cam.view_point, scene->light.pos);
 	obj_list = scene->obj_list;
 	while (obj_list)
 	{
 		switch (obj_list->obj_type)
 		{
 			case SP:
-				(t_sp *)obj = (t_sp *)obj_list->obj;
-				obj->sp_center = vector_add(scene->cam.view_point, obj->sp_center);
+				sp = (t_sp *)obj_list->obj;
+				sp->sp_center = vector_add(scene->cam.view_point, sp->sp_center);
 				break;
 			case CY:
-				(t_cy *)obj = (t_cy *)obj_list->obj;
-				obj->cy_center = vector_add(scene->cam.view_point, obj->cy_center);
+				cy = (t_cy *)obj_list->obj;
+				cy->cy_center = vector_add(scene->cam.view_point, cy->cy_center);
 				break;
 			case PL:
-				(t_pl *)obj = (t_pl *)obj_list->obj;
-				obj->pl_point = vector_add(scene->cam.view_point, obj->pl_point);
+				pl = (t_pl *)obj_list->obj;
+				pl->pl_point = vector_add(scene->cam.view_point, pl->pl_point);
 				break;
 			default:
 				break;
