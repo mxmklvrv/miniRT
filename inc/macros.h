@@ -16,4 +16,6 @@
 # define ESCAPE 0xFF1B
 # define ON_DESTROY 17
 
+# define EPSILON 0.001
+
 #endif

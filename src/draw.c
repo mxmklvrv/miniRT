@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+//TODO: Check if ray or cam is inside any obj
+
 static void	normalize_pos(t_scene *scene);
 static int	trace_color(t_point point, t_scene *scene);
 
@@ -59,6 +61,45 @@ static void	normalize_pos(t_scene *scene)
 
 static int	trace_color(t_point point, t_scene *scene)
 {
-	return (0);
+	t_olist	*obj_list;
+	t_sp	*sp;
+	t_cy	*cy;
+	t_pl	*pl;
+	int		color;
+
+	color = scene->ambient.colour;
+	obj_list = scene->obj_list;//TODO: Add tracking of closest obj
+	while (obj_list)
+	{
+		switch (obj_list->obj_type)
+		{
+			case SP:
+				sp = (t_sp *)obj_list->obj;
+				if (hit_sp(scene->cam.view_point, sp))
+				{
+					color = sp->colour;
+					//point = get_hit_point_sp((scene->cam.view_point, sp));
+				}
+				break;
+			case CY:
+				cy = (t_cy *)obj_list->obj;
+				if (hit_cy(scene->cam.view_point, cy))
+				{
+					color = cy->colour;
+				}
+				break;
+			case PL:
+				pl = (t_pl *)obj_list->obj;
+				if (hit_pl(scene->cam.view_point, pl))
+				{
+					color = pl->colour;
+				}
+				break;
+			default:
+				break;
+		}
+		obj_list = obj_list->next;
+	}
+	return (color);
 }
 

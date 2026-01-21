@@ -31,6 +31,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	visuals.c \
 	hooks.c \
 	draw.c \
+	math.c \
 	vector.c \
 	print.c \
 	)
