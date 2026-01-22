@@ -60,15 +60,17 @@ void	redraw_scene(t_data *data, t_scene *scene);
 void	draw_scene(t_data *data, t_scene *scene);
 
 //math
-bool	hit_sp(t_vec3 cam, t_sp *sp);
-bool	hit_cy(t_vec3 cam, t_cy *cy);
-bool	hit_pl(t_vec3 cam, t_pl *pl);
+int		hit_sp(t_vec3 cam, t_sp *sp);
+int		hit_cy(t_vec3 cam, t_cy *cy);
+int		hit_pl(t_vec3 cam, t_pl *pl);
 
 //vector
 bool	vector_is_zero(t_vec3 vec);
 void	vector_to_zero(t_vec3 *vec);
 t_vec3	vector_add(t_vec3 from, t_vec3 to);
+t_vec3	vector_multiply(t_vec3 v, float multiplier);
 float	vector_dot(t_vec3 v1, t_vec3 v2);
+float	vector_length(t_vec3 v);
 
 // test functions
 void	print_vars(t_scene *scene);

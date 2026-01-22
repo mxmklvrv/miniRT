@@ -1,33 +1,40 @@
 #include "minirt.h"
 
-bool	hit_sp(t_vec3 cam, t_sp *sp)
+int	hit_sp(t_vec3 cam, t_sp *sp)
 {
 	float	a;
 	float	b;
 	float	c;
 	float	discriminant;
+	t_vec3	intersection;
 
 	a = vector_dot(cam, cam);
 	b = 2 * vector_dot(sp->sp_center, cam);
 	c = vector_dot(sp->sp_center, sp->sp_center) - sp->diameter * sp->diameter / 4;
 	discriminant = b * b - 4 * a * c;
-	return (discriminant >= 0);
+	if (discriminant < 0)
+		return (-1);
+	//Find intersection:
+	intersection = cam;//TODO: find intersection with sphere
+	return (vector_length(intersection));
 }
 
-bool	hit_cy(t_vec3 cam, t_cy *cy)
+int	hit_cy(t_vec3 cam, t_cy *cy)
 {
-	return (0);
+	return (-1);
 }
 
-bool	hit_pl(t_vec3 cam, t_pl *pl)
+int	hit_pl(t_vec3 cam, t_pl *pl)
 {
 	float	denominator;
+	float	multiplier;
+	t_vec3	intersection;
 
 	denominator = vector_dot(cam, pl->normal);
 	if (abs(denominator) < EPSILON)
-		return (false);
+		return (-1);
 	//Find intersection:
-	//difference = pl->center - 0.0.0 <- cam center
-	//t = vector_dot(difference, pl->normal) / denominator;
-	return (true);
+	multiplier = vector_dot(pl->pl_point, pl->normal) / vector_dot(cam, pl->normal);
+	intersection = vector_multiply(cam, multiplier);
+	return (vector_length(intersection));
 }

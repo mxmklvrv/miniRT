@@ -4,6 +4,7 @@
 
 static void	normalize_pos(t_scene *scene);
 static int	trace_color(t_point point, t_scene *scene);
+static bool	is_closest(int *distance, int *closest);
 
 void	draw_scene(t_data *data, t_scene *scene)
 {
@@ -42,17 +43,15 @@ static void	normalize_pos(t_scene *scene)
 			case SP:
 				sp = (t_sp *)obj_list->obj;
 				sp->sp_center = vector_add(scene->cam.view_point, sp->sp_center);
-				break;
 			case CY:
 				cy = (t_cy *)obj_list->obj;
 				cy->cy_center = vector_add(scene->cam.view_point, cy->cy_center);
-				break;
 			case PL:
 				pl = (t_pl *)obj_list->obj;
 				pl->pl_point = vector_add(scene->cam.view_point, pl->pl_point);
 				break;
 			default:
-				break;
+				continue ;
 		}
 		obj_list = obj_list->next;
 	}
@@ -66,40 +65,42 @@ static int	trace_color(t_point point, t_scene *scene)
 	t_cy	*cy;
 	t_pl	*pl;
 	int		color;
+	int		distance;
+	int		closest;
 
 	color = scene->ambient.colour;
-	obj_list = scene->obj_list;//TODO: Add tracking of closest obj
+	closest = -1;
+	obj_list = scene->obj_list;
 	while (obj_list)
 	{
 		switch (obj_list->obj_type)
 		{
 			case SP:
 				sp = (t_sp *)obj_list->obj;
-				if (hit_sp(scene->cam.view_point, sp))
-				{
+				distance = hit_sp(scene->cam.view_point, sp);
+				if (is_closest(&distance, &closest))
 					color = sp->colour;
-					//point = get_hit_point_sp((scene->cam.view_point, sp));
-				}
-				break;
 			case CY:
 				cy = (t_cy *)obj_list->obj;
-				if (hit_cy(scene->cam.view_point, cy))
-				{
+				distance = hit_cy(scene->cam.view_point, cy);
+				if (is_closest(&distance, &closest))
 					color = cy->colour;
-				}
-				break;
 			case PL:
 				pl = (t_pl *)obj_list->obj;
-				if (hit_pl(scene->cam.view_point, pl))
-				{
+				distance = hit_pl(scene->cam.view_point, pl);
+				if (is_closest(&distance, &closest))
 					color = pl->colour;
-				}
-				break;
 			default:
-				break;
+				continue ;
 		}
 		obj_list = obj_list->next;
 	}
 	return (color);
 }
 
+static bool	is_closest(int *distance, int *closest)
+{
+	if (distance > 0 && (closest < 0 || distance < closest))
+		return (true);
+	return (false);
+}

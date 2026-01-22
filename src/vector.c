@@ -22,7 +22,20 @@ t_vec3	vector_add(t_vec3 from, t_vec3 to)
 	return (res);
 }
 
+t_vec3	vector_multiply(t_vec3 v, float multiplier)
+{
+	v.x *= multiplier;
+	v.y *= multiplier;
+	v.z *= multiplier;
+	return (v);
+}
+
 float	vector_dot(t_vec3 v1, t_vec3 v2)
 {
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
+}
+
+float	vector_length(t_vec3 v)
+{
+	return (v.x * v.x + v.y * v.y + v.z * v.z);
 }
