@@ -24,7 +24,8 @@ void	draw_scene(t_data *data, t_scene *scene)
 		point.y++;
 	}
 }
-
+// Need to normalize obj, not cam
+/*
 static void	normalize_pos(t_scene *scene)
 {
 	t_olist	*obj_list;
@@ -38,25 +39,28 @@ static void	normalize_pos(t_scene *scene)
 	obj_list = scene->obj_list;
 	while (obj_list)
 	{
-		switch (obj_list->obj_type)
+		if (obj_list->obj_type == SP)
 		{
-			case SP:
-				sp = (t_sp *)obj_list->obj;
-				sp->sp_center = vector_add(scene->cam.view_point, sp->sp_center);
-			case CY:
-				cy = (t_cy *)obj_list->obj;
-				cy->cy_center = vector_add(scene->cam.view_point, cy->cy_center);
-			case PL:
-				pl = (t_pl *)obj_list->obj;
-				pl->pl_point = vector_add(scene->cam.view_point, pl->pl_point);
-				break;
-			default:
-				continue ;
+			sp = (t_sp *)obj_list->obj;
+			sp->sp_center = vector_add(scene->cam.view_point, sp->sp_center);
+		} 
+		else if (obj_list->obj_type == CY)
+		{
+			cy = (t_cy *)obj_list->obj;
+			cy->cy_center = vector_add(scene->cam.view_point, cy->cy_center);
 		}
+		else if (obj_list->obj_type == PL)
+		{
+			pl = (t_pl *)obj_list->obj;
+			pl->pl_point = vector_add(scene->cam.view_point, pl->pl_point);
+		}
+		else
+			continue ;
 		obj_list = obj_list->next;
 	}
 	vector_to_zero(&scene->cam.view_point);
 }
+*/
 
 static int	trace_color(t_point point, t_scene *scene)
 {
@@ -73,26 +77,29 @@ static int	trace_color(t_point point, t_scene *scene)
 	obj_list = scene->obj_list;
 	while (obj_list)
 	{
-		switch (obj_list->obj_type)
+		if (obj_list->obj_type == SP)
 		{
-			case SP:
-				sp = (t_sp *)obj_list->obj;
-				distance = hit_sp(scene->cam.view_point, sp);
-				if (is_closest(&distance, &closest))
-					color = sp->colour;
-			case CY:
-				cy = (t_cy *)obj_list->obj;
-				distance = hit_cy(scene->cam.view_point, cy);
-				if (is_closest(&distance, &closest))
-					color = cy->colour;
-			case PL:
-				pl = (t_pl *)obj_list->obj;
-				distance = hit_pl(scene->cam.view_point, pl);
-				if (is_closest(&distance, &closest))
-					color = pl->colour;
-			default:
-				continue ;
+			sp = (t_sp *)obj_list->obj;
+			distance = hit_sp(scene->cam.view_point, sp);
+			if (is_closest(&distance, &closest))
+				color = sp->colour;
 		}
+		else if (obj_list->obj_type == CY)
+		{
+			cy = (t_cy *)obj_list->obj;
+			distance = hit_cy(scene->cam.view_point, cy);
+			if (is_closest(&distance, &closest))
+				color = cy->colour;
+		}
+		else if (obj_list->obj_type == PL)
+		{
+			pl = (t_pl *)obj_list->obj;
+			distance = hit_pl(scene->cam.view_point, pl);
+			if (is_closest(&distance, &closest))
+				color = pl->colour;
+		}
+		else
+			continue ;
 		obj_list = obj_list->next;
 	}
 	return (color);

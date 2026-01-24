@@ -27,6 +27,13 @@ typedef struct s_vec3
 
 }					t_vec3;
 
+// ray has starting point and direction
+typedef struct s_ray
+{
+	t_vec3	origin;
+	t_vec3	direction;
+}					t_ray;
+
 typedef enum e_otype
 {
 	SP,

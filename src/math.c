@@ -31,10 +31,12 @@ int	hit_pl(t_vec3 cam, t_pl *pl)
 	t_vec3	intersection;
 
 	denominator = vector_dot(cam, pl->normal);
-	if (abs(denominator) < EPSILON)
+	if (abs(denominator) < EPSILON)//cam and palne (almost or fully) parallel
 		return (-1);
 	//Find intersection:
 	multiplier = vector_dot(pl->pl_point, pl->normal) / vector_dot(cam, pl->normal);
+	if (multiplier < 0)//intersection is behind camera
+		return (-1);
 	intersection = vector_multiply(cam, multiplier);
 	return (vector_length(intersection));
 }
