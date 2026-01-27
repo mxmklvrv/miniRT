@@ -3,66 +3,68 @@
 //TODO: Check if ray or cam is inside any obj
 
 static void	normalize_pos(t_scene *scene);
-static int	trace_color(t_point point, t_scene *scene);
+static int	trace_color(t_pixel pixel, t_scene *scene);
 static bool	is_closest(int *distance, int *closest);
 
 void	draw_scene(t_data *data, t_scene *scene)
 {
-	t_point	point;
+	t_pixel	pixel;
+	t_ray	ray;
 
 	normalize_pos(scene);
-	point.y = 0;
-	while (point.y < HEIGHT)//TODO: add multi threading
+	pixel.y = 0;
+	while (pixel.y < HEIGHT)//TODO: add multi threading
 	{
-		point.x = 0;
-		while (point.x < WIDTH)
+		pixel.x = 0;
+		while (pixel.x < WIDTH)
 		{
-			point.color = trace_color(point, scene);
-			ft_mlx_put_pixel(data, point);
-			point.x++;
+			ray = get_ray_for_position(pixel, scene->cam);
+			pixel.color = trace_color(ray, scene);
+			ft_mlx_put_pixel(data, pixel);
+			pixel.x++;
 		}
-		point.y++;
+		pixel.y++;
 	}
 }
 // Need to normalize obj, not cam
 /*
-static void	normalize_pos(t_scene *scene)
+static void	normalize_view(t_scene *scene)
 {
 	t_olist	*obj_list;
 	t_sp	*sp;
 	t_cy	*cy;
 	t_pl	*pl;
 
-	if (vector_is_zero(scene->cam.view_point))
+	if (vector_is_zero(scene->cam.orient.origin))//and view is normalized
 		return ;
-	scene->light.pos = vector_add(scene->cam.view_point, scene->light.pos);
+	scene->light.pos = vector_add(scene->cam.orient.origin, scene->light.pos);
 	obj_list = scene->obj_list;
 	while (obj_list)
 	{
 		if (obj_list->obj_type == SP)
 		{
 			sp = (t_sp *)obj_list->obj;
-			sp->sp_center = vector_add(scene->cam.view_point, sp->sp_center);
+			sp->sp_center = vector_add(scene->cam.orient.origin, sp->sp_center);
 		} 
 		else if (obj_list->obj_type == CY)
 		{
 			cy = (t_cy *)obj_list->obj;
-			cy->cy_center = vector_add(scene->cam.view_point, cy->cy_center);
+			cy->normal = vector_add(scene->cam.orient.origin, cy->normal.origin);
 		}
 		else if (obj_list->obj_type == PL)
 		{
 			pl = (t_pl *)obj_list->obj;
-			pl->pl_point = vector_add(scene->cam.view_point, pl->pl_point);
+			pl->normal = vector_add(scene->cam.orient.origin, pl->normal.origin);
 		}
 		else
 			continue ;
 		obj_list = obj_list->next;
 	}
-	vector_to_zero(&scene->cam.view_point);
+	vector_to_zero(&scene->cam.orient.origin);
 }
 */
 
-static int	trace_color(t_point point, t_scene *scene)
+static int	trace_color(t_ray ray, t_scene *scene)
 {
 	t_olist	*obj_list;
 	t_sp	*sp;
@@ -80,7 +82,7 @@ static int	trace_color(t_point point, t_scene *scene)
 		if (obj_list->obj_type == SP)
 		{
 			sp = (t_sp *)obj_list->obj;
-			distance = hit_sp(scene->cam.view_point, sp);
+			distance = hit_sp(scene->cam.orient.direction, sp);
 			if (is_closest(&distance, &closest))
 				color = sp->colour;
 		}
@@ -110,4 +112,14 @@ static bool	is_closest(int *distance, int *closest)
 	if (distance > 0 && (closest < 0 || distance < closest))
 		return (true);
 	return (false);
+}
+
+t_ray	get_ray_for_position(t_point pixel, t_cam cam)
+{
+	t_ray	ray;
+	t_vec3	pos;
+
+	ray.direction = cam.orient.direction;
+	
+	return (ray);
 }

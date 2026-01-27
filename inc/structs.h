@@ -1,23 +1,23 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
- typedef struct s_data
- {
+typedef struct s_data
+{
 	void	*mlx;
- 	void	*win;
- 	void	*img;
- 	char	*addr;
- 	int		bits_per_pixel;
- 	int		line_length;
- 	int		endian;
- }			t_data;
+	void	*win;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}			t_data;
 
- typedef struct s_point
- {
- 	int		x;
- 	int		y;
- 	int		color;
- }			t_point;
+typedef struct s_pixel
+{
+	int		x;
+	int		y;
+	int		color;
+}			t_pixel;
 
 typedef struct s_vec3
 {
@@ -61,15 +61,13 @@ typedef struct s_sp
 
 typedef struct s_pl
 {
-	t_vec3			pl_point;
-	t_vec3			normal;
+	t_ray			normal;
 	int				colour;
 }					t_pl;
 
 typedef struct s_cy
 {
-	t_vec3			cy_center;
-	t_vec3			normal;
+	t_ray			normal;
 	float			diameter;
 	float			height;
 	int				colour;
@@ -77,8 +75,7 @@ typedef struct s_cy
 
 typedef struct s_cam
 {
-	t_vec3			view_point;
-	t_vec3			orient;
+	t_ray			orient;
 	float			fov;
 }					t_cam;
 

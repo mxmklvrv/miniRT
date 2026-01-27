@@ -121,9 +121,9 @@ int	parse_cam(char *line, t_scene *scene)
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), 1);
-	if (parse_vector(res[0], &scene->cam.view_point, -100.0f, 100.0f) == 1)
+	if (parse_vector(res[0], &scene->cam.orient.origin, -100.0f, 100.0f) == 1)
 		return (error("Invalid camera view point"), free_array(res), 1);
-	if (parse_vector(res[1], &scene->cam.orient, 0.0f, 1.0f) == 1)
+	if (parse_vector(res[1], &scene->cam.orient.direction, 0.0f, 1.0f) == 1)
 		return (error("Invalid camera orientation"), free_array(res), 1);
 	fov = 0;
 	if (parse_float(res[2], 0.0f, 180.0f, &fov) == 1)
@@ -245,10 +245,10 @@ int	parse_plane(char *line, t_scene *scene)
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), free(plane), 1);
-	if (parse_vector(res[0], &plane->pl_point, -100.0f, 100.0f) == 1)
+	if (parse_vector(res[0], &plane->normal.origin, -100.0f, 100.0f) == 1)
 		return (error("Invalid coordinates of a point in plane"), free(plane),
 			free_array(res), 1);
-	if (parse_vector(res[1], &plane->normal, 0.0f, 1.0f) == 1)
+	if (parse_vector(res[1], &plane->normal.direction, 0.0f, 1.0f) == 1)
 		return (error("Invalid normal vector for plane"), free(plane),
 			free_array(res), 1);
 	colour = 0;
@@ -259,10 +259,10 @@ int	parse_plane(char *line, t_scene *scene)
 		return (error("Failed adding plane to the list"), free(plane),
 			free_array(res), 1);
 	printf("PLANE\n");
-	printf("pl point %f %f %f\n", plane->pl_point.x, plane->pl_point.y,
-		plane->pl_point.z);
-	printf("norm %f %f %f\n", plane->normal.x, plane->normal.y,
-		plane->normal.z);
+	printf("pl point %f %f %f\n", plane->normal.origin.x, plane->normal.origin.y,
+		plane->normal.origin.z);
+	printf("norm %f %f %f\n", plane->normal.direction.x, plane->normal.direction.y,
+		plane->normal.direction.z);
 	printf("color %d\n\n", plane->colour);
 	return (free_array(res), 0);
 }
@@ -283,10 +283,10 @@ int	parse_cylinder(char *line, t_scene *scene)
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC), free(cylinder), 1);
-	if (parse_vector(res[0], &cylinder->cy_center, -100.0f, 100.0f) == 1)
+	if (parse_vector(res[0], &cylinder->normal.origin, -100.0f, 100.0f) == 1)
 		return (error("Invalid coordinates of the center of the cylinder"),
 			free(cylinder), free_array(res), 1);
-	if (parse_vector(res[1], &cylinder->normal, 0.0f, 1.0f) == 1)
+	if (parse_vector(res[1], &cylinder->normal.direction, 0.0f, 1.0f) == 1)
 		return (error("Invalid coordinates of the center of the cylinder"),
 			free(cylinder), free_array(res), 1);
 	diameter = 0.0f;
@@ -308,10 +308,10 @@ int	parse_cylinder(char *line, t_scene *scene)
 		return (error("Failed adding cylinder to the list"), free(cylinder),
 			free_array(res), 1);
 	printf("CYLINDR\n");
-	printf("cy cent %f %f %f\n", cylinder->cy_center.x, cylinder->cy_center.y,
-		cylinder->cy_center.z);
-	printf("norm %f %f %f\n", cylinder->normal.x, cylinder->normal.y,
-		cylinder->normal.z);
+	printf("cy cent %f %f %f\n", cylinder->normal.origin.x, cylinder->normal.origin.y,
+		cylinder->normal.origin.z);
+	printf("norm %f %f %f\n", cylinder->normal.direction.x, cylinder->normal.direction.y,
+		cylinder->normal.direction.z);
 	printf("diam %f\n", cylinder->diameter);
 	printf("height %f", cylinder->height);
 	printf("color %d\n\n", cylinder->colour);

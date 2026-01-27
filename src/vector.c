@@ -21,6 +21,16 @@ t_vec3	vector_add(t_vec3 from, t_vec3 to)
 	res.z = to.z - from.z;
 	return (res);
 }
+/*
+t_ray	ray_add(t_ray diff, t_ray target)
+{
+	t_ray	res;
+
+	vector_add(diff.origin, target.origin);
+	vector_add(diff.origin, target.direction);
+	
+}
+*/
 
 t_vec3	vector_multiply(t_vec3 v, float multiplier)
 {
@@ -37,5 +47,5 @@ float	vector_dot(t_vec3 v1, t_vec3 v2)
 
 float	vector_length(t_vec3 v)
 {
-	return (v.x * v.x + v.y * v.y + v.z * v.z);
+	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z));
 }

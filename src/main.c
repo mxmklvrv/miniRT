@@ -6,7 +6,7 @@ int	main(int argc, char **argv)
 
 	if (confirm_input(argc, argv) == 1)
 		return (EXIT_FAILURE);
-	if (pars_input_file(argv[1], &scene) == 1)
+	if (parse_input_file(argv[1], &scene) == 1)
 	{
 		free_scene(&scene);
 		return (EXIT_FAILURE);
