@@ -17,14 +17,15 @@ SRCS = 	ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c \
 		ft_lstlast_bonus.c ft_lstadd_back_bonus.c ft_lstdelone_bonus.c \
 		ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c\
 		$(addprefix ./get_next_line/, get_next_line.c get_next_line_utils.c)\
-		$(addprefix ./ft_printf/, ft_printf.c ft_utilities.c)
+		$(addprefix ./ft_printf/, ft_printf.c ft_utilities.c)\
+		$(addprefix ./math/, ft_max.c)
 
 OBJS = $(SRCS:.c=.o)
 .SECONDARY: ${OBJS}
 
 all: $(NAME)
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -I . -c $< -o $@
 
 $(NAME): $(OBJS) $(HEADERS)
 	ar rcs $(NAME) $(OBJS)

@@ -2,7 +2,9 @@
 
 //TODO: Check if ray or cam is inside any obj
 
-static void	normalize_pos(t_scene *scene);
+float	get_zoom(t_scene *scene)
+
+//static void	normalize_pos(t_scene *scene);
 static int	trace_color(t_pixel pixel, t_scene *scene);
 static bool	is_closest(int *distance, int *closest);
 
@@ -11,7 +13,8 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_pixel	pixel;
 	t_ray	ray;
 
-	normalize_pos(scene);
+	scene->zoom = get_zoom(scene);
+	scene->cam.angle = get_camera_angle(scene->cam);
 	pixel.y = 0;
 	while (pixel.y < HEIGHT)//TODO: add multi threading
 	{
@@ -26,6 +29,51 @@ void	draw_scene(t_data *data, t_scene *scene)
 		pixel.y++;
 	}
 }
+
+/*
+ * Find how much distance is 1 pixel. Depends on camera field of view,
+ * length of camera direction vector and window width or heigth.
+ */
+float	get_zoom(t_scene *scene)
+{
+	return (vector_length(scene->cam.orient.direction)
+		* tanf(scene->cam.fov / 2) * 2 / ft_max(3, WIDTH, HIGHT, 1);
+}
+
+/*
+ * Calculate angle between screen projection and 0x axis on xy plane. If angle
+ * is zero screen is parallel to xy plane; it is then positioned with WIDTH
+ * aligned with 0x axis.
+ */
+float	get_camera_angle(t_cam cam)
+{
+	float	angle;
+	float	x;
+	float	y;
+
+	x = cam.orient.position.x;
+	y = cam.orient.position.y;
+	if (x == 0 && y >= 0)
+		return (0);
+	if (x == 0 && y < 0)
+		return (PI);
+	if (y == 0 && x > 0)
+		return (PI / 2);
+	if (y == 0 && x < 0)
+		return (-Pi / 2);
+	return (arcsin())
+}
+
+t_ray	get_ray_for_position(t_point pixel, t_cam cam)
+{
+	t_ray	ray;
+	t_vec3	pos;
+
+	ray.direction = cam.orient.direction;
+	
+	return (ray);
+}
+
 // Need to normalize obj, not cam
 /*
 static void	normalize_view(t_scene *scene)
@@ -114,12 +162,3 @@ static bool	is_closest(int *distance, int *closest)
 	return (false);
 }
 
-t_ray	get_ray_for_position(t_point pixel, t_cam cam)
-{
-	t_ray	ray;
-	t_vec3	pos;
-
-	ray.direction = cam.orient.direction;
-	
-	return (ray);
-}

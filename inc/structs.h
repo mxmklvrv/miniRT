@@ -101,6 +101,7 @@ typedef struct s_scene
 	t_ambient		ambient;
 	t_light			light;
 	t_cam			cam;
+	float			zoom;
 	int				qt_ambiant;
 	int				qt_cam;
 	int				qt_light;
