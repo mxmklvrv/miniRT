@@ -2,31 +2,35 @@
 
 //TODO: Check if ray or cam is inside any obj
 
-float	get_zoom(t_scene *scene)
+float	get_zoom(t_cam cam);
+t_vec3	get_camera_angle(t_cam cam);
+t_ray	get_ray_for_position(t_pixel pixel, t_cam cam);
 
-//static void	normalize_pos(t_scene *scene);
-static int	trace_color(t_pixel pixel, t_scene *scene);
-static bool	is_closest(int *distance, int *closest);
+//void	normalize_pos(t_scene *scene);
+int		trace_color(t_ray ray, t_scene *scene);
+bool	is_closest(int distance, int closest);
 
 void	draw_scene(t_data *data, t_scene *scene)
 {
 	t_pixel	pixel;
-	t_ray	ray;
+	//t_ray	ray;
 
-	scene->zoom = get_zoom(scene);
-	scene->cam.angle = get_camera_angle(scene->cam);
-	pixel.y = 0;
-	while (pixel.y < HEIGHT)//TODO: add multi threading
+	scene->cam.zoom = get_zoom(scene->cam);//Doesn't change ever(?)
+	scene->cam.angle = get_camera_angle(scene->cam);//Can change with movement
+	printf("Zoom: %f\nAngle:\nx = %f\ny = %f\nz = %f\n", scene->cam.zoom, 
+		scene->cam.angle.x, scene->cam.angle.y, scene->cam.angle.z);
+	pixel.j = 0;
+	while (pixel.j < HEIGHT)//TODO: add multi threading
 	{
-		pixel.x = 0;
-		while (pixel.x < WIDTH)
+		pixel.i = 0;
+		while (pixel.i < WIDTH)
 		{
-			ray = get_ray_for_position(pixel, scene->cam);
-			pixel.color = trace_color(ray, scene);
+			//ray = get_ray_for_position(pixel, scene->cam);
+			//pixel.color = trace_color(ray, scene);
 			ft_mlx_put_pixel(data, pixel);
-			pixel.x++;
+			pixel.i++;
 		}
-		pixel.y++;
+		pixel.j++;
 	}
 }
 
@@ -34,49 +38,68 @@ void	draw_scene(t_data *data, t_scene *scene)
  * Find how much distance is 1 pixel. Depends on camera field of view,
  * length of camera direction vector and window width or heigth.
  */
-float	get_zoom(t_scene *scene)
+float	get_zoom(t_cam cam)
 {
-	return (vector_length(scene->cam.orient.direction)
-		* tanf(scene->cam.fov / 2) * 2 / ft_max(3, WIDTH, HIGHT, 1);
+	float	zoom;
+	float	cam_length;
+	float	tan;
+
+	cam_length = vector_length(cam.orient.direction);
+	tan = tanf(cam.fov * M_PI / 180 / 2);
+	zoom = cam_length * tan * 2 / ft_max(2, WIDTH, 1);
+	printf("\nZOOM\nCamera vector len = %f\nAngel = %f\ntan = %f\nZoom = %f\n\n", 
+		cam_length, cam.fov / 2, tan, zoom);
+	return (zoom);
 }
 
 /*
- * Calculate angle between screen projection and 0x axis on xy plane. If angle
- * is zero screen is parallel to xy plane; it is then positioned with WIDTH
- * aligned with 0x axis.
+ * Calculate angle (in radians, counter-clockwise) between screen projection
+ * and 0x axis on xy plane. This angle is equal to angle between camera normal
+ * and 0y axis. If angle is zero screen is parallel to 0x axis and camera
+ * normal is parallel to 0y axis.
+ * Returns sine and cosine of this angle in form of t_vec3.
  */
-float	get_camera_angle(t_cam cam)
+t_vec3	get_camera_angle(t_cam cam)
 {
-	float	angle;
-	float	x;
-	float	y;
+	t_vec3	angle;
+	float	cam_length;
 
-	x = cam.orient.position.x;
-	y = cam.orient.position.y;
-	if (x == 0 && y >= 0)
-		return (0);
-	if (x == 0 && y < 0)
-		return (PI);
-	if (y == 0 && x > 0)
-		return (PI / 2);
-	if (y == 0 && x < 0)
-		return (-Pi / 2);
-	return (arcsin())
+	angle.x = 0;
+	angle.y = 0;
+	angle.z = 0;
+	cam_length = vector_length(cam.orient.direction);
+	if (cam_length != 0)
+	{
+		angle.x = cam.orient.origin.y / cam_length;
+		angle.y = cam.orient.origin.x / cam_length;
+		angle.z = cam.orient.origin.z / cam_length;
+	}
+	return (angle);
 }
 
-t_ray	get_ray_for_position(t_point pixel, t_cam cam)
+/*
+ * Returns ray from camera origin to point in 3d coordinates
+ */
+t_ray	get_ray_for_position(t_pixel pixel, t_cam cam)
 {
 	t_ray	ray;
-	t_vec3	pos;
+	t_vec3	position;
+	float	position_width;
+	float	position_heigth;
 
-	ray.direction = cam.orient.direction;
-	
+	position_width = (float)(pixel.i - WIDTH / 2) * cam.zoom;
+	position_heigth = (float)(pixel.j - HEIGHT / 2) * cam.zoom;
+	position.x = position_width * cam.angle.x;
+	position.y = position_width * cam.angle.y;
+	position.z = position_heigth * cam.angle.z;
+	ray.origin = cam.orient.origin;
+	ray.direction = vector_add(cam.orient.direction, position);
 	return (ray);
 }
 
 // Need to normalize obj, not cam
 /*
-static void	normalize_view(t_scene *scene)
+void	normalize_view(t_scene *scene)
 {
 	t_olist	*obj_list;
 	t_sp	*sp;
@@ -112,7 +135,7 @@ static void	normalize_view(t_scene *scene)
 }
 */
 
-static int	trace_color(t_ray ray, t_scene *scene)
+int	trace_color(t_ray ray, t_scene *scene)
 {
 	t_olist	*obj_list;
 	t_sp	*sp;
@@ -130,23 +153,26 @@ static int	trace_color(t_ray ray, t_scene *scene)
 		if (obj_list->obj_type == SP)
 		{
 			sp = (t_sp *)obj_list->obj;
-			distance = hit_sp(scene->cam.orient.direction, sp);
-			if (is_closest(&distance, &closest))
+			distance = hit_sp(ray, sp);
+			if (is_closest(distance, closest))
 				color = sp->colour;
 		}
 		else if (obj_list->obj_type == CY)
 		{
 			cy = (t_cy *)obj_list->obj;
-			distance = hit_cy(scene->cam.view_point, cy);
-			if (is_closest(&distance, &closest))
+			distance = hit_cy(ray, cy);
+			if (is_closest(distance, closest))
 				color = cy->colour;
 		}
 		else if (obj_list->obj_type == PL)
 		{
 			pl = (t_pl *)obj_list->obj;
-			distance = hit_pl(scene->cam.view_point, pl);
-			if (is_closest(&distance, &closest))
+			distance = hit_pl(ray, pl);
+			if (is_closest(distance, closest))
+			{
 				color = pl->colour;
+				printf("Found a plane, color: %d\n", color);
+			}
 		}
 		else
 			continue ;
@@ -155,7 +181,7 @@ static int	trace_color(t_ray ray, t_scene *scene)
 	return (color);
 }
 
-static bool	is_closest(int *distance, int *closest)
+bool	is_closest(int distance, int closest)
 {
 	if (distance > 0 && (closest < 0 || distance < closest))
 		return (true);

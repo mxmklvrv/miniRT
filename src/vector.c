@@ -12,25 +12,25 @@ void	vector_to_zero(t_vec3 *vec)
 	vec->z = 0;
 }
 
-t_vec3	vector_add(t_vec3 from, t_vec3 to)
+t_vec3	vector_add(t_vec3 v1, t_vec3 v2)
 {
 	t_vec3	res;
 
-	res.x = to.x - from.x;
-	res.y = to.y - from.y;
-	res.z = to.z - from.z;
+	res.x = v1.x + v2.x;
+	res.y = v1.y + v2.y;
+	res.z = v1.z + v2.z;
 	return (res);
 }
-/*
-t_ray	ray_add(t_ray diff, t_ray target)
-{
-	t_ray	res;
 
-	vector_add(diff.origin, target.origin);
-	vector_add(diff.origin, target.direction);
-	
+t_vec3	vector_remove(t_vec3 v1, t_vec3 v2)
+{
+	t_vec3	res;
+
+	res.x = v1.x - v2.x;
+	res.y = v1.y - v2.y;
+	res.z = v1.z - v2.z;
+	return (res);
 }
-*/
 
 t_vec3	vector_multiply(t_vec3 v, float multiplier)
 {

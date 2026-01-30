@@ -14,8 +14,8 @@ typedef struct s_data
 
 typedef struct s_pixel
 {
-	int		x;
-	int		y;
+	int		i;
+	int		j;
 	int		color;
 }			t_pixel;
 
@@ -77,6 +77,8 @@ typedef struct s_cam
 {
 	t_ray			orient;
 	float			fov;
+	float			zoom;
+	t_vec3			angle;
 }					t_cam;
 
 typedef struct s_ambient
@@ -101,7 +103,6 @@ typedef struct s_scene
 	t_ambient		ambient;
 	t_light			light;
 	t_cam			cam;
-	float			zoom;
 	int				qt_ambiant;
 	int				qt_cam;
 	int				qt_light;

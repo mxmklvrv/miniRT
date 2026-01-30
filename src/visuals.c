@@ -47,14 +47,14 @@ bool	visuals_loop(t_scene *scene)
  	free(data->mlx);
  }
 
- void	ft_mlx_put_pixel(t_data *data, t_point point)
+ void	ft_mlx_put_pixel(t_data *data, t_pixel pixel)
  {
  	char	*dst;
 
- 	if (point.x >= 0 && point.x < WIDTH && point.y >= 0 && point.y < HEIGHT)
+ 	if (pixel.i >= 0 && pixel.i < WIDTH && pixel.j >= 0 && pixel.j < HEIGHT)
  	{
- 		dst = data->addr + (point.y * data->line_length + point.x
+ 		dst = data->addr + (pixel.j * data->line_length + pixel.i
  				* (data->bits_per_pixel / 8));
- 		*(unsigned int *) dst = point.color;
+ 		*(unsigned int *) dst = pixel.color;
  	}
  }

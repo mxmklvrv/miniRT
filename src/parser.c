@@ -47,14 +47,6 @@ int	parse_input_file(char *file, t_scene *scene)
 	// should have qty == 1 of each.
 }
 
-void	init_scene(t_scene *scene)
-{
-	scene->obj_list = NULL;
-	scene->qt_ambiant = 0;
-	scene->qt_cam = 0;
-	scene->qt_light = 0;
-}
-
 int	dispatch(char *line, t_scene *scene)
 {
 	while (*line == ' ') // what about tabs here ??
