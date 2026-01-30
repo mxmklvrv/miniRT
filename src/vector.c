@@ -45,7 +45,27 @@ float	vector_dot(t_vec3 v1, t_vec3 v2)
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
+t_vec3	vector_cross(t_vec3 v1, t_vec3 v2)
+{
+	t_vec3	res;
+
+	res.x = v1.y * v2.z - v1.z * v2.y;
+	res.y = -(v1.x * v2.z - v1.z * v2.x);
+	res.z = v1.x * v2.y - v1.y * v2.x;
+	return (res);
+}
+
 float	vector_length(t_vec3 v)
 {
 	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z));
+}
+
+t_vec3	vector_normalize(t_vec3 v)
+{
+	float	length;
+
+	length = vector_length(v);
+	if (length == 1)
+		return (v);
+	return (vector_multiply(v, 1 / length));
 }

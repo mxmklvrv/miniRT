@@ -63,6 +63,7 @@ void	draw_scene(t_data *data, t_scene *scene);
 int		hit_sp(t_ray cam, t_sp *sp);
 int		hit_cy(t_ray cam, t_cy *cy);
 int		hit_pl(t_ray cam, t_pl *pl);
+float	degrees_to_radians(float degrees);
 
 //vector
 bool	vector_is_zero(t_vec3 vec);
@@ -71,7 +72,9 @@ t_vec3	vector_add(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_remove(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_multiply(t_vec3 v, float multiplier);
 float	vector_dot(t_vec3 v1, t_vec3 v2);
+t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
 float	vector_length(t_vec3 v);
+t_vec3	vector_normalize(t_vec3 v);
 
 // test functions
 void	print_vars(t_scene *scene);

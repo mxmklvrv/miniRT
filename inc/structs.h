@@ -77,8 +77,8 @@ typedef struct s_cam
 {
 	t_ray			orient;
 	float			fov;
-	float			zoom;
-	t_vec3			angle;
+	t_vec3			vector_i;
+	t_vec3			vector_j;
 }					t_cam;
 
 typedef struct s_ambient
