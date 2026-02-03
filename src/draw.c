@@ -13,7 +13,6 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_pixel	pixel;
 	t_ray	ray;
 
-	printf("%d degrees = %f radians\n", 90, degrees_to_radians(90));
 	setup_camera_angle(&scene->cam);//Can change with movement
 	pixel.j = 0;
 	while (pixel.j < HEIGHT)//TODO: add multi threading
@@ -41,7 +40,7 @@ void	draw_scene(t_data *data, t_scene *scene)
 void	setup_camera_angle(t_cam *cam)
 {
 	t_vec3	opposite_cam;
-	const t_vec3	up_view = {0, 0, 1};
+	const t_vec3	up_view = {0, 0, 1, 0};
 	float	fov_multiplier;
 	float	cam_angle;
 

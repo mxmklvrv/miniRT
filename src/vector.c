@@ -1,5 +1,34 @@
 #include "minirt.h"
 
+t_vec3	new_vector(float x, float y, float z)//BOOK
+{
+	t_vec3	res;
+
+	res.x = x;
+	res.y = y;
+	res.z = z;
+	res.w = 0;
+	return (res);
+}
+
+t_vec3	new_point(float x, float y, float z)//BOOK
+{
+	t_vec3	res;
+
+	res.x = x;
+	res.y = y;
+	res.z = z;
+	res.w = 1.0;
+	return (res);
+}
+
+bool	is_equalf(float a, float b)//BOOK
+{
+	if (fabsf(a - b) < EPSILON)
+		return (true);
+	return (false);
+}
+
 bool	vector_is_zero(t_vec3 vec)
 {
 	return (vec.x == 0 && vec.y == 0 && vec.z == 0);
@@ -68,4 +97,10 @@ t_vec3	vector_normalize(t_vec3 v)
 	if (length == 1)
 		return (v);
 	return (vector_multiply(v, 1 / length));
+}
+
+
+float	degrees_to_radians(float degrees)
+{
+	return (degrees * M_PI / 180);
 }

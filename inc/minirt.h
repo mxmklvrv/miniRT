@@ -15,7 +15,7 @@
 
 int		confirm_input(int ac, char **av);
 
-//parser
+/* ===== Parser ============================================================= */
 int		parse_input_file(char *file, t_scene *scene);
 int		dispatch(char *line, t_scene *scene);
 int		parse_cam_light(char *line, char ch, t_scene *scene);
@@ -26,7 +26,7 @@ int		parse_sphere(char *line, t_scene *scene);
 int		parse_plane(char *line, t_scene *scene);
 int		parse_cylinder(char *line, t_scene *scene);
 
-//parcer helpers
+/* ===== Parser uitls ======================================================= */
 void	init_scene(t_scene *scene);
 void	free_scene(t_scene *scene);
 int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
@@ -48,7 +48,7 @@ int		parse_vector(char *str, t_vec3 *vector, float min, float max);
 int		parse_int(char *str, int min, int max, int *res);
 int		parse_float(char *str, float min, float max, float *res);
 
-//visuals
+/* ===== Visuals ============================================================ */
 bool	visuals_loop(t_scene *scene);
 bool	set_visuals(t_data *data);
 void	free_visuals(t_data *data);
@@ -56,16 +56,18 @@ void	ft_mlx_put_pixel(t_data *data, t_pixel pixel);
 void	set_hooks(t_data *data);
 void	redraw_scene(t_data *data, t_scene *scene);
 
-//draw
+/* ===== Render ============================================================= */
 void	draw_scene(t_data *data, t_scene *scene);
 
-//math
+/* ===== Shapes math ======================================================== */
 int		hit_sp(t_ray cam, t_sp *sp);
 int		hit_cy(t_ray cam, t_cy *cy);
 int		hit_pl(t_ray cam, t_pl *pl);
 float	degrees_to_radians(float degrees);
 
-//vector
+/* ===== Vector math ======================================================== */
+t_vec3	new_vector(float x, float y, float z);//BOOK
+t_vec3	new_point(float x, float y, float z);//BOOK
 bool	vector_is_zero(t_vec3 vec);
 void	vector_to_zero(t_vec3 *vec);
 t_vec3	vector_add(t_vec3 v1, t_vec3 v2);

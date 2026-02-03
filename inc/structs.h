@@ -19,12 +19,15 @@ typedef struct s_pixel
 	int		color;
 }			t_pixel;
 
+// w = 0 for vector;
+// w = 1 for point;
+// Needed for matrix math.
 typedef struct s_vec3
 {
 	float			x;
 	float			y;
 	float			z;
-
+	float			w;//BOOK
 }					t_vec3;
 
 // ray has starting point and direction

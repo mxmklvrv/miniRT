@@ -70,8 +70,3 @@ int	hit_pl(t_ray ray, t_pl *pl)
 	}
 	return (distance);
 }
-
-float	degrees_to_radians(float degrees)
-{
-	return (degrees * M_PI / 180);
-}

@@ -1,7 +1,6 @@
 #include "libft.h"
 
-/*
- * Returns maximum value from given.
+/* Returns maximum value from given.
  *
  * @param	int		arg_count number of expected values.
  * @param	int		... values.
