@@ -6,12 +6,14 @@
 # include "libft.h"
 # include "mlx.h"
 # include "mlx_int.h"
+# include "parsing.h"
 
 # include <stdio.h>
 # include <math.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <stdbool.h>
+
 
 // int		handle_error(void);
 // bool	check_args(int argc, char **argv, char **format);
