@@ -55,6 +55,7 @@ dkms.conf
 *.dwo
 
 .gitignore
+*.pdf
 
 # miniRT specific
 miniRT
