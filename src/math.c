@@ -9,7 +9,7 @@ int	hit_sp(t_ray ray, t_sp *sp)
 	float	discriminant;
 	t_vec3	intersection;
 
-	vector_to_sphere = vector_remove(ray.origin, sp->sp_center);
+	vector_to_sphere = vector_substract(ray.origin, sp->sp_center);
 	a = vector_dot(ray.direction, ray.direction);
 	b = 2 * vector_dot(vector_to_sphere, ray.direction);
 	c = vector_dot(vector_to_sphere, vector_to_sphere) - sp->diameter
@@ -19,7 +19,7 @@ int	hit_sp(t_ray ray, t_sp *sp)
 		return (-1);
 	//Find intersection:
 	intersection = ray.direction;//TODO: find intersection with sphere
-	//vector_length(intersection)
+	//vector_magnitude(intersection)
 	return (1);
 }
 
@@ -49,7 +49,7 @@ int	hit_pl(t_ray ray, t_pl *pl)
 		return (-1);
 	}
 	//Find intersection:
-	multiplier = -vector_dot(pl->normal.direction, vector_remove(ray.origin,
+	multiplier = -vector_dot(pl->normal.direction, vector_substract(ray.origin,
 		pl->normal.origin)) / denominator;
 	if (multiplier < 0)//intersection is behind camera
 	{
@@ -61,7 +61,7 @@ int	hit_pl(t_ray ray, t_pl *pl)
 		return (-1);
 	}
 	intersection = vector_multiply(ray.direction, multiplier);
-	distance = vector_length(intersection);
+	distance = vector_magnitude(intersection);
 	if (message_pl == 0)
 	{
 		message_pl++;

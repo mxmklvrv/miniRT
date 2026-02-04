@@ -33,6 +33,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	draw.c \
 	math.c \
 	vector.c \
+	color.c \
 	print.c \
 	)
 

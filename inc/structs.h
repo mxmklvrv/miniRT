@@ -19,16 +19,25 @@ typedef struct s_pixel
 	int		color;
 }			t_pixel;
 
+// Tuple - a vector or a point
+// Needed for matrix math.
 // w = 0 for vector;
 // w = 1 for point;
-// Needed for matrix math.
 typedef struct s_vec3
 {
 	float			x;
 	float			y;
 	float			z;
-	float			w;//BOOK
+	float			w;
 }					t_vec3;
+
+//Will we store colors in structs or in ints?
+typedef struct s_color
+{
+	float			red;
+	float			green;
+	float			blue;
+}					t_color;
 
 // ray has starting point and direction
 typedef struct s_ray

@@ -63,20 +63,32 @@ void	draw_scene(t_data *data, t_scene *scene);
 int		hit_sp(t_ray cam, t_sp *sp);
 int		hit_cy(t_ray cam, t_cy *cy);
 int		hit_pl(t_ray cam, t_pl *pl);
-float	degrees_to_radians(float degrees);
 
 /* ===== Vector math ======================================================== */
-t_vec3	new_vector(float x, float y, float z);//BOOK
-t_vec3	new_point(float x, float y, float z);//BOOK
-bool	vector_is_zero(t_vec3 vec);
-void	vector_to_zero(t_vec3 *vec);
+t_vec3	new_vector(float x, float y, float z);
+t_vec3	new_point(float x, float y, float z);
+bool	is_point(t_vec3 vec);
+t_vec3	vector_negate(t_vec3 v);
 t_vec3	vector_add(t_vec3 v1, t_vec3 v2);
-t_vec3	vector_remove(t_vec3 v1, t_vec3 v2);
-t_vec3	vector_multiply(t_vec3 v, float multiplier);
+t_vec3	vector_substract(t_vec3 v1, t_vec3 v2);
+t_vec3	vector_multiply(t_vec3 v, float scalar);
+t_vec3	vector_divide(t_vec3 v, float scalar);
+float	vector_magnitude(t_vec3 v);
+t_vec3	vector_normalize(t_vec3 v);
 float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
-float	vector_length(t_vec3 v);
-t_vec3	vector_normalize(t_vec3 v);
+float	degrees_to_radians(float degrees);
+
+/* ===== Color ============================================================== */
+int	new_color(int opacity, int red, int green, int blue);
+int	get_opacity(int color);
+int	get_red(int color);
+int	get_green(int color);
+int	get_blue(int color);
+int	color_add(int c1, int c2);
+int	color_substract(int c1, int c2);
+int	color_multiply(int color, int scalar);
+
 
 // test functions
 void	print_vars(t_scene *scene);
