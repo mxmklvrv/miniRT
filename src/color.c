@@ -68,7 +68,7 @@ int	color_substract(int c1, int c2)
 	));
 }
 
-int	color_multiply(int color, int scalar)
+int	color_multiply(int color, float scalar)
 {
 	return (new_color(
 		get_opacity(color) * scalar,
@@ -76,4 +76,9 @@ int	color_multiply(int color, int scalar)
 		get_green(color) * scalar,
 		get_blue(color) * scalar
 	));
+}
+
+int	color_mix(int c1, int c2)
+{
+	return(color_add(color_multiply(c1, 0.5), color_multiply(c2, 0.5)));
 }

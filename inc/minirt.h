@@ -63,6 +63,7 @@ void	draw_scene(t_data *data, t_scene *scene);
 int		hit_sp(t_ray cam, t_sp *sp);
 int		hit_cy(t_ray cam, t_cy *cy);
 int		hit_pl(t_ray cam, t_pl *pl);
+float	degrees_to_radians(float degrees);
 
 /* ===== Vector math ======================================================== */
 t_vec3	new_vector(float x, float y, float z);
@@ -77,7 +78,6 @@ float	vector_magnitude(t_vec3 v);
 t_vec3	vector_normalize(t_vec3 v);
 float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
-float	degrees_to_radians(float degrees);
 
 /* ===== Color ============================================================== */
 int	new_color(int opacity, int red, int green, int blue);
@@ -87,11 +87,18 @@ int	get_green(int color);
 int	get_blue(int color);
 int	color_add(int c1, int c2);
 int	color_substract(int c1, int c2);
-int	color_multiply(int color, int scalar);
+int	color_multiply(int color, float scalar);
+int	color_mix(int c1, int c2);
 
+/* ===== Matrix ============================================================= */
+t_matrix	new_matrix(int row, int col);
+void		free_matrix(t_matrix matrix);
+bool		matrix_is_equal(t_matrix m1, t_matrix m2);
 
 // test functions
 void	print_vars(t_scene *scene);
 void	print_list(t_scene *scene);
+void	print_color(char *name, int color);
+void	print_matrix(t_matrix matrix);
 
 #endif

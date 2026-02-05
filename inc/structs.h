@@ -10,48 +10,49 @@ typedef struct s_data
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}			t_data;
+	float	aspect_ratio;
+}	t_data;
 
 typedef struct s_pixel
 {
 	int		i;
 	int		j;
 	int		color;
-}			t_pixel;
+}	t_pixel;
 
 // Tuple - a vector or a point
-// Needed for matrix math.
 // w = 0 for vector;
 // w = 1 for point;
+// Needed for matrix math.
+// Can be used for colors.
 typedef struct s_vec3
 {
-	float			x;
-	float			y;
-	float			z;
-	float			w;
-}					t_vec3;
+	float	x;
+	float	y;
+	float	z;
+	float	w;
+}	t_vec3;
 
-//Will we store colors in structs or in ints?
-typedef struct s_color
+typedef struct s_matrix
 {
-	float			red;
-	float			green;
-	float			blue;
-}					t_color;
+	int		row;
+	int		col;
+	float	**ptr;
+}	t_matrix;
 
 // ray has starting point and direction
 typedef struct s_ray
 {
 	t_vec3	origin;
 	t_vec3	direction;
-}					t_ray;
+}	t_ray;
 
 typedef enum e_otype
 {
 	SP,
 	CY,
 	PL
-}					t_otype;
+}	t_otype;
 
 // linked list with objects
 typedef struct s_olist
@@ -61,21 +62,20 @@ typedef struct s_olist
 	int				obj_id;
 	int				colour;
 	struct s_olist	*next;
-
-}					t_olist;
+}	t_olist;
 
 typedef struct s_sp
 {
 	t_vec3			sp_center;
 	float			diameter;
 	int				colour;
-}					t_sp;
+}	t_sp;
 
 typedef struct s_pl
 {
 	t_ray			normal;
 	int				colour;
-}					t_pl;
+}	t_pl;
 
 typedef struct s_cy
 {
@@ -83,7 +83,7 @@ typedef struct s_cy
 	float			diameter;
 	float			height;
 	int				colour;
-}					t_cy;
+}	t_cy;
 
 typedef struct s_cam
 {

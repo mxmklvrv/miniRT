@@ -54,15 +54,14 @@ dkms.conf
 # debug information files
 *.dwo
 
-.gitignore
-*.pdf
-
 # miniRT specific
 miniRT
+minilibx-linux
 
 # Build directories
 obj/
 build/
 
-# libft build output
-minilibx-linux
+# extra
+.gitignore
+*.pdf

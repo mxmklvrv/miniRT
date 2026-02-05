@@ -48,5 +48,30 @@ void	print_vars(t_scene *scene)
 	printf("%f \n", scene->light.bright);
 	printf("(BONUS) R, G, B colors in the range [0-255]: ");
 	printf("%d\n\n", scene->light.color);
+}
 
+void	print_color(char *name, int color)
+{
+	printf("\nColor %s: %i\nop: %i\nr: %i\ng: %i\nb: %i\n", name,
+		color, get_opacity(color), get_red(color), get_green(color), get_blue(color));
+}
+
+void	print_matrix(t_matrix matrix)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (matrix.ptr && j < matrix.row)
+	{
+		i = 0;
+		while (i < matrix.col)
+		{
+			printf("| %f ", matrix.ptr[j][i]);
+			i++;
+		}
+		printf("|\n");
+		j++;
+	}
+	printf("%ix%i\n", j, i);
 }
