@@ -44,6 +44,36 @@ t_matrix	new_identity_matrix(int	row)
 	return (res);
 }
 
+t_matrix	new_submatrix(t_matrix m, int target_row, int target_col)
+{
+	t_matrix	res;
+	int			i;
+	int			j;
+
+	if (m.col <= 2 || m.row <= 2)
+	{
+		ft_putendl_fd("Error: can't create submatrix, matrix is too small", STDERR_FILENO);
+		res.ptr = NULL;
+		return (res);
+	}
+	res = new_matrix(m.row - 1, m.col - 1);
+	if (!res.ptr)
+		return (res);
+	j = 0;
+	while (j < m.row)
+	{
+		i = 0;
+		while (i < m.col)
+		{
+			if (i != target_col && j != target_row)
+				res.ptr[j - (j > target_row)][i - (i > target_col)] = m.ptr[j][i];
+			i++;
+		}
+		j++;
+	}
+	return (res);
+}
+
 void	free_matrix(t_matrix matrix)
 {
 	int	i;
@@ -64,11 +94,6 @@ bool	matrix_is_equal(t_matrix m1, t_matrix m2)
 	int	i;
 	int	j;
 
-	if (!m1.ptr || !m2.ptr)
-	{
-		ft_putendl_fd("Error: matrix is NULL", STDERR_FILENO);
-		return (false);
-	}
 	if (!matrix_has_equal_dimensions(m1, m2))
 	{
 		ft_putendl_fd("Error: matricces are not comparable", STDERR_FILENO);
@@ -94,7 +119,7 @@ bool	matrix_has_equal_dimensions(t_matrix m1, t_matrix m2)
 	return (m1.col == m2.col && m1.row == m2.row);
 }
 
-t_matrix	matrix_multiply(t_matrix m1, t_matrix m2)
+t_matrix	new_matrix_multiply(t_matrix m1, t_matrix m2)
 {
 	int			i;
 	int			j;
@@ -152,7 +177,7 @@ t_vec3	matrix_multiply_by_vector(t_matrix m, t_vec3 v)
 	v_m.ptr[1][0] = v.y;
 	v_m.ptr[2][0] = v.z;
 	v_m.ptr[3][0] = v.w;
-	res_m = matrix_multiply(m, v_m);
+	res_m = new_matrix_multiply(m, v_m);
 	if (!res_m.ptr)
 	{
 		free_matrix(v_m);
@@ -167,6 +192,7 @@ t_vec3	matrix_multiply_by_vector(t_matrix m, t_vec3 v)
 	return (res);
 }
 
+//Can change to return new matrix
 void	matrix_transpose(t_matrix m)
 {
 	int			middle;
@@ -191,4 +217,32 @@ void	matrix_transpose(t_matrix m)
 		}
 		j++;
 	}
+}
+
+float	matrix_find_determinant(t_matrix m)
+{
+	if (m.col != 2 || m.row != 2)
+	{
+		ft_putendl_fd("Error: can't find determinant, matrix isn't 2x2", STDERR_FILENO);
+		return (0);
+	}
+	return (m.ptr[0][0] * m.ptr[1][1] - m.ptr[0][1] * m.ptr[1][0]);
+}
+
+float	matrix_find_minor(t_matrix m, int row, int col)
+{
+	t_matrix	sub_m;
+	float		res;
+
+	if (m.col != 3 || m.row != 3)
+	{
+		ft_putendl_fd("Error: can't find minor, matrix isn't 3x3", STDERR_FILENO);
+		return (0);
+	}
+	sub_m = new_submatrix(m, row, col);
+	if (!sub_m.ptr)
+		return (0);
+	res = matrix_find_determinant(sub_m);
+	free_matrix(sub_m);
+	return (res);
 }

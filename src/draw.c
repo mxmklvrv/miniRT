@@ -14,7 +14,8 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_ray	ray;
 
 	t_matrix	m = new_matrix(4, 4);
-	t_vec3		v = {3, -2, 5 ,2};
+	t_matrix	sub_m;
+	//t_vec3		v = {3, -2, 5 ,2};
 
 	m.ptr[0][0] = 1;
 	m.ptr[0][1] = 2;
@@ -23,10 +24,12 @@ void	draw_scene(t_data *data, t_scene *scene)
 	m.ptr[2][0] = 5;
 	m.ptr[3][0] = 6;
 	print_matrix(m);
-	print_vector("A", v);
-	print_vector("matrix * A", matrix_multiply_by_vector(m, v));
-	matrix_transpose(m);
-	print_matrix(m);
+	//print_vector("A", v);
+	//print_vector("matrix * A", matrix_multiply_by_vector(m, v));
+	sub_m = new_submatrix(m, 1, 1);
+	printf("Submatrix (1, 1):\n");
+	print_matrix(sub_m);
+	free_matrix(sub_m);
 	free_matrix(m);
 
 	setup_camera_angle(&scene->cam);//Can change with movement
