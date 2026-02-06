@@ -50,6 +50,12 @@ void	print_vars(t_scene *scene)
 	printf("%d\n\n", scene->light.color);
 }
 
+void	print_vector(char *name, t_vec3	vector)
+{
+	printf("\nVector %s\n(x: %f, y: %f, z: %f, w: %f)\n", name,
+			vector.x, vector.y, vector.z, vector.w);
+}
+
 void	print_color(char *name, int color)
 {
 	printf("\nColor %s: %i\nop: %i\nr: %i\ng: %i\nb: %i\n", name,
@@ -65,7 +71,7 @@ void	print_matrix(t_matrix matrix)
 	while (matrix.ptr && j < matrix.row)
 	{
 		i = 0;
-		while (i < matrix.col)
+		while (matrix.ptr[j] && i < matrix.col)
 		{
 			printf("| %f ", matrix.ptr[j][i]);
 			i++;

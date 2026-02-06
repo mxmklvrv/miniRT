@@ -92,14 +92,18 @@ int		color_mix(int c1, int c2);
 
 /* ===== Matrix ============================================================= */
 t_matrix	new_matrix(int row, int col);
+t_matrix	new_identity_matrix(int	row);
 void		free_matrix(t_matrix matrix);
 bool		matrix_is_equal(t_matrix m1, t_matrix m2);
 bool		matrix_has_equal_dimensions(t_matrix m1, t_matrix m2);
 t_matrix	matrix_multiply(t_matrix m1, t_matrix m2);
+t_vec3		matrix_multiply_by_vector(t_matrix m, t_vec3 v);
+void		matrix_transpose(t_matrix m);
 
 // test functions
 void	print_vars(t_scene *scene);
 void	print_list(t_scene *scene);
+void	print_vector(char *name, t_vec3	vector);
 void	print_color(char *name, int color);
 void	print_matrix(t_matrix matrix);
 

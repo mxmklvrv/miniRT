@@ -13,6 +13,22 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_pixel	pixel;
 	t_ray	ray;
 
+	t_matrix	m = new_matrix(4, 4);
+	t_vec3		v = {3, -2, 5 ,2};
+
+	m.ptr[0][0] = 1;
+	m.ptr[0][1] = 2;
+	m.ptr[0][2] = 3;
+	m.ptr[1][0] = 4;
+	m.ptr[2][0] = 5;
+	m.ptr[3][0] = 6;
+	print_matrix(m);
+	print_vector("A", v);
+	print_vector("matrix * A", matrix_multiply_by_vector(m, v));
+	matrix_transpose(m);
+	print_matrix(m);
+	free_matrix(m);
+
 	setup_camera_angle(&scene->cam);//Can change with movement
 	pixel.j = 0;
 	while (pixel.j < HEIGHT)//TODO: add multi threading
