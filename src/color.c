@@ -68,13 +68,13 @@ int	color_substract(int c1, int c2)
 	));
 }
 
-int	color_multiply(int color, float scalar)
+int	color_multiply(int c, float scalar)
 {
 	return (new_color(
-		get_opacity(color) * scalar,
-		get_red(color) * scalar,
-		get_green(color) * scalar,
-		get_blue(color) * scalar
+		get_opacity(c) * scalar,
+		get_red(c) * scalar,
+		get_green(c) * scalar,
+		get_blue(c) * scalar
 	));
 }
 

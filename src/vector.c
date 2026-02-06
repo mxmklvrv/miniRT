@@ -22,9 +22,9 @@ t_vec3	new_point(float x, float y, float z)
 	return (res);
 }
 
-bool	is_equalf(float a, float b)
+bool	is_equalf(float f1, float f2)
 {
-	if (fabsf(a - b) < EPSILON)
+	if (fabsf(f1 - f2) < EPSILON)
 		return (true);
 	return (false);
 }
@@ -39,37 +39,37 @@ t_vec3	vector_negate(t_vec3 v)
 	return (new_vector(-v.x, -v.y, -v.z));
 }
 
-t_vec3	vector_add(t_vec3 a, t_vec3 b)
+t_vec3	vector_add(t_vec3 v1, t_vec3 v2)
 {
-	if (is_point(a) && is_point(b))
+	if (is_point(v1) && is_point(v2))
 		printf("Error: adding two points\n");
-	if (is_point(a) || is_point(b))
+	if (is_point(v1) || is_point(v2))
 		return(new_point(
-			a.x + b.x,
-			a.y + b.y,
-			a.z + b.z
+			v1.x + v2.x,
+			v1.y + v2.y,
+			v1.z + v2.z
 		));
 	return(new_vector(
-		a.x + b.x,
-		a.y + b.y,
-		a.z + b.z
+		v1.x + v2.x,
+		v1.y + v2.y,
+		v1.z + v2.z
 	));
 }
 
-t_vec3	vector_substract(t_vec3 a, t_vec3 b)
+t_vec3	vector_substract(t_vec3 v1, t_vec3 v2)
 {
-	if (!is_point(a) && is_point(b))
+	if (!is_point(v1) && is_point(v2))
 		printf("Error: substracting point from vector\n");
-	if (is_point(a) != is_point(b))
+	if (is_point(v1) != is_point(v2))
 		return(new_point(
-			a.x - b.x,
-			a.y - b.y,
-			a.z - b.z
+			v1.x - v2.x,
+			v1.y - v2.y,
+			v1.z - v2.z
 		));
 	return(new_vector(
-		a.x - b.x,
-		a.y - b.y,
-		a.z - b.z
+		v1.x - v2.x,
+		v1.y - v2.y,
+		v1.z - v2.z
 	));
 }
 
@@ -125,23 +125,23 @@ t_vec3	vector_normalize(t_vec3 v)
  -1 - vectors are opposite.
  
  For other vectors:
-  a * b = |a||b|cos(angle)
+  v1 * v2 = |v1||v2|cos(angle)
 */
-float	vector_dot(t_vec3 a, t_vec3 b)
+float	vector_dot(t_vec3 v1, t_vec3 v2)
 {
-	if (is_point(a) || is_point(b))
+	if (is_point(v1) || is_point(v2))
 		printf("Error: calculating dot product of a point\n");
-	return (a.x * b.x + a.y * b.y + a.z * b.z);
+	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
-t_vec3	vector_cross(t_vec3 a, t_vec3 b)
+t_vec3	vector_cross(t_vec3 v1, t_vec3 v2)
 {
-	if (is_point(a) || is_point(b))
+	if (is_point(v1) || is_point(v2))
 		printf("Error: calculating cross product of a point\n");
 	return (new_vector(
-		a.y * b.z - a.z * b.y,
-		a.z * b.x - a.x * b.z,
-		a.x * b.y - a.y * b.x
+		v1.y * v2.z - v1.z * v2.y,
+		v1.z * v2.x - v1.x * v2.z,
+		v1.x * v2.y - v1.y * v2.x
 	));
 }
 

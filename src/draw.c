@@ -13,36 +13,13 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_pixel	pixel;
 	t_ray	ray;
 
-	t_matrix	m1 = new_matrix(3, 4);
-	t_matrix	m2 = new_matrix(3, 4);
-	if (m1.ptr && m2.ptr)
-	{
-		m1.ptr[1][0] = 5;
-		m1.ptr[2][2] = 12;
-		print_matrix(m1);
-		print_matrix(m2);
-		if (matrix_is_equal(m1, m2))
-			printf("Matrices are equal\n");
-		else
-			printf("Matrices are NOT equal\n");
-		free_matrix(m1);
-		free_matrix(m2);
-	}
-
 	setup_camera_angle(&scene->cam);//Can change with movement
 	pixel.j = 0;
 	while (pixel.j < HEIGHT)//TODO: add multi threading
 	{
-		//int	g;
-		//int	b;
 		pixel.i = 0;
 		while (pixel.i < WIDTH)
 		{
-			// Gradient
-			//g = pixel.j * 255 / (HEIGHT - 1);
-			//b = pixel.i * 255 / (WIDTH - 1);
-			//pixel.color = new_color(0, 0, g, b);
-
 			ray = get_ray_for_position(pixel, scene->cam);
 			pixel.color = trace_color(ray, scene);
 			ft_mlx_put_pixel(data, pixel);//TODO: add writting to ppm(?)

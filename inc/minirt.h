@@ -68,7 +68,7 @@ float	degrees_to_radians(float degrees);
 /* ===== Vector math ======================================================== */
 t_vec3	new_vector(float x, float y, float z);
 t_vec3	new_point(float x, float y, float z);
-bool	is_point(t_vec3 vec);
+bool	is_point(t_vec3 v);
 t_vec3	vector_negate(t_vec3 v);
 t_vec3	vector_add(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_substract(t_vec3 v1, t_vec3 v2);
@@ -80,20 +80,22 @@ float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
 
 /* ===== Color ============================================================== */
-int	new_color(int opacity, int red, int green, int blue);
-int	get_opacity(int color);
-int	get_red(int color);
-int	get_green(int color);
-int	get_blue(int color);
-int	color_add(int c1, int c2);
-int	color_substract(int c1, int c2);
-int	color_multiply(int color, float scalar);
-int	color_mix(int c1, int c2);
+int		new_color(int opacity, int red, int green, int blue);
+int		get_opacity(int color);
+int		get_red(int color);
+int		get_green(int color);
+int		get_blue(int color);
+int		color_add(int c1, int c2);
+int		color_substract(int c1, int c2);
+int		color_multiply(int c, float scalar);
+int		color_mix(int c1, int c2);
 
 /* ===== Matrix ============================================================= */
 t_matrix	new_matrix(int row, int col);
 void		free_matrix(t_matrix matrix);
 bool		matrix_is_equal(t_matrix m1, t_matrix m2);
+bool		matrix_has_equal_dimensions(t_matrix m1, t_matrix m2);
+t_matrix	matrix_multiply(t_matrix m1, t_matrix m2);
 
 // test functions
 void	print_vars(t_scene *scene);
