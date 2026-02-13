@@ -102,6 +102,7 @@ t_vec3		matrix_multiply_by_vector(t_matrix m, t_vec3 v);
 void		matrix_transpose(t_matrix m);
 float		matrix_find_determinant(t_matrix m);
 float		matrix_find_minor(t_matrix m, int row, int col);
+float		matrix_find_cofactor(t_matrix m, int row, int col);
 
 // test functions
 void	print_vars(t_scene *scene);

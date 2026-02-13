@@ -246,3 +246,13 @@ float	matrix_find_minor(t_matrix m, int row, int col)
 	free_matrix(sub_m);
 	return (res);
 }
+
+float	matrix_find_cofactor(t_matrix m, int row, int col)
+{
+	int	sign;
+
+	sign = -1;
+	if ((row / 2 == 0) && (col / 2 == 0))
+		sign = 1;
+	return (sign * matrix_find_minor(m, row, col));
+}
