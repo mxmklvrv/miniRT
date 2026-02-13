@@ -109,6 +109,8 @@ typedef struct s_scene
 	int				qt_cam;
 	int				qt_light;
 	char			*err_m;
+    t_olist         *obj_selected;
+
 
 }					t_scene;
 
