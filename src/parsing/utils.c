@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-void	kill_all(t_scene *scene)
+void	free_scene(t_scene *scene)
 {
 	free_list(scene->obj_list);
 }

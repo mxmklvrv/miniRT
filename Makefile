@@ -42,9 +42,6 @@ PARS_OBJ = $(PARS_SRC:$(PARS_DIR)/%.c=$(PARS_OBJ_DIR)/%.o)
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
 	main.c \
-	input.c \
-	parser.c \
-	parser_utils.c \
 	visuals.c \
 	hooks.c \
 	draw.c \

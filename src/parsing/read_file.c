@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-int	pars_input_file(char *file, t_scene *scene)
+int	parse_input_file(char *file, t_scene *scene)
 {
 	int		fd;
 	int		check;

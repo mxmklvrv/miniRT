@@ -15,10 +15,10 @@ int	parse_plane(char *line, t_scene *scene)
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC, NULL), free(plane), 1);
-	if (parse_vector(res[0], &plane->pl_point, -100.0f, 100.0f) == 1)
+	if (parse_vector(res[0], &plane->normal.origin, -100.0f, 100.0f) == 1)
 		return (error("Invalid coordinates of a point in plane", scene->err_m),
 			free(plane), free_array(res), 1);
-	if (parse_vector(res[1], &plane->normal, 0.0f, 1.0f) == 1)
+	if (parse_vector(res[1], &plane->normal.direction, 0.0f, 1.0f) == 1)
 		return (error("Invalid normal vector for plane", scene->err_m),
 			free(plane), free_array(res), 1);
 	colour = 0;
@@ -30,10 +30,10 @@ int	parse_plane(char *line, t_scene *scene)
 		return (error("Failed adding plane to the list", scene->err_m),
 			free(plane), free_array(res), 1);
 	printf("PLANE\n");
-	printf("pl point %f %f %f\n", plane->pl_point.x, plane->pl_point.y,
-		plane->pl_point.z);
-	printf("norm %f %f %f\n", plane->normal.x, plane->normal.y,
-		plane->normal.z);
+	printf("pl point %f %f %f\n", plane->normal.origin.x, plane->normal.origin.y,
+		plane->normal.origin.z);
+	printf("norm %f %f %f\n", plane->normal.direction.x, plane->normal.direction.y,
+		plane->normal.direction.z);
 	printf("color %d\n\n", plane->colour);
 	return (free_array(res), 0);
 }
