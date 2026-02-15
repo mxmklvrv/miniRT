@@ -1,5 +1,108 @@
 #include "minirt.h"
 
+#define MOVE_SPEED 0.5f
+#define ROTATE_SPEED 0.1f
+#define RESIZE_SPEED 0.2f
+
+#define KEY_W 119
+#define KEY_A 97
+#define KEY_S 115
+#define KEY_D 100
+#define KEY_Q 113
+#define KEY_E 101
+#define KEY_C 99
+#define KEY_SPACE 32
+#define KEY_TAB 65289
+#define KEY_LEFT 65361
+#define KEY_RIGHT 65363
+#define KEY_PLUS 61
+#define KEY_MINUS 45
+#define KEY_ESC 65307
+
+typedef struct s_control
+{
+	int forward;
+	int backward;
+	int left;
+	int right;
+	int up;
+	int down;
+	int rotate_left;
+	int rotate_right;
+	int resize_up;
+	int resize_down;
+} t_control;
+
+
+int key_press_hook(int key, t_data *data)
+{
+	t_control *move;
+
+	move = data->move_state;
+	if(key == KEY_TAB)
+		select_object(data->scene);
+	// for camcontrol here needed
+	else if(key == KEY_W)
+		move->forward = 1;
+	else if(key == KEY_S)
+		move->backward = 1;
+	else if(key == KEY_A)
+		move->left = 1;
+	else if(key == KEY_D)
+		move->right = 1;
+	else if(key == KEY_Q)
+		move->up = 1;
+	else if(key == KEY_E)
+		move->down = 1;
+	// rotation
+	else if(key == KEY_LEFT)
+		move->rotate_left = 1;
+	else if(key == KEY_RIGHT)
+		move->rotate_right = 1;
+	else if(key == KEY_PLUS)
+		move->resize_up = 1;
+	else if(key == KEY_MINUS)
+		move->resize_down = 1;
+	else if(key == KEY_ESC)
+		mlx_loop_end(data->mlx);
+	return (0);
+
+}
+
+int key_release_hook(int key, t_data *data)
+{
+	t_control *move;
+
+	move = data->move_state;
+	if(key == KEY_TAB)
+		select_object(data->scene);
+	// for camcontrol here needed
+	else if(key == KEY_W)
+		move->forward = 0;
+	else if(key == KEY_S)
+		move->backward = 0;
+	else if(key == KEY_A)
+		move->left = 0;
+	else if(key == KEY_D)
+		move->right = 0;
+	else if(key == KEY_Q)
+		move->up = 0;
+	else if(key == KEY_E)
+		move->down = 0;
+	// rotation
+	else if(key == KEY_LEFT)
+		move->rotate_left = 0;
+	else if(key == KEY_RIGHT)
+		move->rotate_right = 0;
+	else if(key == KEY_PLUS)
+		move->resize_up = 0;
+	else if(key == KEY_MINUS)
+		move->resize_down = 0;
+	return (0);
+
+}
+
+
 /**
  * TODO:
  * get current node (sphere, plane cylinder)
@@ -27,8 +130,8 @@
 void	select_object(t_scene *scene)
 {
 	if (!scene->obj_selected)
-		return ;
-	if (scene->obj_selected->next)
+		scene->obj_selected = scene->obj_list;
+	else if (scene->obj_selected->next)
 		scene->obj_selected = scene->obj_selected->next;
 	else
 		scene->obj_selected = scene->obj_list;
@@ -137,7 +240,12 @@ t_vec3	rotate_y(t_vec3 current, float angle)
 	rotated.y = current.y;
 	rotated.z = -current.x * sinus + current.z * cosinus;
 	rotated.w = current.w;
+	return (rotated);
 }
 
-// need rotation
+
+int key_hook(int key, )
+
+
+
 // need camera movement
