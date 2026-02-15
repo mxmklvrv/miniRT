@@ -99,7 +99,6 @@ int key_release_hook(int key, t_data *data)
 	else if(key == KEY_MINUS)
 		move->resize_down = 0;
 	return (0);
-
 }
 
 
