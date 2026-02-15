@@ -19,88 +19,85 @@
 #define KEY_MINUS 45
 #define KEY_ESC 65307
 
-typedef struct s_control
+typedef struct s_move_state
 {
-	int forward;
-	int backward;
-	int left;
-	int right;
-	int up;
-	int down;
-	int rotate_left;
-	int rotate_right;
-	int resize_up;
-	int resize_down;
-} t_control;
+	int	forward;
+	int	backward;
+	int	left;
+	int	right;
+	int	up;
+	int	down;
+	int	rotate_left;
+	int	rotate_right;
+	int	resize_up;
+	int	resize_down;
+}		t_move_state;
 
-
-int key_press_hook(int key, t_data *data)
+int	key_press_hook(int key, t_data *data)
 {
-	t_control *move;
+	t_move_state	*move;
 
 	move = data->move_state;
-	if(key == KEY_TAB)
+	if (key == KEY_TAB)
 		select_object(data->scene);
 	// for camcontrol here needed
-	else if(key == KEY_W)
+	else if (key == KEY_W)
 		move->forward = 1;
-	else if(key == KEY_S)
+	else if (key == KEY_S)
 		move->backward = 1;
-	else if(key == KEY_A)
+	else if (key == KEY_A)
 		move->left = 1;
-	else if(key == KEY_D)
+	else if (key == KEY_D)
 		move->right = 1;
-	else if(key == KEY_Q)
+	else if (key == KEY_Q)
 		move->up = 1;
-	else if(key == KEY_E)
+	else if (key == KEY_E)
 		move->down = 1;
 	// rotation
-	else if(key == KEY_LEFT)
+	else if (key == KEY_LEFT)
 		move->rotate_left = 1;
-	else if(key == KEY_RIGHT)
+	else if (key == KEY_RIGHT)
 		move->rotate_right = 1;
-	else if(key == KEY_PLUS)
+	else if (key == KEY_PLUS)
 		move->resize_up = 1;
-	else if(key == KEY_MINUS)
+	else if (key == KEY_MINUS)
 		move->resize_down = 1;
-	else if(key == KEY_ESC)
+	else if (key == KEY_ESC)
 		mlx_loop_end(data->mlx);
 	return (0);
-
 }
 
-int key_release_hook(int key, t_data *data)
+int	key_release_hook(int key, t_data *data)
 {
-	t_control *move;
+	t_move_state	*move;
 
 	move = data->move_state;
-	if(key == KEY_TAB)
+	if (key == KEY_TAB)
 		select_object(data->scene);
 	// for camcontrol here needed
-	else if(key == KEY_W)
+	else if (key == KEY_W)
 		move->forward = 0;
-	else if(key == KEY_S)
+	else if (key == KEY_S)
 		move->backward = 0;
-	else if(key == KEY_A)
+	else if (key == KEY_A)
 		move->left = 0;
-	else if(key == KEY_D)
+	else if (key == KEY_D)
 		move->right = 0;
-	else if(key == KEY_Q)
+	else if (key == KEY_Q)
 		move->up = 0;
-	else if(key == KEY_E)
+	else if (key == KEY_E)
 		move->down = 0;
 	// rotation
-	else if(key == KEY_LEFT)
+	else if (key == KEY_LEFT)
 		move->rotate_left = 0;
-	else if(key == KEY_RIGHT)
+	else if (key == KEY_RIGHT)
 		move->rotate_right = 0;
-	else if(key == KEY_PLUS)
+	else if (key == KEY_PLUS)
 		move->resize_up = 0;
-	else if(key == KEY_MINUS)
+	else if (key == KEY_MINUS)
 		move->resize_down = 0;
 	return (0);
 }
-
 
 /**
  * TODO:
@@ -119,7 +116,13 @@ int key_release_hook(int key, t_data *data)
 
 	* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!scene->obj_selected = scene->obj_list
  *
- *
+ *s_data added from Anya's brunch and added
+	t_scene *scene;
+	void	*move_state;
+	int		control_cam;
+
+	move state struct to check press release buttons
+
  */
 
 /**
@@ -243,8 +246,5 @@ t_vec3	rotate_y(t_vec3 current, float angle)
 }
 
 
-int key_hook(int key, )
 
-
-
-// need camera movement
+	// need camera movement
