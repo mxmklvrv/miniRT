@@ -221,12 +221,24 @@ void	matrix_transpose(t_matrix m)
 
 float	matrix_find_determinant(t_matrix m)
 {
-	if (m.col != 2 || m.row != 2)
+	int		i;
+	float	res;
+
+	if (m.col != m.row)
 	{
-		ft_putendl_fd("Error: can't find determinant, matrix isn't 2x2", STDERR_FILENO);
+		ft_putendl_fd("Error: can't find determinant, matrix isn't square", STDERR_FILENO);
 		return (0);
 	}
-	return (m.ptr[0][0] * m.ptr[1][1] - m.ptr[0][1] * m.ptr[1][0]);
+	if (m.col == 2 || m.row == 2)
+		return (m.ptr[0][0] * m.ptr[1][1] - m.ptr[0][1] * m.ptr[1][0]);
+	i = 0;
+	res = 0;
+	while (i < m.col)
+	{
+		res += m.ptr[0][i] * matrix_find_cofactor(m, 0, i);
+		i++;
+	}
+	return (res);
 }
 
 float	matrix_find_minor(t_matrix m, int row, int col)
@@ -234,9 +246,9 @@ float	matrix_find_minor(t_matrix m, int row, int col)
 	t_matrix	sub_m;
 	float		res;
 
-	if (m.col != 3 || m.row != 3)
+	if (m.col > 4 || m.row > 4)
 	{
-		ft_putendl_fd("Error: can't find minor, matrix isn't 3x3", STDERR_FILENO);
+		ft_putendl_fd("Error: can't find minor, matrix bigger than 4x4", STDERR_FILENO);
 		return (0);
 	}
 	sub_m = new_submatrix(m, row, col);
@@ -252,7 +264,7 @@ float	matrix_find_cofactor(t_matrix m, int row, int col)
 	int	sign;
 
 	sign = -1;
-	if ((row / 2 == 0) && (col / 2 == 0))
+	if ((row % 2 == 0) == (col % 2 == 0))
 		sign = 1;
 	return (sign * matrix_find_minor(m, row, col));
 }

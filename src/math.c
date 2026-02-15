@@ -7,7 +7,7 @@ int	hit_sp(t_ray ray, t_sp *sp)
 	float	c;
 	t_vec3	vector_to_sphere;
 	float	discriminant;
-	t_vec3	intersection;
+	//t_vec3	intersection;
 
 	vector_to_sphere = vector_substract(ray.origin, sp->sp_center);
 	a = vector_dot(ray.direction, ray.direction);
@@ -18,7 +18,7 @@ int	hit_sp(t_ray ray, t_sp *sp)
 	if (discriminant < 0)
 		return (-1);
 	//Find intersection:
-	intersection = ray.direction;//TODO: find intersection with sphere
+	//intersection = ray.direction;//TODO: find intersection with sphere
 	//vector_magnitude(intersection)
 	return (1);
 }

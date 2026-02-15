@@ -64,8 +64,8 @@ void	print_color(char *name, int color)
 
 void	print_matrix(t_matrix matrix)
 {
-	int	i;
-	int	j;
+	int	i = 0;
+	int	j = 0;
 
 	j = 0;
 	while (matrix.ptr && j < matrix.row)

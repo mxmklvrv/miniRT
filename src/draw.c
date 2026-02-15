@@ -14,22 +14,25 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_ray	ray;
 
 	t_matrix	m = new_matrix(4, 4);
-	t_matrix	sub_m;
-	//t_vec3		v = {3, -2, 5 ,2};
 
-	m.ptr[0][0] = 1;
-	m.ptr[0][1] = 2;
+	m.ptr[0][0] = -2;
+	m.ptr[0][1] = -8;
 	m.ptr[0][2] = 3;
-	m.ptr[1][0] = 4;
-	m.ptr[2][0] = 5;
-	m.ptr[3][0] = 6;
+	m.ptr[0][3] = 5;
+	m.ptr[1][0] = -3;
+	m.ptr[1][1] = 1;
+	m.ptr[1][2] = 7;
+	m.ptr[1][3] = 3;
+	m.ptr[2][0] = 1;
+	m.ptr[2][1] = 2;
+	m.ptr[2][2] = -9;
+	m.ptr[2][3] = 6;
+	m.ptr[3][0] = -6;
+	m.ptr[3][1] = 7;
+	m.ptr[3][2] = 7;
+	m.ptr[3][3] = -9;
 	print_matrix(m);
-	//print_vector("A", v);
-	//print_vector("matrix * A", matrix_multiply_by_vector(m, v));
-	sub_m = new_submatrix(m, 1, 1);
-	printf("Submatrix (1, 1):\n");
-	print_matrix(sub_m);
-	free_matrix(sub_m);
+	printf("Determinant: %f\n", matrix_find_determinant(m));
 	free_matrix(m);
 
 	setup_camera_angle(&scene->cam);//Can change with movement
@@ -60,15 +63,11 @@ void	setup_camera_angle(t_cam *cam)
 {
 	t_vec3	opposite_cam;
 	const t_vec3	up_view = {0, 0, 1, 0};
-	float	fov_multiplier;
-	float	cam_angle;
 
 	cam->orient.direction = vector_normalize(cam->orient.direction);
 	opposite_cam = vector_multiply(cam->orient.direction, -1);
 	cam->vector_i = vector_cross(opposite_cam,up_view);
 	cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
-	cam_angle = degrees_to_radians(cam->fov / 2);
-	fov_multiplier = 1;
 }
 
 /*
