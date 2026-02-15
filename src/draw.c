@@ -14,26 +14,42 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_ray	ray;
 
 	t_matrix	m = new_matrix(4, 4);
+	t_matrix	inverse;
+	t_matrix	multi;
+	float		det;
 
-	m.ptr[0][0] = -2;
-	m.ptr[0][1] = -8;
-	m.ptr[0][2] = 3;
-	m.ptr[0][3] = 5;
-	m.ptr[1][0] = -3;
-	m.ptr[1][1] = 1;
-	m.ptr[1][2] = 7;
-	m.ptr[1][3] = 3;
-	m.ptr[2][0] = 1;
-	m.ptr[2][1] = 2;
-	m.ptr[2][2] = -9;
-	m.ptr[2][3] = 6;
-	m.ptr[3][0] = -6;
-	m.ptr[3][1] = 7;
+	m.ptr[0][0] = -5;
+	m.ptr[0][1] = 2;
+	m.ptr[0][2] = 6;
+	m.ptr[0][3] = -8;
+	m.ptr[1][0] = 1;
+	m.ptr[1][1] = -5;
+	m.ptr[1][2] = 1;
+	m.ptr[1][3] = 8;
+	m.ptr[2][0] = 7;
+	m.ptr[2][1] = 7;
+	m.ptr[2][2] = -6;
+	m.ptr[2][3] = -7;
+	m.ptr[3][0] = 1;
+	m.ptr[3][1] = -3;
 	m.ptr[3][2] = 7;
-	m.ptr[3][3] = -9;
+	m.ptr[3][3] = 4;
 	print_matrix(m);
 	printf("Determinant: %f\n", matrix_find_determinant(m));
+	printf("Invertible: ");
+	if (matrix_is_invertible(m, &det))
+		printf("yes\n");
+	else
+		printf("no\n");
+	inverse = new_inverse_matrix(m);
+	multi = new_matrix_multiply(m, inverse);
+	printf("Inverse matrix:\n");
+	print_matrix(inverse);
+	printf("Multiply matrix:\n");
+	print_matrix(multi);
 	free_matrix(m);
+	free_matrix(inverse);
+	free_matrix(multi);
 
 	setup_camera_angle(&scene->cam);//Can change with movement
 	pixel.j = 0;

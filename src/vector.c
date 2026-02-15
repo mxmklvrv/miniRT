@@ -22,16 +22,16 @@ t_vec3	new_point(float x, float y, float z)
 	return (res);
 }
 
+bool	is_point(t_vec3 v)
+{
+	return (v.w == 1);
+}
+
 bool	is_equalf(float f1, float f2)
 {
 	if (fabsf(f1 - f2) < EPSILON)
 		return (true);
 	return (false);
-}
-
-bool	is_point(t_vec3 v)
-{
-	return (v.w == 1);
 }
 
 t_vec3	vector_negate(t_vec3 v)
@@ -88,8 +88,8 @@ t_vec3	vector_divide(t_vec3 v, float scalar)
 {
 	if (is_point(v))
 		printf("Error: dividing a point\n");
-	//if (is_equalf(scalar, 0f))
-	if (scalar == 0)
+	if (is_equalf(scalar, 0))
+	//if (scalar == 0)
 		printf("Error: dividing by zero\n");
 	return (new_vector(
 		v.x / scalar,

@@ -74,6 +74,36 @@ t_matrix	new_submatrix(t_matrix m, int target_row, int target_col)
 	return (res);
 }
 
+t_matrix	new_inverse_matrix(t_matrix m)
+{
+	t_matrix	res;
+	int			i;
+	int			j;
+	float		determinant;
+
+	if (!matrix_is_invertible(m, &determinant))
+	{
+		ft_putendl_fd("Error: can't inverse matrix, determinant is 0, ", STDERR_FILENO);
+		res.ptr = NULL;
+		return (res);
+	}
+	res = new_matrix(m.col, m.row);
+	if (!res.ptr)
+		return (res);
+	j = 0;
+	while (j < m.col)
+	{
+		i = 0;
+		while (i < m.row)
+		{
+			res.ptr[j][i] = matrix_find_cofactor(m, i, j) / determinant;
+			i++;
+		}
+		j++;
+	}
+	return (res);
+}
+
 void	free_matrix(t_matrix matrix)
 {
 	int	i;
@@ -267,4 +297,12 @@ float	matrix_find_cofactor(t_matrix m, int row, int col)
 	if ((row % 2 == 0) == (col % 2 == 0))
 		sign = 1;
 	return (sign * matrix_find_minor(m, row, col));
+}
+
+bool	matrix_is_invertible(t_matrix m, float *determinant)
+{
+	*determinant = matrix_find_determinant(m);
+	if (is_equalf(*determinant, 0))
+		return (false);
+	return (true);
 }

@@ -35,6 +35,7 @@ float	degrees_to_radians(float degrees);
 t_vec3	new_vector(float x, float y, float z);
 t_vec3	new_point(float x, float y, float z);
 bool	is_point(t_vec3 v);
+bool	is_equalf(float f1, float f2);
 t_vec3	vector_negate(t_vec3 v);
 t_vec3	vector_add(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_substract(t_vec3 v1, t_vec3 v2);
@@ -44,6 +45,7 @@ float	vector_magnitude(t_vec3 v);
 t_vec3	vector_normalize(t_vec3 v);
 float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
+float	degrees_to_radians(float degrees);
 
 /* ===== Color ============================================================== */
 int		new_color(int opacity, int red, int green, int blue);
@@ -56,10 +58,11 @@ int		color_substract(int c1, int c2);
 int		color_multiply(int c, float scalar);
 int		color_mix(int c1, int c2);
 
-/* ===== Matrix ============================================================= */
+/* ===== Matrix math ======================================================== */
 t_matrix	new_matrix(int row, int col);
 t_matrix	new_identity_matrix(int	row);
 t_matrix	new_submatrix(t_matrix m, int target_row, int target_col);
+t_matrix	new_inverse_matrix(t_matrix m);
 t_matrix	new_matrix_multiply(t_matrix m1, t_matrix m2);
 void		free_matrix(t_matrix matrix);
 bool		matrix_is_equal(t_matrix m1, t_matrix m2);
@@ -69,6 +72,7 @@ void		matrix_transpose(t_matrix m);
 float		matrix_find_determinant(t_matrix m);
 float		matrix_find_minor(t_matrix m, int row, int col);
 float		matrix_find_cofactor(t_matrix m, int row, int col);
+bool	    matrix_is_invertible(t_matrix m, float *determinant);
 
 // test functions
 void	print_vars(t_scene *scene);
