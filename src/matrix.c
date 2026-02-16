@@ -104,6 +104,90 @@ t_matrix	new_inverse_matrix(t_matrix m)
 	return (res);
 }
 
+t_matrix	new_translation_matrix(float x, float y, float z)
+{
+	t_matrix	res;
+
+	res = new_identity_matrix(4);
+	if (!res.ptr)
+		return (res);
+	res.ptr[0][3] = x;
+	res.ptr[1][3] = y;
+	res.ptr[2][3] = z;
+	return (res);
+}
+
+t_matrix	new_scaling_matrix(float x, float y, float z)
+{
+	t_matrix	res;
+
+	res = new_identity_matrix(4);
+	if (!res.ptr)
+		return (res);
+	res.ptr[0][0] = x;
+	res.ptr[1][1] = y;
+	res.ptr[2][2] = z;
+	return (res);
+}
+
+t_matrix	new_rotation_x_matrix(float radians)
+{
+	t_matrix	res;
+
+	res = new_identity_matrix(4);
+	if (!res.ptr)
+		return (res);
+	res.ptr[1][1] = cosf(radians);
+	res.ptr[2][2] = res.ptr[1][1];
+	res.ptr[2][1] = sinf(radians);
+	res.ptr[1][2] = -res.ptr[2][1];
+	return (res);
+}
+
+t_matrix	new_rotation_y_matrix(float radians)
+{
+	t_matrix	res;
+
+	res = new_identity_matrix(4);
+	if (!res.ptr)
+		return (res);
+	res.ptr[0][0] = cosf(radians);
+	res.ptr[2][2] = res.ptr[0][0];
+	res.ptr[0][2] = sinf(radians);
+	res.ptr[2][0] = -res.ptr[0][2];
+	return (res);
+}
+
+t_matrix	new_rotation_z_matrix(float radians)
+{
+	t_matrix	res;
+
+	res = new_identity_matrix(4);
+	if (!res.ptr)
+		return (res);
+	res.ptr[0][0] = cosf(radians);
+	res.ptr[1][1] = res.ptr[0][0];
+	res.ptr[1][0] = sinf(radians);
+	res.ptr[0][1] = -res.ptr[1][0];
+	return (res);
+}
+
+t_matrix	new_shearing_matrix(t_vec3 x, t_vec3 y, t_vec3 z)
+{
+	t_matrix	res;
+
+	res = new_identity_matrix(4);
+	if (!res.ptr)
+		return (res);
+	res.ptr[0][1] = x.y;
+	res.ptr[0][2] = x.z;
+	res.ptr[1][0] = y.x;
+	res.ptr[1][2] = y.z;
+	res.ptr[2][0] = z.x;
+	res.ptr[2][1] = z.y;
+	return (res);
+}
+
 void	free_matrix(t_matrix matrix)
 {
 	int	i;
