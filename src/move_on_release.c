@@ -29,10 +29,10 @@
 
 
 
-// NEED TO ADD ROTATION X 
+// NEED TO ADD ROTATION X
 // NEED TO ADD SEP BUTTON FOR DIAM INCR
 
-// VERSION WITH CONTINUOUS MOVEMENT 
+// VERSION WITH CONTINUOUS MOVEMENT
 
 #define MOVE_SPEED 0.5f
 #define ROTATE_SPEED 0.1f
@@ -44,10 +44,12 @@
 #define KEY_D 100 // right
 #define KEY_Q 113 // up
 #define KEY_E 101 // down
-#define KEY_C 99 // cam 
+#define KEY_C 99 // cam
 #define KEY_TAB 65289 // switch obj
 #define KEY_LEFT 65361 // rotate left
 #define KEY_RIGHT 65363 // rotate right
+#define KEY_UP 65362 // rotate up
+#define KEY_DOWN 65364 // rotate down
 #define KEY_PLUS 61 // resize up
 #define KEY_MINUS 45 // resize down
 #define KEY_ESC 65307 // esc
@@ -62,6 +64,8 @@ typedef struct s_move_state
 	int	down;
 	int	rotate_left;
 	int	rotate_right;
+	int rotate_up;
+	int rotate_down;
 	int	resize_up;
 	int	resize_down;
 }		t_move_state;
@@ -95,6 +99,11 @@ int	key_press_hook(int key, t_data *data)
 		move->rotate_left = 1;
 	else if (key == KEY_RIGHT)
 		move->rotate_right = 1;
+	else if (key == KEY_UP)
+		move->rotate_up = 1;
+	else if (key == KEY_DOWN)
+		move->rotate_down = 1;
+	// resize
 	else if (key == KEY_PLUS)
 		move->resize_up = 1;
 	else if (key == KEY_MINUS)
@@ -126,6 +135,10 @@ int	key_release_hook(int key, t_data *data)
 		move->rotate_left = 0;
 	else if (key == KEY_RIGHT)
 		move->rotate_right = 0;
+	else if (key == KEY_UP)
+		move->rotate_up = 0;
+	else if(key == KEY_DOWN)
+		move->rotate_down = 0;
     // size
 	else if (key == KEY_PLUS)
 		move->resize_up = 0;
@@ -145,8 +158,8 @@ int render_hook(t_data *data)
 void set_hooks(t_data *data)
 {
     // check if malloc fails
-    // probably will do that in init 
-    data->move_state = ft_calloc(1, sizeof(t_move_state)); 
+    // probably will do that in init
+    data->move_state = ft_calloc(1, sizeof(t_move_state));
     data->control_cam = 0;
 
     mlx_hook(data->win, 2, 1L<<0, key_press_hook, data);
@@ -209,6 +222,11 @@ void    rotate_cam(t_cam *cam, float angle)
     cam->orient.direction = vec_normalize(rotate_y(cam->orient.direction, angle));
     setup_camera_angle(cam);
 }
+void    rotate_cam_x(t_cam *cam, float angle)
+{
+    cam->orient.direction = vec_normalize(rotate_x(cam->orient.direction, angle));
+    setup_camera_angle(cam);
+}
 
 
 void	apply_movement(t_data *data)
@@ -259,6 +277,23 @@ void	apply_movement(t_data *data)
             rotate_cam(&data->scene->cam, ROTATE_SPEED);
         need_redraw = 1;
     }
+	if(move->rotate_up)
+	{
+		if(data->scene->obj_selected)
+			rotate_objects_x(data->scene->obj_selected, -ROTATE_SPEED);
+		else if(data->control_cam)
+			rotate_cam_x(&data->scene->cam, -ROTATE_SPEED);
+		need_redraw = 1;
+
+	}
+	if(move->rotate_down)
+	{
+		if(data->scene->obj_selected)
+			rotate_objects_x(data->scene->obj_selected, ROTATE_SPEED);
+		else if(data->control_cam)
+			rotate_cam_x(&data->scene->cam, ROTATE_SPEED);
+		need_redraw = 1;
+	}
     if(move->resize_up)
     {
         if(data->scene->obj_selected && !data->control_cam)
@@ -324,6 +359,28 @@ void	rotate_objects(t_olist *node, float angle)
 		cy->normal.direction = vec_normalize(rotate_y(cy->normal.direction, angle));
 	}
 }
+
+void	rotate_objects_x(t_olist *node, float angle)
+{
+	t_pl	*pl;
+	t_cy	*cy;
+
+	if (!node)
+		return ;
+	if (node->obj_type == PL)
+	{
+		pl = (t_pl *)node->obj;
+		pl->normal.direction = vec_normalize(rotate_x(pl->normal.direction, angle));
+	}
+	else if (node->obj_type == CY)
+	{
+		cy = (t_cy *)node->obj;
+		cy->normal.direction = vec_normalize(rotate_x(cy->normal.direction, angle));
+	}
+}
+
+
+
 t_vec3	rotate_y(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
@@ -339,6 +396,20 @@ t_vec3	rotate_y(t_vec3 current, float angle)
 	return (rotated);
 }
 
+t_vec3 rotate_x(t_vec3 current, float angle)
+{
+	t_vec3 rotated;
+	float cosinus;
+	float sinus;
+
+	cosinus = cosf(angle);
+	sinus = sinf(angle);
+	rotated.x = current.x;
+	rotated.y = current.y * cosinus - current.z * sinus;
+	rotated.z = current.y *sinus + current.z * cosinus;
+	rotated.w = current.w;
+	return (rotated);
+}
 
 
 // VERSION WITH CONTINUOUS MOVEMENT  END
@@ -408,8 +479,21 @@ int	key_release_hook(int key, t_data *data)
             rotate_cam(&data->scene->cam, ROTATE_SPEED);
         need_redrow = 1;
     }
+	else if (key == KEY_UP)
+	{
+		if(!data->control_cam)
+			rotate_objects_x(data->scene->obj_selected, -ROTATE_SPEED);
+		else
+			rotate_cam_x(&data->scene->cam, -ROTATE_SPEED);
+	}
+	else if (key == KEY_DOWN)
+	{
+		if(!data->control_cam)
+			rotate_objects_x(data->scene->obj_selected, ROTATE_SPEED);
+		else
+			rotate_cam_x(&data->scene->cam, ROTATE_SPEED);
+	}
     // size
-
     if(!data->control_cam)
     {
         if (key == KEY_PLUS && data->scene->obj_selected)
@@ -506,11 +590,38 @@ void	rotate_objects(t_olist *node, float angle)
 		cy->normal.direction = vec_normalize(rotate_y(cy->normal.direction, angle));
 	}
 }
+
+void	rotate_objects_x(t_olist *node, float angle)
+{
+	t_pl	*pl;
+	t_cy	*cy;
+
+	if (!node)
+		return ;
+	if (node->obj_type == PL)
+	{
+		pl = (t_pl *)node->obj;
+		pl->normal.direction = vec_normalize(rotate_x(pl->normal.direction, angle));
+	}
+	else if (node->obj_type == CY)
+	{
+		cy = (t_cy *)node->obj;
+		cy->normal.direction = vec_normalize(rotate_x(cy->normal.direction, angle));
+	}
+}
+
 void    rotate_cam(t_cam *cam, float angle)
 {
     cam->orient.direction = vec_normalize(rotate_y(cam->orient.direction, angle));
     setup_camera_angle(cam);
 }
+
+void    rotate_cam_x(t_cam *cam, float angle)
+{
+    cam->orient.direction = vec_normalize(rotate_x(cam->orient.direction, angle));
+    setup_camera_angle(cam);
+}
+
 t_vec3	rotate_y(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
@@ -526,6 +637,20 @@ t_vec3	rotate_y(t_vec3 current, float angle)
 	return (rotated);
 }
 
+t_vec3 rotate_x(t_vec3 current, float angle)
+{
+	t_vec3 rotated;
+	float cosinus;
+	float sinus;
+
+	cosinus = cosf(angle);
+	sinus = sinf(angle);
+	rotated.x = current.x;
+	rotated.y = current.y * cosinus - current.z * sinus;
+	rotated.z = current.y *sinus + current.z * cosinus;
+	rotated.w = current.w;
+	return (rotated);
+}
 
 // not sure about resizing
 void	resize_objects(t_olist *node, float value)
