@@ -255,6 +255,7 @@ int	handle_translation(t_data *data)
 	}
 	return (0);
 }
+// light cannot be rotated
 int	handle_rotation(t_data *data)
 {
 	t_move_state	*move;
@@ -271,35 +272,8 @@ int	handle_rotation(t_data *data)
 	return (move->rotate_left || move->rotate_right || move->rotate_up
 		|| move->rotate_down);
 }
-// int	handle_rotation(t_data *data)
-// {
-// 	t_move_state	*move;
-// 	int				changed;
 
-// 	move = data->move_state;
-// 	changed = 0;
-// 	if (move->rotate_left)
-// 	{
-// 		rotate_obj_or_cam(data, -ROTATE_SPEED, Y_AXIS);
-// 		changed = 1;
-// 	}
-// 	if (move->rotate_right)
-// 	{
-// 		rotate_obj_or_cam(data, ROTATE_SPEED, Y_AXIS);
-// 		changed = 1;
-// 	}
-// 	if (move->rotate_up)
-// 	{
-// 		rotate_obj_or_cam(data, -ROTATE_SPEED, X_AXIS);
-// 		changed = 1;
-// 	}
-// 	if (move->rotate_down)
-// 	{
-// 		rotate_obj_or_cam(data, ROTATE_SPEED, X_AXIS);
-// 		changed = 1;
-// 	}
-// 	return (changed);
-// }
+// can we resize light ?? Looks like no
 int	handle_resize(t_data *data)
 {
 	t_move_state	*move;
@@ -327,6 +301,7 @@ int	handle_resize(t_data *data)
 	return (0);
 }
 
+// need to add light
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 {
 	if (data->control_cam)
@@ -339,9 +314,9 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 	else if (data->scene->obj_selected)
 	{
 		if (axis == Y_AXIS)
-			rotate_objects(data->scene->obj_selected, angle);
+			rotate_objects(data->scene->obj_selected, angle, Y_AXIS);
 		else
-			rotate_objects_x(data->scene->obj_selected, angle);
+			rotate_objects(data->scene->obj_selected, angle, X_AXIS);
 	}
 }
 
@@ -351,7 +326,7 @@ void	resize_diameter(t_olist *node, float value)
 	t_sp	*sp;
 	t_cy	*cy;
 
-	if (!node)
+	if (!node || node->obj_type == PL)
 		return ;
 	if (node->obj_type == SP)
 	{
@@ -382,7 +357,9 @@ int	resize_height(t_olist *node, float value)
 	return (1);
 }
 
-void	rotate_objects(t_olist *node, float angle)
+
+
+void	rotate_objects(t_olist *node, float angle, t_axis axis)
 {
 	t_pl	*pl;
 	t_cy	*cy;
@@ -392,37 +369,26 @@ void	rotate_objects(t_olist *node, float angle)
 	if (node->obj_type == PL)
 	{
 		pl = (t_pl *)node->obj;
-		pl->normal.direction = vec_normalize(rotate_y(pl->normal.direction,
-					angle));
+		if (axis == Y_AXIS)
+			pl->normal.direction = vec_normalize(rotate_y(pl->normal.direction,
+						angle));
+		else
+			pl->normal.direction = vec_normalize(rotate_x(pl->normal.direction,
+						angle));
 	}
 	else if (node->obj_type == CY)
 	{
 		cy = (t_cy *)node->obj;
-		cy->normal.direction = vec_normalize(rotate_y(cy->normal.direction,
-					angle));
+		if (axis == Y_AXIS)
+			cy->normal.direction = vec_normalize(rotate_y(cy->normal.direction,
+						angle));
+		else
+			cy->normal.direction = vec_normalize(rotate_x(cy->normal.direction,
+						angle));
 	}
 }
 
-void	rotate_objects_x(t_olist *node, float angle)
-{
-	t_pl	*pl;
-	t_cy	*cy;
 
-	if (!node)
-		return ;
-	if (node->obj_type == PL)
-	{
-		pl = (t_pl *)node->obj;
-		pl->normal.direction = vec_normalize(rotate_x(pl->normal.direction,
-					angle));
-	}
-	else if (node->obj_type == CY)
-	{
-		cy = (t_cy *)node->obj;
-		cy->normal.direction = vec_normalize(rotate_x(cy->normal.direction,
-					angle));
-	}
-}
 
 t_vec3	rotate_y(t_vec3 current, float angle)
 {
@@ -522,4 +488,78 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 // 	}
 // 	if (need_redraw)
 // 		redraw_scene(data, data->scene);
+// }
+
+// int	handle_rotation(t_data *data)
+// {
+// 	t_move_state	*move;
+// 	int				changed;
+
+// 	move = data->move_state;
+// 	changed = 0;
+// 	if (move->rotate_left)
+// 	{
+// 		rotate_obj_or_cam(data, -ROTATE_SPEED, Y_AXIS);
+// 		changed = 1;
+// 	}
+// 	if (move->rotate_right)
+// 	{
+// 		rotate_obj_or_cam(data, ROTATE_SPEED, Y_AXIS);
+// 		changed = 1;
+// 	}
+// 	if (move->rotate_up)
+// 	{
+// 		rotate_obj_or_cam(data, -ROTATE_SPEED, X_AXIS);
+// 		changed = 1;
+// 	}
+// 	if (move->rotate_down)
+// 	{
+// 		rotate_obj_or_cam(data, ROTATE_SPEED, X_AXIS);
+// 		changed = 1;
+// 	}
+// 	return (changed);
+// }
+
+
+// void	rotate_objects(t_olist *node, float angle)
+// {
+// 	t_pl	*pl;
+// 	t_cy	*cy;
+
+// 	if (!node || node->obj_type == SP)
+// 		return ;
+// 	if (node->obj_type == PL)
+// 	{
+// 		pl = (t_pl *)node->obj;
+// 		pl->normal.direction = vec_normalize(rotate_y(pl->normal.direction,
+// 					angle));
+// 	}
+// 	else if (node->obj_type == CY)
+// 	{
+// 		cy = (t_cy *)node->obj;
+// 		cy->normal.direction = vec_normalize(rotate_y(cy->normal.direction,
+// 					angle));
+// 	}
+// }
+
+
+// void	rotate_objects_x(t_olist *node, float angle)
+// {
+// 	t_pl	*pl;
+// 	t_cy	*cy;
+
+// 	if (!node)
+// 		return ;
+// 	if (node->obj_type == PL)
+// 	{
+// 		pl = (t_pl *)node->obj;
+// 		pl->normal.direction = vec_normalize(rotate_x(pl->normal.direction,
+// 					angle));
+// 	}
+// 	else if (node->obj_type == CY)
+// 	{
+// 		cy = (t_cy *)node->obj;
+// 		cy->normal.direction = vec_normalize(rotate_x(cy->normal.direction,
+// 					angle));
+// 	}
 // }
