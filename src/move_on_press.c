@@ -199,6 +199,7 @@ void	translate_cam(t_cam *cam, t_vec3 move_vec)
 	cam->orient.origin = vector_add(cam->orient.origin, move_vec);
 	setup_camera_angle(cam);
 }
+
 void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 {
 	if (axis == Y_AXIS)
@@ -280,18 +281,14 @@ int	handle_resize(t_data *data)
 
 	move = data->move_state;
 	if (!data->scene->obj_selected || data->scene->obj_selected->obj_type == PL
-		|| data->control_cam)
+		|| data->control_cam) // or data->light
 		return (0);
-	if (move->resize_up)
-	{
-		resize_diameter(data->scene->obj_selected, RESIZE_SPEED);
+	if (move->resize_up && resize_diameter(data->scene->obj_selected,
+			RESIZE_SPEED))
 		return (1);
-	}
-	if (move->resize_down)
-	{
-		resize_diameter(data->scene->obj_selected, -RESIZE_SPEED);
+	if (move->resize_down && resize_diameter(data->scene->obj_selected,
+			-RESIZE_SPEED))
 		return (1);
-	}
 	if (move->height_up && resize_height(data->scene->obj_selected,
 			RESIZE_SPEED))
 		return (1);
@@ -305,29 +302,19 @@ int	handle_resize(t_data *data)
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 {
 	if (data->control_cam)
-	{
-		if (axis == Y_AXIS)
-			rotate_cam(&data->scene->cam, angle, Y_AXIS);
-		else
-			rotate_cam(&data->scene->cam, angle, X_AXIS);
-	}
+		rotate_cam(&data->scene->cam, angle, axis);
 	else if (data->scene->obj_selected)
-	{
-		if (axis == Y_AXIS)
-			rotate_objects(data->scene->obj_selected, angle, Y_AXIS);
-		else
-			rotate_objects(data->scene->obj_selected, angle, X_AXIS);
-	}
+		rotate_objects(data->scene->obj_selected, angle, axis);
 }
 
 // resizing diam of sphere and cy
-void	resize_diameter(t_olist *node, float value)
+int	resize_diameter(t_olist *node, float value)
 {
 	t_sp	*sp;
 	t_cy	*cy;
 
 	if (!node || node->obj_type == PL)
-		return ;
+		return (0);
 	if (node->obj_type == SP)
 	{
 		sp = (t_sp *)node->obj;
@@ -342,6 +329,7 @@ void	resize_diameter(t_olist *node, float value)
 		if (cy->diameter < 0.1f)
 			cy->diameter = 0.1f;
 	}
+	return (1);
 }
 
 int	resize_height(t_olist *node, float value)
@@ -356,8 +344,6 @@ int	resize_height(t_olist *node, float value)
 		cy->height = 0.1f;
 	return (1);
 }
-
-
 
 void	rotate_objects(t_olist *node, float angle, t_axis axis)
 {
@@ -387,8 +373,6 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 						angle));
 	}
 }
-
-
 
 t_vec3	rotate_y(t_vec3 current, float angle)
 {
@@ -520,7 +504,6 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 // 	return (changed);
 // }
 
-
 // void	rotate_objects(t_olist *node, float angle)
 // {
 // 	t_pl	*pl;
@@ -541,7 +524,6 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 // 					angle));
 // 	}
 // }
-
 
 // void	rotate_objects_x(t_olist *node, float angle)
 // {
