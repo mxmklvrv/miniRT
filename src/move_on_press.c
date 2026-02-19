@@ -1,7 +1,6 @@
 #include "minirt.h"
 
-// forgot to add movement of the plane TODO
-// consider cam changes
+// consider cam changes ??????
 // what about light ??
 
 #define MOVE_SPEED 0.5f
@@ -128,6 +127,7 @@ int	key_release_hook(int key, t_data *data)
 		move->resize_up = 0;
 	else if (key == KEY_MINUS)
 		move->resize_down = 0;
+	// height of cy
 	else if (key == KEY_H)
 		move->height_up = 0;
 	else if (key == KEY_J)
@@ -199,16 +199,14 @@ void	translate_cam(t_cam *cam, t_vec3 move_vec)
 	cam->orient.origin = vector_add(cam->orient.origin, move_vec);
 	setup_camera_angle(cam);
 }
-void	rotate_cam(t_cam *cam, float angle)
+void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 {
-	cam->orient.direction = vec_normalize(rotate_y(cam->orient.direction,
-				angle));
-	setup_camera_angle(cam);
-}
-void	rotate_cam_x(t_cam *cam, float angle)
-{
-	cam->orient.direction = vec_normalize(rotate_x(cam->orient.direction,
-				angle));
+	if (axis == Y_AXIS)
+		cam->orient.direction = vec_normalize(rotate_y(cam->orient.direction,
+					angle));
+	else if (axis == X_AXIS)
+		cam->orient.direction = vec_normalize(rotate_x(cam->orient.direction,
+					angle));
 	setup_camera_angle(cam);
 }
 
@@ -227,6 +225,7 @@ void	apply_movement(t_data *data)
 		redraw_scene(data, data->scene);
 }
 
+// add translate light
 int	handle_translation(t_data *data)
 {
 	t_move_state	*move;
@@ -259,47 +258,64 @@ int	handle_translation(t_data *data)
 int	handle_rotation(t_data *data)
 {
 	t_move_state	*move;
-	int				changed;
 
 	move = data->move_state;
-	changed = 0;
 	if (move->rotate_left)
-	{
 		rotate_obj_or_cam(data, -ROTATE_SPEED, Y_AXIS);
-		changed = 1;
-	}
 	if (move->rotate_right)
-	{
 		rotate_obj_or_cam(data, ROTATE_SPEED, Y_AXIS);
-		changed = 1;
-	}
 	if (move->rotate_up)
-	{
 		rotate_obj_or_cam(data, -ROTATE_SPEED, X_AXIS);
-		changed = 1;
-	}
 	if (move->rotate_down)
-	{
 		rotate_obj_or_cam(data, ROTATE_SPEED, X_AXIS);
-		changed = 1;
-	}
-	return (changed);
+	return (move->rotate_left || move->rotate_right || move->rotate_up
+		|| move->rotate_down);
 }
+// int	handle_rotation(t_data *data)
+// {
+// 	t_move_state	*move;
+// 	int				changed;
+
+// 	move = data->move_state;
+// 	changed = 0;
+// 	if (move->rotate_left)
+// 	{
+// 		rotate_obj_or_cam(data, -ROTATE_SPEED, Y_AXIS);
+// 		changed = 1;
+// 	}
+// 	if (move->rotate_right)
+// 	{
+// 		rotate_obj_or_cam(data, ROTATE_SPEED, Y_AXIS);
+// 		changed = 1;
+// 	}
+// 	if (move->rotate_up)
+// 	{
+// 		rotate_obj_or_cam(data, -ROTATE_SPEED, X_AXIS);
+// 		changed = 1;
+// 	}
+// 	if (move->rotate_down)
+// 	{
+// 		rotate_obj_or_cam(data, ROTATE_SPEED, X_AXIS);
+// 		changed = 1;
+// 	}
+// 	return (changed);
+// }
 int	handle_resize(t_data *data)
 {
 	t_move_state	*move;
 
 	move = data->move_state;
-	if (!data->scene->obj_selected || data->control_cam)
+	if (!data->scene->obj_selected || data->scene->obj_selected->obj_type == PL
+		|| data->control_cam)
 		return (0);
 	if (move->resize_up)
 	{
-		resize_objects(data->scene->obj_selected, RESIZE_SPEED);
+		resize_diameter(data->scene->obj_selected, RESIZE_SPEED);
 		return (1);
 	}
 	if (move->resize_down)
 	{
-		resize_objects(data->scene->obj_selected, -RESIZE_SPEED);
+		resize_diameter(data->scene->obj_selected, -RESIZE_SPEED);
 		return (1);
 	}
 	if (move->height_up && resize_height(data->scene->obj_selected,
@@ -316,9 +332,9 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 	if (data->control_cam)
 	{
 		if (axis == Y_AXIS)
-			rotate_cam(&data->scene->cam, angle);
+			rotate_cam(&data->scene->cam, angle, Y_AXIS);
 		else
-			rotate_cam_x(&data->scene->cam, angle);
+			rotate_cam(&data->scene->cam, angle, X_AXIS);
 	}
 	else if (data->scene->obj_selected)
 	{
@@ -329,8 +345,8 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 	}
 }
 
-// resizing diam of sphere and cy 
-void	resize_objects(t_olist *node, float value)
+// resizing diam of sphere and cy
+void	resize_diameter(t_olist *node, float value)
 {
 	t_sp	*sp;
 	t_cy	*cy;
@@ -371,7 +387,7 @@ void	rotate_objects(t_olist *node, float angle)
 	t_pl	*pl;
 	t_cy	*cy;
 
-	if (!node)
+	if (!node || node->obj_type == SP)
 		return ;
 	if (node->obj_type == PL)
 	{
