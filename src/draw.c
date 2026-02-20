@@ -13,9 +13,9 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_pixel	pixel;
 	t_ray	ray;
 
-	t_matrix	m = new_rotation_z_matrix(M_PI / 2);
-	t_matrix	inverse = new_inverse_matrix(m);
-	t_vec3	p = new_point(0, 1, 0);
+	t_vec3	origin = new_point(2, 3, 4);
+	t_vec3	direction = new_vector(1, 0, 0);
+	t_ray	ray1 = new_ray(origin, direction);
 
 	//m.ptr[0][0] = -5;
 	//m.ptr[0][1] = 2;
@@ -33,14 +33,16 @@ void	draw_scene(t_data *data, t_scene *scene)
 	//m.ptr[3][1] = -3;
 	//m.ptr[3][2] = 7;
 	//m.ptr[3][3] = 4;
-	print_vector("Point", p);
-	printf("\nAfter rotating:\n");
-	print_matrix(m);
-	print_vector("Point", matrix_multiply_by_vector(m, p));
-	printf("\nAfter rotating by inverse:\n");
-	print_vector("Point", matrix_multiply_by_vector(inverse, p));
-	free_matrix(m);
-	free_matrix(inverse);
+	print_ray(ray1);
+	printf("Distance 0:");
+	print_vector(get_position(ray1, 0));
+	printf("Distance 1:");
+	print_vector(get_position(ray1, 1));
+	printf("Distance -1:");
+	print_vector(get_position(ray1, -1));
+	printf("Distance 2.5:");
+	print_vector(get_position(ray1, 2.5));
+
 
 
 	setup_camera_angle(&scene->cam);//Can change with movement

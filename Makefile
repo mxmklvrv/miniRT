@@ -49,6 +49,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	vector.c \
 	color.c \
 	matrix.c \
+	ray.c \
 	print.c \
 	)
 

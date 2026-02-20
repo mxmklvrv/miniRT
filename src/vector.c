@@ -42,7 +42,7 @@ t_vec3	vector_negate(t_vec3 v)
 t_vec3	vector_add(t_vec3 v1, t_vec3 v2)
 {
 	if (is_point(v1) && is_point(v2))
-		printf("Error: adding two points\n");
+		ft_putendl_fd("Error: adding two points", STDERR_FILENO);
 	if (is_point(v1) || is_point(v2))
 		return(new_point(
 			v1.x + v2.x,
@@ -59,7 +59,7 @@ t_vec3	vector_add(t_vec3 v1, t_vec3 v2)
 t_vec3	vector_substract(t_vec3 v1, t_vec3 v2)
 {
 	if (!is_point(v1) && is_point(v2))
-		printf("Error: substracting point from vector\n");
+		ft_putendl_fd("Error: substracting point from vector", STDERR_FILENO);
 	if (is_point(v1) != is_point(v2))
 		return(new_point(
 			v1.x - v2.x,
@@ -76,7 +76,7 @@ t_vec3	vector_substract(t_vec3 v1, t_vec3 v2)
 t_vec3	vector_multiply(t_vec3 v, float scalar)
 {
 	if (is_point(v))
-		printf("Error: multiplying a point\n");
+		ft_putendl_fd("Error: multiplying a point", STDERR_FILENO);
 	return (new_vector(
 		v.x * scalar,
 		v.y * scalar,
@@ -87,10 +87,10 @@ t_vec3	vector_multiply(t_vec3 v, float scalar)
 t_vec3	vector_divide(t_vec3 v, float scalar)
 {
 	if (is_point(v))
-		printf("Error: dividing a point\n");
+		ft_putendl_fd("Error: dividing a point", STDERR_FILENO);
 	if (is_equalf(scalar, 0))
 	//if (scalar == 0)
-		printf("Error: dividing by zero\n");
+		ft_putendl_fd("Error: dividing by zero", STDERR_FILENO);
 	return (new_vector(
 		v.x / scalar,
 		v.y / scalar,
@@ -103,7 +103,7 @@ t_vec3	vector_divide(t_vec3 v, float scalar)
 float	vector_magnitude(t_vec3 v)
 {
 	if (is_point(v))
-		printf("Error: calculating magnitude of a point\n");
+		ft_putendl_fd("Error: calculating magnitude of a point", STDERR_FILENO);
 	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z));
 }
 
@@ -130,14 +130,14 @@ t_vec3	vector_normalize(t_vec3 v)
 float	vector_dot(t_vec3 v1, t_vec3 v2)
 {
 	if (is_point(v1) || is_point(v2))
-		printf("Error: calculating dot product of a point\n");
+		ft_putendl_fd("Error: calculating dot product of a point", STDERR_FILENO);
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2)
 {
 	if (is_point(v1) || is_point(v2))
-		printf("Error: calculating cross product of a point\n");
+		ft_putendl_fd("Error: calculating cross product of a point", STDERR_FILENO);
 	return (new_vector(
 		v1.y * v2.z - v1.z * v2.y,
 		v1.z * v2.x - v1.x * v2.z,

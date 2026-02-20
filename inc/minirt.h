@@ -25,12 +25,6 @@ void	redraw_scene(t_data *data, t_scene *scene);
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data, t_scene *scene);
 
-/* ===== Shapes math ======================================================== */
-int		hit_sp(t_ray cam, t_sp *sp);
-int		hit_cy(t_ray cam, t_cy *cy);
-int		hit_pl(t_ray cam, t_pl *pl);
-float	degrees_to_radians(float degrees);
-
 /* ===== Vector math ======================================================== */
 t_vec3	new_vector(float x, float y, float z);
 t_vec3	new_point(float x, float y, float z);
@@ -46,17 +40,6 @@ t_vec3	vector_normalize(t_vec3 v);
 float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
 float	degrees_to_radians(float degrees);
-
-/* ===== Color ============================================================== */
-int		new_color(int opacity, int red, int green, int blue);
-int		get_opacity(int color);
-int		get_red(int color);
-int		get_green(int color);
-int		get_blue(int color);
-int		color_add(int c1, int c2);
-int		color_substract(int c1, int c2);
-int		color_multiply(int c, float scalar);
-int		color_mix(int c1, int c2);
 
 /* ===== Matrix math ======================================================== */
 t_matrix	new_matrix(int row, int col);
@@ -80,11 +63,35 @@ float		matrix_find_minor(t_matrix m, int row, int col);
 float		matrix_find_cofactor(t_matrix m, int row, int col);
 bool	    matrix_is_invertible(t_matrix m, float *determinant);
 
+/* ===== Rays =============================================================== */
+t_ray	new_ray(t_vec3 origin, t_vec3 direction);
+t_vec3	get_position(t_ray ray, float distance);
+
+/* ===== Shapes math ======================================================== */
+int		hit_sp(t_ray cam, t_sp *sp);
+int		hit_cy(t_ray cam, t_cy *cy);
+int		hit_pl(t_ray cam, t_pl *pl);
+float	degrees_to_radians(float degrees);
+
+/* ===== Color ============================================================== */
+int		new_color(int opacity, int red, int green, int blue);
+int		get_opacity(int color);
+int		get_red(int color);
+int		get_green(int color);
+int		get_blue(int color);
+int		color_add(int c1, int c2);
+int		color_substract(int c1, int c2);
+int		color_multiply(int c, float scalar);
+int		color_mix(int c1, int c2);
+
+
+
 // test functions
 void	print_vars(t_scene *scene);
 void	print_list(t_scene *scene);
-void	print_vector(char *name, t_vec3	vector);
-void	print_color(char *name, int color);
+void	print_vector(t_vec3	vector);
+void	print_ray(t_ray	ray);
+void	print_color(int color);
 void	print_matrix(t_matrix matrix);
 
 #endif

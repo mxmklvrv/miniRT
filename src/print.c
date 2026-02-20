@@ -50,15 +50,28 @@ void	print_vars(t_scene *scene)
 	printf("%d\n\n", scene->light.color);
 }
 
-void	print_vector(char *name, t_vec3	vector)
+void	print_vector(t_vec3	vector)
 {
-	printf("\nVector %s\n(x: %f, y: %f, z: %f, w: %f)\n", name,
-			vector.x, vector.y, vector.z, vector.w);
+	if (is_point(vector))
+		printf("point ");
+	else
+		printf("vector ");
+	printf("(x: %f, y: %f, z: %f)\n",
+			vector.x, vector.y, vector.z);
 }
 
-void	print_color(char *name, int color)
+void	print_ray(t_ray	ray)
 {
-	printf("\nColor %s: %i\nop: %i\nr: %i\ng: %i\nb: %i\n", name,
+	printf("RAY\norigin: ");
+	print_vector(ray.origin);
+	printf("direction: ");
+	print_vector(ray.direction);
+	printf("\n");
+}
+
+void	print_color(int color)
+{
+	printf("\nColor: %i\nop: %i\nr: %i\ng: %i\nb: %i\n",
 		color, get_opacity(color), get_red(color), get_green(color), get_blue(color));
 }
 
