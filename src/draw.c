@@ -13,52 +13,24 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_pixel	pixel;
 	t_ray	ray;
 
-	t_vec3	origin = new_point(2, 3, 4);
-	t_vec3	direction = new_vector(1, 0, 0);
-	t_ray	ray1 = new_ray(origin, direction);
+	//setup_camera_angle(&scene->cam);//Can change with movement
+	//pixel.j = 0;
+	//while (pixel.j < HEIGHT)//TODO: add multi threading
+	//{
+	//	pixel.i = 0;
+	//	while (pixel.i < WIDTH)
+	//	{
+	//		ray = get_ray_for_position(pixel, scene->cam);
 
-	//m.ptr[0][0] = -5;
-	//m.ptr[0][1] = 2;
-	//m.ptr[0][2] = 6;
-	//m.ptr[0][3] = -8;
-	//m.ptr[1][0] = 1;
-	//m.ptr[1][1] = -5;
-	//m.ptr[1][2] = 1;
-	//m.ptr[1][3] = 8;
-	//m.ptr[2][0] = 7;
-	//m.ptr[2][1] = 7;
-	//m.ptr[2][2] = -6;
-	//m.ptr[2][3] = -7;
-	//m.ptr[3][0] = 1;
-	//m.ptr[3][1] = -3;
-	//m.ptr[3][2] = 7;
-	//m.ptr[3][3] = 4;
-	print_ray(ray1);
-	printf("Distance 0:");
-	print_vector(get_position(ray1, 0));
-	printf("Distance 1:");
-	print_vector(get_position(ray1, 1));
-	printf("Distance -1:");
-	print_vector(get_position(ray1, -1));
-	printf("Distance 2.5:");
-	print_vector(get_position(ray1, 2.5));
+	ray = scene->cam.orient;
+	print_ray(ray);
 
-
-
-	setup_camera_angle(&scene->cam);//Can change with movement
-	pixel.j = 0;
-	while (pixel.j < HEIGHT)//TODO: add multi threading
-	{
-		pixel.i = 0;
-		while (pixel.i < WIDTH)
-		{
-			ray = get_ray_for_position(pixel, scene->cam);
 			pixel.color = trace_color(ray, scene);
 			ft_mlx_put_pixel(data, pixel);//TODO: add writting to ppm(?)
-			pixel.i++;
-		}
-		pixel.j++;
-	}
+	//		pixel.i++;
+	//	}
+	//	pixel.j++;
+	//}
 	printf("Finished\n");
 }
 
@@ -96,44 +68,6 @@ t_ray	get_ray_for_position(t_pixel pixel, t_cam cam)
 	return (ray);
 }
 
-// Need to normalize obj, not cam
-/*
-void	normalize_view(t_scene *scene)
-{
-	t_olist	*obj_list;
-	t_sp	*sp;
-	t_cy	*cy;
-	t_pl	*pl;
-
-	if (vector_is_zero(scene->cam.orient.origin))//and view is normalized
-		return ;
-	scene->light.pos = vector_add(scene->cam.orient.origin, scene->light.pos);
-	obj_list = scene->obj_list;
-	while (obj_list)
-	{
-		if (obj_list->obj_type == SP)
-		{
-			sp = (t_sp *)obj_list->obj;
-			sp->sp_center = vector_add(scene->cam.orient.origin, sp->sp_center);
-		} 
-		else if (obj_list->obj_type == CY)
-		{
-			cy = (t_cy *)obj_list->obj;
-			cy->normal = vector_add(scene->cam.orient.origin, cy->normal.origin);
-		}
-		else if (obj_list->obj_type == PL)
-		{
-			pl = (t_pl *)obj_list->obj;
-			pl->normal = vector_add(scene->cam.orient.origin, pl->normal.origin);
-		}
-		else
-			continue ;
-		obj_list = obj_list->next;
-	}
-	vector_to_zero(&scene->cam.orient.origin);
-}
-*/
-
 int	trace_color(t_ray ray, t_scene *scene)
 {
 	t_olist	*obj_list;
@@ -141,34 +75,39 @@ int	trace_color(t_ray ray, t_scene *scene)
 	t_cy	*cy;
 	t_pl	*pl;
 	int		color;
-	int		distance;
-	int		closest;
+	t_intersection	intersection;
+	//int		distance;
+	//int		closest;
 
 	color = scene->ambient.colour;
-	closest = -1;
+	//closest = -1;
 	obj_list = scene->obj_list;
 	while (obj_list)
 	{
 		if (obj_list->obj_type == SP)
 		{
 			sp = (t_sp *)obj_list->obj;
-			distance = hit_sp(ray, sp);
-			if (is_closest(distance, closest))
-				color = sp->colour;
+			intersection = hit_sp(ray, sp);
+
+			print_intersection(intersection);
+
+
+			//if (is_closest(distance, closest))
+				//color = sp->colour;
 		}
 		else if (obj_list->obj_type == CY)
 		{
 			cy = (t_cy *)obj_list->obj;
-			distance = hit_cy(ray, cy);
-			if (is_closest(distance, closest))
-				color = cy->colour;
+			intersection = hit_cy(ray, cy);
+			//if (is_closest(distance, closest))
+			//	color = cy->colour;
 		}
 		else if (obj_list->obj_type == PL)
 		{
 			pl = (t_pl *)obj_list->obj;
-			distance = hit_pl(ray, pl);
-			if (is_closest(distance, closest))
-				color = pl->colour;
+			intersection = hit_pl(ray, pl);
+			//if (is_closest(distance, closest))
+			//	color = pl->colour;
 		}
 		else
 			continue ;

@@ -94,3 +94,16 @@ void	print_matrix(t_matrix matrix)
 	}
 	printf("%ix%i\n", j, i);
 }
+
+void	print_intersection(t_intersection intersection)
+{
+	int	i;
+
+	printf("INTERSECTION\ncount: %i\n", intersection.count);
+	i = 0;
+	while (i < intersection.count)
+	{
+		printf("[%i] %f\n", i, intersection.val[i]);
+		i++;
+	}
+}

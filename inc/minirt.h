@@ -68,9 +68,9 @@ t_ray	new_ray(t_vec3 origin, t_vec3 direction);
 t_vec3	get_position(t_ray ray, float distance);
 
 /* ===== Shapes math ======================================================== */
-int		hit_sp(t_ray cam, t_sp *sp);
-int		hit_cy(t_ray cam, t_cy *cy);
-int		hit_pl(t_ray cam, t_pl *pl);
+t_intersection	hit_sp(t_ray cam, t_sp *sp);
+t_intersection	hit_cy(t_ray cam, t_cy *cy);
+t_intersection	hit_pl(t_ray cam, t_pl *pl);
 float	degrees_to_radians(float degrees);
 
 /* ===== Color ============================================================== */
@@ -93,5 +93,6 @@ void	print_vector(t_vec3	vector);
 void	print_ray(t_ray	ray);
 void	print_color(int color);
 void	print_matrix(t_matrix matrix);
+void	print_intersection(t_intersection intersection);
 
 #endif

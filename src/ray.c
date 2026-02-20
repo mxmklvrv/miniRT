@@ -17,3 +17,4 @@ t_vec3	get_position(t_ray ray, float distance)
 {
 	return (vector_add(ray.origin, vector_multiply(ray.direction, distance)));
 }
+

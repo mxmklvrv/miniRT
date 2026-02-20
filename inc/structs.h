@@ -41,11 +41,19 @@ typedef struct s_matrix
 }	t_matrix;
 
 // ray has starting point and direction
+// starting point is a point;
+// direction is a vector.
 typedef struct s_ray
 {
 	t_vec3	origin;
 	t_vec3	direction;
 }	t_ray;
+
+typedef struct s_intersection
+{
+	int		count;
+	float	val[2];
+}	t_intersection;
 
 typedef enum e_otype
 {
