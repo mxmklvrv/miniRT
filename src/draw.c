@@ -6,7 +6,7 @@ t_ray	get_ray_for_position(t_pixel pixel, t_cam cam);
 
 //void	normalize_pos(t_scene *scene);
 int		trace_color(t_ray ray, t_scene *scene);
-bool	is_closest(int distance, int closest);
+bool	is_closest(t_intersection intersection, int closest);
 
 void	draw_scene(t_data *data, t_scene *scene)
 {
@@ -77,10 +77,10 @@ int	trace_color(t_ray ray, t_scene *scene)
 	int		color;
 	t_intersection	intersection;
 	//int		distance;
-	//int		closest;
+	int		closest;
 
 	color = scene->ambient.colour;
-	//closest = -1;
+	closest = -1;
 	obj_list = scene->obj_list;
 	while (obj_list)
 	{
@@ -92,22 +92,22 @@ int	trace_color(t_ray ray, t_scene *scene)
 			print_intersection(intersection);
 
 
-			//if (is_closest(distance, closest))
-				//color = sp->colour;
+			if (is_closest(intersection, closest))
+				color = sp->colour;
 		}
 		else if (obj_list->obj_type == CY)
 		{
 			cy = (t_cy *)obj_list->obj;
 			intersection = hit_cy(ray, cy);
-			//if (is_closest(distance, closest))
-			//	color = cy->colour;
+			if (is_closest(intersection, closest))
+				color = cy->colour;
 		}
 		else if (obj_list->obj_type == PL)
 		{
 			pl = (t_pl *)obj_list->obj;
 			intersection = hit_pl(ray, pl);
-			//if (is_closest(distance, closest))
-			//	color = pl->colour;
+			if (is_closest(intersection, closest))
+				color = pl->colour;
 		}
 		else
 			continue ;
@@ -116,9 +116,17 @@ int	trace_color(t_ray ray, t_scene *scene)
 	return (color);
 }
 
-bool	is_closest(int distance, int closest)
+bool	is_closest(t_intersection intersection, int closest)
 {
-	if (distance > 0 && (closest < 0 || distance < closest))
+	float	hit;
+
+	if (intersection.count == 0)
+		return (false);
+	hit = intersection.val[0];
+	if (intersection.count == 2 && intersection.val[1] > 0
+		&& (intersection.val[1] < hit || hit < 0))
+		hit = intersection.val[1];
+	if (hit > 0 && (hit < closest || closest < 0))
 		return (true);
 	return (false);
 }
