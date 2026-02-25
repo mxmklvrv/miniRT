@@ -22,8 +22,35 @@ void	ft_mlx_put_pixel(t_data *data, t_pixel pixel);
 void	set_hooks(t_data *data);
 void	redraw_scene(t_data *data, t_scene *scene);
 
+/* ===== Hooks ============================================================== */
+int	key_press_hook(int key, t_data *data);
+int	key_release_hook(int key, t_data *data);
+int	render_hook(t_data *data);
+void	set_general_keys(int key, t_data *data);
+void	set_translation_keys(int key, t_move_state *move, int value);
+void	set_rotation_keys(int key, t_move_state *move, int value);
+void	set_resize_keys(int key, t_move_state *move, int value);
+void	select_object(t_scene *scene);
+void	translate_object(t_olist *node, t_vec3 move_vec);
+void	translate_cam(t_cam *cam, t_vec3 move_vec);
+void	rotate_cam(t_cam *cam, float angle, t_axis axis);
+void	apply_movement(t_data *data);
+int	handle_translation(t_data *data);
+int	handle_rotation(t_data *data);
+void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
+void	rotate_objects(t_olist *node, float angle, t_axis axis);
+t_vec3	rotate_y(t_vec3 current, float angle);
+t_vec3	rotate_x(t_vec3 current, float angle);
+int	handle_resize(t_data *data);
+int	resize_diameter(t_olist *node, float value);
+int	resize_height(t_olist *node, float value);
+
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data, t_scene *scene);
+void	setup_camera_angle(t_cam *cam);
+t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam);
+int		trace_color(t_ray ray, t_scene *scene);
+bool	is_closest(t_intersection intersection, int *closest);
 
 /* ===== Vector math ======================================================== */
 t_vec3	new_vector(float x, float y, float z);

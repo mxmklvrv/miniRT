@@ -1,10 +1,5 @@
 #include "minirt.h"
 
-void	setup_camera_angle(t_cam *cam);
-t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam);
-int		trace_color(t_ray ray, t_scene *scene);
-bool	is_closest(t_intersection intersection, int *closest);
-
 void	draw_scene(t_data *data, t_scene *scene)
 {
 	t_pixel	pixel;
@@ -34,16 +29,16 @@ void	draw_scene(t_data *data, t_scene *scene)
  * normal is parallel to 0y axis.
  * Returns sine and cosine of this angle in form of t_vec3.
  */
-//void	setup_camera_angle(t_cam *cam)
-//{
-//	t_vec3	opposite_cam;
-//	const t_vec3	up_view = {0, 0, 1, 0};
+void	setup_camera_angle(t_cam *cam)
+{
+	t_vec3	opposite_cam;
+	const t_vec3	up_view = {0, 0, 1, 0};
 
-//	cam->orient.direction = vector_normalize(cam->orient.direction);
-//	opposite_cam = vector_multiply(cam->orient.direction, -1);
-//	cam->vector_i = vector_cross(opposite_cam,up_view);
-//	cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
-//}
+	cam->orient.direction = vector_normalize(cam->orient.direction);
+	opposite_cam = vector_multiply(cam->orient.direction, -1);
+	cam->vector_i = vector_cross(opposite_cam,up_view);
+	cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
+}
 
 /*
  * Returns normalized vector from camera origin to point in 3d coordinates

@@ -1,69 +1,5 @@
 #include "minirt.h"
 
-// what about light ?? need to add
-
-#define MOVE_SPEED 0.5f
-#define ROTATE_SPEED 0.1f
-#define RESIZE_SPEED 0.2f
-
-#define KEY_W 119       // forward
-#define KEY_A 97        // left
-#define KEY_S 115       // back
-#define KEY_D 100       // right
-#define KEY_Q 113       // up
-#define KEY_E 101       // down
-#define KEY_C 99        // cam
-#define KEY_TAB 65289   // switch obj
-#define KEY_LEFT 65361  // rotate left
-#define KEY_RIGHT 65363 // rotate right
-#define KEY_UP 65362    // rotate up
-#define KEY_DOWN 65364  // rotate down
-#define KEY_PLUS 61     // resize up
-#define KEY_MINUS 45    // resize down
-#define KEY_ESC 65307   // esc
-#define KEY_H 104       // height up
-#define KEY_J 106       // height down
-
-// to pass as value pressed or no
-#define KEY_ON 1
-#define KEY_OFF 0
-
-typedef enum e_axis
-{
-	Y_AXIS,
-	X_AXIS
-}		t_axis;
-
-typedef struct s_move_state
-{
-	int	forward;
-	int	backward;
-	int	left;
-	int	right;
-	int	up;
-	int	down;
-	int	rotate_left;
-	int	rotate_right;
-	int	rotate_up;
-	int	rotate_down;
-	int	resize_up;
-	int	resize_down;
-	int	height_up;
-	int	height_down;
-}		t_move_state;
-
-void	set_hooks(t_data *data)
-{
-	// check if malloc fails
-	// probably will do that in init
-	data->move_state = ft_calloc(1, sizeof(t_move_state));
-	data->control_cam = 0;
-	mlx_hook(data->win, 2, 1L << 0, key_press_hook, data);
-	mlx_hook(data->win, 3, 1L << 1, key_release_hook, data);
-	mlx_loop_hook(data->mlx, render_hook, data);
-	mlx_hook(data->win, 17, 0, mlx_loop_end, data->mlx);
-}
-
 int	key_press_hook(int key, t_data *data)
 {
 	t_move_state	*move;
@@ -169,23 +105,35 @@ void	translate_object(t_olist *node, t_vec3 move_vec)
 	t_pl	*pl;
 	t_cy	*cy;
 
+	printf("1111111111111111111111111111111111\n");
+
 	if (!node)
+	{
+		printf("000000000000000000000000\n");
 		return ;
+	}
 	if (node->obj_type == SP)
 	{
+		printf("222222222222222222222222222\n");
 		sp = (t_sp *)node->obj;
 		sp->sp_center = vector_add(sp->sp_center, move_vec);
+		printf("7777777777777777777777777777777\n");
 	}
 	else if (node->obj_type == PL)
 	{
+		printf("PL\n");
 		pl = (t_pl *)node->obj;
 		pl->normal.origin = vector_add(pl->normal.origin, move_vec);
+		printf("PL\n");
 	}
 	else if (node->obj_type == CY)
 	{
+		printf("CY\n");
 		cy = (t_cy *)node->obj;
 		cy->normal.origin = vector_add(cy->normal.origin, move_vec);
+		printf("CY\n");
 	}
+	printf("3333333333333333333333333333\n");
 }
 
 void	translate_cam(t_cam *cam, t_vec3 move_vec)
@@ -197,10 +145,10 @@ void	translate_cam(t_cam *cam, t_vec3 move_vec)
 void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 {
 	if (axis == Y_AXIS)
-		cam->orient.direction = vec_normalize(rotate_y(cam->orient.direction,
+		cam->orient.direction = vector_normalize(rotate_y(cam->orient.direction,
 					angle));
 	else if (axis == X_AXIS)
-		cam->orient.direction = vec_normalize(rotate_x(cam->orient.direction,
+		cam->orient.direction = vector_normalize(rotate_x(cam->orient.direction,
 					angle));
 	setup_camera_angle(cam);
 }
@@ -288,20 +236,20 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 	{
 		pl = (t_pl *)node->obj;
 		if (axis == Y_AXIS)
-			pl->normal.direction = vec_normalize(rotate_y(pl->normal.direction,
+			pl->normal.direction = vector_normalize(rotate_y(pl->normal.direction,
 						angle));
 		else
-			pl->normal.direction = vec_normalize(rotate_x(pl->normal.direction,
+			pl->normal.direction = vector_normalize(rotate_x(pl->normal.direction,
 						angle));
 	}
 	else if (node->obj_type == CY)
 	{
 		cy = (t_cy *)node->obj;
 		if (axis == Y_AXIS)
-			cy->normal.direction = vec_normalize(rotate_y(cy->normal.direction,
+			cy->normal.direction = vector_normalize(rotate_y(cy->normal.direction,
 						angle));
 		else
-			cy->normal.direction = vec_normalize(rotate_x(cy->normal.direction,
+			cy->normal.direction = vector_normalize(rotate_x(cy->normal.direction,
 						angle));
 	}
 }
@@ -336,15 +284,15 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 	return (rotated);
 }
 
-// can we resize light ?? Looks like no
+//// can we resize light ?? Looks like no
 int	handle_resize(t_data *data)
 {
 	t_move_state	*move;
 
 	move = data->move_state;
-	if (!data->scene->obj_selected || data->scene->obj_selected->obj_type == PL
-		|| data->control_cam) // or data->light
-		return (0);
+	//if ( data->scene->obj_selected->obj_type == PL
+	//	|| data->control_cam) // or data->light !data->scene->obj_selected ||
+	//	return (0);
 	if (move->resize_up && resize_diameter(data->scene->obj_selected,
 			RESIZE_SPEED))
 		return (1);
@@ -508,13 +456,13 @@ int	resize_height(t_olist *node, float value)
 // 	if (node->obj_type == PL)
 // 	{
 // 		pl = (t_pl *)node->obj;
-// 		pl->normal.direction = vec_normalize(rotate_y(pl->normal.direction,
+// 		pl->normal.direction = vector_normalize(rotate_y(pl->normal.direction,
 // 					angle));
 // 	}
 // 	else if (node->obj_type == CY)
 // 	{
 // 		cy = (t_cy *)node->obj;
-// 		cy->normal.direction = vec_normalize(rotate_y(cy->normal.direction,
+// 		cy->normal.direction = vector_normalize(rotate_y(cy->normal.direction,
 // 					angle));
 // 	}
 // }
@@ -529,13 +477,13 @@ int	resize_height(t_olist *node, float value)
 // 	if (node->obj_type == PL)
 // 	{
 // 		pl = (t_pl *)node->obj;
-// 		pl->normal.direction = vec_normalize(rotate_x(pl->normal.direction,
+// 		pl->normal.direction = vector_normalize(rotate_x(pl->normal.direction,
 // 					angle));
 // 	}
 // 	else if (node->obj_type == CY)
 // 	{
 // 		cy = (t_cy *)node->obj;
-// 		cy->normal.direction = vec_normalize(rotate_x(cy->normal.direction,
+// 		cy->normal.direction = vector_normalize(rotate_x(cy->normal.direction,
 // 					angle));
 // 	}
 // }

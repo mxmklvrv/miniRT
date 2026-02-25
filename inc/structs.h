@@ -8,21 +8,6 @@ typedef struct s_pixel
 	int		color;
 }	t_pixel;
 
-typedef struct s_data
-{
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	float	aspect_ratio;
-	t_scene *scene;
-	void	*move_state;
-	int		control_cam;
-}	t_data;
-
 // Tuple - a vector or a point
 // w = 0 for vector;
 // w = 1 for point;
@@ -133,5 +118,44 @@ typedef struct s_scene
 	char			*err_m;
 	t_olist			*obj_selected;
 }					t_scene;
+
+typedef struct s_data
+{
+	void	*mlx;
+	void	*win;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	float	aspect_ratio;
+	t_scene *scene;
+	void	*move_state;
+	int		control_cam;
+}	t_data;
+
+typedef enum e_axis
+{
+	Y_AXIS,
+	X_AXIS
+}		t_axis;
+
+typedef struct s_move_state
+{
+	int	forward;
+	int	backward;
+	int	left;
+	int	right;
+	int	up;
+	int	down;
+	int	rotate_left;
+	int	rotate_right;
+	int	rotate_up;
+	int	rotate_down;
+	int	resize_up;
+	int	resize_down;
+	int	height_up;
+	int	height_down;
+}		t_move_state;
 
 #endif
