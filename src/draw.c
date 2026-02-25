@@ -1,36 +1,29 @@
 #include "minirt.h"
 
-//TODO: Check if ray or cam is inside any obj
 void	setup_camera_angle(t_cam *cam);
-t_ray	get_ray_for_position(t_pixel pixel, t_cam cam);
-
-//void	normalize_pos(t_scene *scene);
+t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam);
 int		trace_color(t_ray ray, t_scene *scene);
-bool	is_closest(t_intersection intersection, int closest);
+bool	is_closest(t_intersection intersection, int *closest);
 
 void	draw_scene(t_data *data, t_scene *scene)
 {
 	t_pixel	pixel;
 	t_ray	ray;
 
-	//setup_camera_angle(&scene->cam);//Can change with movement
-	//pixel.j = 0;
-	//while (pixel.j < HEIGHT)//TODO: add multi threading
-	//{
-	//	pixel.i = 0;
-	//	while (pixel.i < WIDTH)
-	//	{
-	//		ray = get_ray_for_position(pixel, scene->cam);
-
-	ray = scene->cam.orient;
-	print_ray(ray);
-
+	ray.origin = scene->cam.orient.origin;
+	pixel.j = 0;
+	while (pixel.j < HEIGHT)//TODO: add multi threading
+	{
+		pixel.i = 0;
+		while (pixel.i < WIDTH)
+		{
+			ray.direction = get_direction_for_position(pixel, scene->cam);
 			pixel.color = trace_color(ray, scene);
 			ft_mlx_put_pixel(data, pixel);//TODO: add writting to ppm(?)
-	//		pixel.i++;
-	//	}
-	//	pixel.j++;
-	//}
+			pixel.i++;
+		}
+		pixel.j++;
+	}
 	printf("Finished\n");
 }
 
@@ -41,42 +34,37 @@ void	draw_scene(t_data *data, t_scene *scene)
  * normal is parallel to 0y axis.
  * Returns sine and cosine of this angle in form of t_vec3.
  */
-void	setup_camera_angle(t_cam *cam)
-{
-	t_vec3	opposite_cam;
-	const t_vec3	up_view = {0, 0, 1, 0};
+//void	setup_camera_angle(t_cam *cam)
+//{
+//	t_vec3	opposite_cam;
+//	const t_vec3	up_view = {0, 0, 1, 0};
 
-	cam->orient.direction = vector_normalize(cam->orient.direction);
-	opposite_cam = vector_multiply(cam->orient.direction, -1);
-	cam->vector_i = vector_cross(opposite_cam,up_view);
-	cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
-}
+//	cam->orient.direction = vector_normalize(cam->orient.direction);
+//	opposite_cam = vector_multiply(cam->orient.direction, -1);
+//	cam->vector_i = vector_cross(opposite_cam,up_view);
+//	cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
+//}
 
 /*
- * Returns ray from camera origin to point in 3d coordinates
+ * Returns normalized vector from camera origin to point in 3d coordinates
  */
-t_ray	get_ray_for_position(t_pixel pixel, t_cam cam)
+t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 {
-	t_ray	ray;
+	t_vec3	direction;
 	t_vec3	position_width;
 	t_vec3	position_heigth;
 
 	position_width = vector_multiply(cam.vector_i, pixel.i - WIDTH / 2);
 	position_heigth = vector_multiply(cam.vector_j, pixel.j - HEIGHT / 2);
-	ray.origin = cam.orient.origin;
-	ray.direction = vector_add(position_width, position_heigth);
-	return (ray);
+	direction = vector_add(position_width, position_heigth);
+	return (direction);
 }
 
 int	trace_color(t_ray ray, t_scene *scene)
 {
 	t_olist	*obj_list;
-	t_sp	*sp;
-	t_cy	*cy;
-	t_pl	*pl;
 	int		color;
 	t_intersection	intersection;
-	//int		distance;
 	int		closest;
 
 	color = scene->ambient.colour;
@@ -86,28 +74,21 @@ int	trace_color(t_ray ray, t_scene *scene)
 	{
 		if (obj_list->obj_type == SP)
 		{
-			sp = (t_sp *)obj_list->obj;
-			intersection = hit_sp(ray, sp);
-
-			print_intersection(intersection);
-
-
-			if (is_closest(intersection, closest))
-				color = sp->colour;
+			intersection = hit_sp(ray, (t_sp *)obj_list->obj);
+			if (is_closest(intersection, &closest))
+				color = obj_list->colour;
 		}
 		else if (obj_list->obj_type == CY)
 		{
-			cy = (t_cy *)obj_list->obj;
-			intersection = hit_cy(ray, cy);
-			if (is_closest(intersection, closest))
-				color = cy->colour;
+			intersection = hit_cy(ray, (t_cy *)obj_list->obj);
+			if (is_closest(intersection, &closest))
+				color = obj_list->colour;
 		}
 		else if (obj_list->obj_type == PL)
 		{
-			pl = (t_pl *)obj_list->obj;
-			intersection = hit_pl(ray, pl);
-			if (is_closest(intersection, closest))
-				color = pl->colour;
+			intersection = hit_pl(ray, (t_pl *)obj_list->obj);
+			if (is_closest(intersection, &closest))
+				color = obj_list->colour;
 		}
 		else
 			continue ;
@@ -116,7 +97,7 @@ int	trace_color(t_ray ray, t_scene *scene)
 	return (color);
 }
 
-bool	is_closest(t_intersection intersection, int closest)
+bool	is_closest(t_intersection intersection, int *closest)
 {
 	float	hit;
 
@@ -126,8 +107,11 @@ bool	is_closest(t_intersection intersection, int closest)
 	if (intersection.count == 2 && intersection.val[1] > 0
 		&& (intersection.val[1] < hit || hit < 0))
 		hit = intersection.val[1];
-	if (hit > 0 && (hit < closest || closest < 0))
+	if (hit > 0 && (hit < *closest || *closest < 0))
+	{
+		*closest = hit;
 		return (true);
+	}
 	return (false);
 }
 

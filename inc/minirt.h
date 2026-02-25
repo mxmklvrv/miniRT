@@ -65,12 +65,13 @@ bool	    matrix_is_invertible(t_matrix m, float *determinant);
 
 /* ===== Rays =============================================================== */
 t_ray	new_ray(t_vec3 origin, t_vec3 direction);
-t_vec3	get_position(t_ray ray, float distance);
+t_ray	ray_transform(t_ray r, t_matrix m);
 
 /* ===== Shapes math ======================================================== */
 t_intersection	hit_sp(t_ray cam, t_sp *sp);
 t_intersection	hit_cy(t_ray cam, t_cy *cy);
 t_intersection	hit_pl(t_ray cam, t_pl *pl);
+void	sp_set_matrix(t_sp *sp, t_matrix m);
 float	degrees_to_radians(float degrees);
 
 /* ===== Color ============================================================== */

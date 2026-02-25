@@ -77,6 +77,7 @@ typedef struct s_sp
 	t_vec3			sp_center;
 	float			diameter;
 	int				colour;
+	t_matrix		matrix;
 }	t_sp;
 
 typedef struct s_pl

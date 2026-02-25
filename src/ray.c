@@ -13,8 +13,14 @@ t_ray	new_ray(t_vec3 origin, t_vec3 direction)
 	return (ray);
 }
 
-t_vec3	get_position(t_ray ray, float distance)
+t_ray	ray_transform(t_ray r, t_matrix m)
 {
-	return (vector_add(ray.origin, vector_multiply(ray.direction, distance)));
-}
+	t_ray		res;
+	t_matrix	inverse;
 
+	inverse = new_inverse_matrix(m);
+	res.origin = matrix_multiply_by_vector(inverse, r.origin);
+	res.direction = matrix_multiply_by_vector(inverse, r.direction);
+	free_matrix(inverse);
+	return (res);
+}

@@ -16,9 +16,11 @@ int	parse_cam(char *line, t_scene *scene)
 	if (parse_vector(res[0], &scene->cam.orient.origin, -100.0f, 100.0f) == 1)
 		return (error("Invalid camera view point", scene->err_m),
 			free_array(res), 1);
+	scene->cam.orient.origin.w = 1;
 	if (parse_vector(res[1], &scene->cam.orient.direction, 0.0f, 1.0f) == 1)
 		return (error("Invalid camera orientation", scene->err_m),
 			free_array(res), 1);
+	scene->cam.orient.direction.w = 0;
 	fov = 0;
 	if (parse_float(res[2], 0.0f, 180.0f, &fov) == 1)
 		return (error("Invalid camera FOV", scene->err_m), free_array(res), 1);
