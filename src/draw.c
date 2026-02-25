@@ -6,6 +6,7 @@ void	draw_scene(t_data *data, t_scene *scene)
 	t_ray	ray;
 
 	ray.origin = scene->cam.orient.origin;
+	setup_camera_angle(&scene->cam);
 	pixel.j = 0;
 	while (pixel.j < HEIGHT)//TODO: add multi threading
 	{
@@ -23,21 +24,20 @@ void	draw_scene(t_data *data, t_scene *scene)
 }
 
 /*
- * Calculate angle (in radians, counter-clockwise) between screen projection
- * and 0x axis on xy plane. This angle is equal to angle between camera normal
- * and 0y axis. If angle is zero screen is parallel to 0x axis and camera
- * normal is parallel to 0y axis.
- * Returns sine and cosine of this angle in form of t_vec3.
+ * Calculates pixel size relative to 3d world depending on camera fov.
+ * Distance between camera and 2d screen is assumed to be 1.
  */
 void	setup_camera_angle(t_cam *cam)
 {
-	t_vec3	opposite_cam;
-	const t_vec3	up_view = {0, 0, 1, 0};
+	cam->pixel_size = 1 * tanf(degrees_to_radians(cam->fov / 2)) * 2
+		/ ft_max(2, WIDTH, HEIGHT);
+	//t_vec3	opposite_cam;
+	//const t_vec3	up_view = new_vector(0, 0, 1);
 
-	cam->orient.direction = vector_normalize(cam->orient.direction);
-	opposite_cam = vector_multiply(cam->orient.direction, -1);
-	cam->vector_i = vector_cross(opposite_cam,up_view);
-	cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
+	//cam->orient.direction = vector_normalize(cam->orient.direction);
+	//opposite_cam = vector_multiply(cam->orient.direction, -1);
+	//cam->vector_i = vector_cross(opposite_cam,up_view);
+	//cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
 }
 
 /*
@@ -45,13 +45,18 @@ void	setup_camera_angle(t_cam *cam)
  */
 t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 {
-	t_vec3	direction;
-	t_vec3	position_width;
-	t_vec3	position_heigth;
+	t_vec3		direction;
+	t_matrix	rotation;
+	float		multiplier;
 
-	position_width = vector_multiply(cam.vector_i, pixel.i - WIDTH / 2);
-	position_heigth = vector_multiply(cam.vector_j, pixel.j - HEIGHT / 2);
-	direction = vector_add(position_width, position_heigth);
+	multiplier = degrees_to_radians(cam.fov) / ft_max(2, WIDTH, HEIGHT);
+	rotation = new_rotation_y_matrix((pixel.i - WIDTH / 2) * multiplier);
+	direction = matrix_multiply_by_vector(rotation, cam.orient.direction);
+	free_matrix(rotation);
+	rotation = new_rotation_x_matrix((pixel.j - HEIGHT / 2) * multiplier);
+	direction = matrix_multiply_by_vector(rotation, direction);
+	free_matrix(rotation);
+	direction = vector_normalize(direction);
 	return (direction);
 }
 
