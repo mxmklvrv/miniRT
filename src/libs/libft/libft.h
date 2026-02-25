@@ -6,7 +6,7 @@
 /*   By: rmamzer <rmamzer@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 11:12:32 by rmamzer           #+#    #+#             */
-/*   Updated: 2025/07/07 16:21:28 by rmamzer          ###   ########.fr       */
+/*   Updated: 2026/02/06 20:05:42 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdarg.h>
+# include <limits.h>
 
 typedef struct s_list
 {
@@ -68,6 +69,11 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
+
+//math
+int		ft_max(int arg_count, ...);
+int		ft_abs(int num);
+void	ft_swapf(float *a, float *b);
 
 //get_next_line functions
 # ifndef BUFFER_SIZE

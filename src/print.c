@@ -1,54 +1,9 @@
 #include "minirt.h"
 
-// TODO: probably after parsing
-/**
- * 1. scene lvl validation:
- * -1 cam 1 amb 1 light
- * - at list 1 object probably
- * 2. obj lvl validation:
- *
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-*/
-
-void	init_scene(t_scene *scene)
-{
-	scene->mlx = NULL;
-	scene->window = NULL;
-	scene->obj_list = NULL;
-	scene->qt_ambiant = 0;
-	scene->qt_cam = 0;
-	scene->qt_light = 0;
-	scene->err_m = NULL;
-    scene->obj_selected = NULL;
-}
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-int	main(int ac, char **av)
-{
-	t_scene	scene;
-
-	init_scene(&scene);
-	if (confirm_input(ac, av) == 1)
-	{
-		kill_all(&scene);
-		return (EXIT_FAILURE);
-	}
-	if (pars_input_file(av[1], &scene) == 1)
-	{
-		kill_all(&scene);
-		return (EXIT_FAILURE);
-	}
-	print_vars(&scene);
-	print_list(&scene);
-	kill_all(&scene);
-	return (0);
-}
-
 void	print_list(t_scene *scene)
 {
-	t_olist	*curr;
-	int		i;
+	t_olist *curr;
+	int	i;
 
 	curr = scene->obj_list;
 	i = 0;
@@ -74,13 +29,13 @@ void	print_vars(t_scene *scene)
 	printf("---------------------------------------------------\n");
 	printf("Camera Parsing\n");
 	printf("x, y, z coordinates of the viewpoint: ");
-	printf("%f ", scene->cam.view_point.x);
-	printf("%f ", scene->cam.view_point.y);
-	printf("%f \n", scene->cam.view_point.z);
+	printf("%f ", scene->cam.orient.origin.x);
+	printf("%f ", scene->cam.orient.origin.y);
+	printf("%f \n", scene->cam.orient.origin.z);
 	printf("3D norm orientation vector, in the range [-1,1] for x, y, z axis:");
-	printf("%f ", scene->cam.orient.x);
-	printf("%f ", scene->cam.orient.y);
-	printf("%f\n", scene->cam.orient.z);
+	printf("%f ", scene->cam.orient.direction.x);
+	printf("%f ", scene->cam.orient.direction.y);
+	printf("%f\n", scene->cam.orient.direction.z);
 	printf("FOV: Horizontal field of view in degrees in the range [0,180]: ");
 	printf("%f\n", scene->cam.fov);
 	printf("---------------------------------------------------\n");
@@ -93,4 +48,62 @@ void	print_vars(t_scene *scene)
 	printf("%f \n", scene->light.bright);
 	printf("(BONUS) R, G, B colors in the range [0-255]: ");
 	printf("%d\n\n", scene->light.color);
+}
+
+void	print_vector(t_vec3	vector)
+{
+	if (is_point(vector))
+		printf("point ");
+	else
+		printf("vector ");
+	printf("(x: %f, y: %f, z: %f)\n",
+			vector.x, vector.y, vector.z);
+}
+
+void	print_ray(t_ray	ray)
+{
+	printf("RAY\norigin: ");
+	print_vector(ray.origin);
+	printf("direction: ");
+	print_vector(ray.direction);
+	printf("\n");
+}
+
+void	print_color(int color)
+{
+	printf("\nColor: %i\nop: %i\nr: %i\ng: %i\nb: %i\n",
+		color, get_opacity(color), get_red(color), get_green(color), get_blue(color));
+}
+
+void	print_matrix(t_matrix matrix)
+{
+	int	i = 0;
+	int	j = 0;
+
+	j = 0;
+	while (matrix.ptr && j < matrix.row)
+	{
+		i = 0;
+		while (matrix.ptr[j] && i < matrix.col)
+		{
+			printf("| %f ", matrix.ptr[j][i]);
+			i++;
+		}
+		printf("|\n");
+		j++;
+	}
+	printf("%ix%i\n", j, i);
+}
+
+void	print_intersection(t_intersection intersection)
+{
+	int	i;
+
+	printf("INTERSECTION\ncount: %i\n", intersection.count);
+	i = 0;
+	while (i < intersection.count)
+	{
+		printf("[%i] %f\n", i, intersection.val[i]);
+		i++;
+	}
 }

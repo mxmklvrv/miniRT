@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-void	kill_all(t_scene *scene)
+void	free_scene(t_scene *scene)
 {
 	free_list(scene->obj_list);
 }
@@ -40,7 +40,7 @@ void	free_list(t_olist *list)
 	{
 		temp = list->next;
 		if (list->obj)
-			free(list->obj);
+			free(list->obj);//Add free sphere matrix
 		free(list);
 		list = temp;
 	}

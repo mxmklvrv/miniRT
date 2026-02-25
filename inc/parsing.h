@@ -1,7 +1,6 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-int		rt_file_extension(char *file);
 int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
 void	free_list(t_olist *list);
 t_vec3	creat_vec3(float x, float y, float z);
@@ -26,15 +25,11 @@ int		parse_cylinder(char *line, t_scene *scene);
 int		parse_ambient(char *line, t_scene *scene);
 int		parse_light(char *line, t_scene *scene);
 int		parse_cam(char *line, t_scene *scene);
-int		pars_cam_light(char *line, char ch, t_scene *scene);
+int		parse_cam_light(char *line, char ch, t_scene *scene);
 int		dispatch(char *line, t_scene *scene);
-int		pars_input_file(char *file, t_scene *scene);
+int		parse_input_file(char *file, t_scene *scene);
 int		confirm_input(int ac, char **av);
 void	init_scene(t_scene *scene);
-void	kill_all(t_scene *scene);
-
-// test functions
-void	print_vars(t_scene *scene);
-void	print_list(t_scene *scene);
+void	free_scene(t_scene *scene);
 
 #endif

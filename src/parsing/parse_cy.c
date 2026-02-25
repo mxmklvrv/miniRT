@@ -17,10 +17,10 @@ int	parse_cylinder(char *line, t_scene *scene)
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error(ERR_ALLOC, NULL), free(cylinder), 1);
-	if (parse_vector(res[0], &cylinder->cy_center, -100.0f, 100.0f) == 1)
+	if (parse_vector(res[0], &cylinder->normal.origin, -100.0f, 100.0f) == 1)
 		return (error("Invalid coordinates of the center of the cylinder",
 				scene->err_m), free(cylinder), free_array(res), 1);
-	if (parse_vector(res[1], &cylinder->normal, 0.0f, 1.0f) == 1)
+	if (parse_vector(res[1], &cylinder->normal.direction, 0.0f, 1.0f) == 1)
 		return (error("Invalid coordinates of the center of the cylinder",
 				scene->err_m), free(cylinder), free_array(res), 1);
 	diameter = 0.0f;
@@ -42,10 +42,10 @@ int	parse_cylinder(char *line, t_scene *scene)
 		return (error("Failed adding cylinder to the list", scene->err_m),
 			free(cylinder), free_array(res), 1);
 	printf("CYLINDR\n");
-	printf("cy cent %f %f %f\n", cylinder->cy_center.x, cylinder->cy_center.y,
-		cylinder->cy_center.z);
-	printf("norm %f %f %f\n", cylinder->normal.x, cylinder->normal.y,
-		cylinder->normal.z);
+	printf("cy cent %f %f %f\n", cylinder->normal.origin.x, cylinder->normal.origin.y,
+		cylinder->normal.origin.z);
+	printf("norm %f %f %f\n", cylinder->normal.direction.x, cylinder->normal.direction.y,
+		cylinder->normal.direction.z);
 	printf("diam %f\n", cylinder->diameter);
 	printf("height %f", cylinder->height);
 	printf("color %d\n\n", cylinder->colour);

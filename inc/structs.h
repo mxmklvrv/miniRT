@@ -1,42 +1,54 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-// typedef struct s_vars
-// {
-// 	void	*mlx;
-// 	void	*win;
-// }			t_vars;
+typedef struct s_pixel
+{
+	int		i;
+	int		j;
+	int		color;
+}	t_pixel;
 
-// typedef struct s_data
-// {
-// 	void	*img;
-// 	char	*addr;
-// 	int		bits_per_pixel;
-// 	int		line_length;
-// 	int		endian;
-// }			t_data;
-
-// typedef struct s_point
-// {
-// 	int		x;
-// 	int		y;
-// 	int		color;
-// }			t_point;
-
+// Tuple - a vector or a point
+// w = 0 for vector;
+// w = 1 for point;
+// Needed for matrix math.
+// Can be used for colors.
 typedef struct s_vec3
 {
-	float			x;
-	float			y;
-	float			z;
+	float	x;
+	float	y;
+	float	z;
+	float	w;
+}	t_vec3;
 
-}					t_vec3;
+typedef struct s_matrix
+{
+	int		row;
+	int		col;
+	float	**ptr;
+}	t_matrix;
+
+// ray has starting point and direction
+// starting point is a point;
+// direction is a vector.
+typedef struct s_ray
+{
+	t_vec3	origin;
+	t_vec3	direction;
+}	t_ray;
+
+typedef struct s_intersection
+{
+	int		count;
+	float	val[2];
+}	t_intersection;
 
 typedef enum e_otype
 {
 	SP,
 	CY,
 	PL
-}					t_otype;
+}	t_otype;
 
 // linked list with objects
 typedef struct s_olist
@@ -46,38 +58,36 @@ typedef struct s_olist
 	int				obj_id;
 	int				colour;
 	struct s_olist	*next;
-
-}					t_olist;
+}	t_olist;
 
 typedef struct s_sp
 {
 	t_vec3			sp_center;
 	float			diameter;
-	//float			radius;
 	int				colour;
-}					t_sp;
+	t_matrix		matrix;
+}	t_sp;
 
 typedef struct s_pl
 {
-	t_vec3			pl_point;
-	t_vec3			normal;
+	t_ray			normal;
 	int				colour;
-}					t_pl;
+}	t_pl;
 
 typedef struct s_cy
 {
-	t_vec3			cy_center;
-	t_vec3			normal;
+	t_ray			normal;
 	float			diameter;
 	float			height;
 	int				colour;
-}					t_cy;
+}	t_cy;
 
 typedef struct s_cam
 {
-	t_vec3			view_point;
-	t_vec3			orient;
+	t_ray			orient;
 	float			fov;
+	t_vec3			vector_i;
+	t_vec3			vector_j;
 }					t_cam;
 
 typedef struct s_ambient
@@ -98,18 +108,54 @@ typedef struct s_light
 // main struct
 typedef struct s_scene
 {
-	void			*mlx;
-	void			*window;
 	t_olist			*obj_list;
 	t_ambient		ambient;
-	// t_light         *light;
 	t_light			light;
 	t_cam			cam;
 	int				qt_ambiant;
 	int				qt_cam;
 	int				qt_light;
 	char			*err_m;
-
+	t_olist			*obj_selected;
 }					t_scene;
+
+typedef struct s_data
+{
+	void	*mlx;
+	void	*win;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	float	aspect_ratio;
+	t_scene *scene;
+	void	*move_state;
+	int		control_cam;
+}	t_data;
+
+typedef enum e_axis
+{
+	Y_AXIS,
+	X_AXIS
+}		t_axis;
+
+typedef struct s_move_state
+{
+	int	forward;
+	int	backward;
+	int	left;
+	int	right;
+	int	up;
+	int	down;
+	int	rotate_left;
+	int	rotate_right;
+	int	rotate_up;
+	int	rotate_down;
+	int	resize_up;
+	int	resize_down;
+	int	height_up;
+	int	height_down;
+}		t_move_state;
 
 #endif

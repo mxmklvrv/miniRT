@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
+#include "libft.h"
 
 int	do_conversion(const char *str, va_list *arg_list)
 {

@@ -41,9 +41,17 @@ PARS_OBJ = $(PARS_SRC:$(PARS_DIR)/%.c=$(PARS_OBJ_DIR)/%.o)
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
-	mainm.c \
+	main.c \
 	visuals.c \
 	hooks.c \
+	draw.c \
+	shapes.c \
+	vector.c \
+	color.c \
+	matrix.c \
+	ray.c \
+	print.c \
+	move_on_press.c \
 	)
 
 

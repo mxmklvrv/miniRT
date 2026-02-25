@@ -26,7 +26,10 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		return (NULL);
 	ptr = malloc(totalbytes);
 	if (!ptr)
+	{
+		ft_putendl_fd("Error: malloc", STDERR_FILENO);
 		return (NULL);
+	}
 	ft_bzero(ptr, totalbytes);
 	return (ptr);
 }

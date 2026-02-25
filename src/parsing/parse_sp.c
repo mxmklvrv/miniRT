@@ -19,6 +19,7 @@ int	parse_sphere(char *line, t_scene *scene)
 	if (parse_vector(res[0], &sphere->sp_center, -100.0f, 100.0f) == 1)
 		return (error("Invalid sphere center", scene->err_m), free(sphere),
 			free_array(res), 1);
+	sphere->sp_center.w = 1;//New
 	diameter = 0;
 	colour = 0;
 	if (parse_float(res[1], 0.0f, 100.0f, &diameter) == 1)
@@ -32,6 +33,7 @@ int	parse_sphere(char *line, t_scene *scene)
 	if (add_to_list(&scene->obj_list, sphere, SP, sphere->colour) == 1)
 		return (error("Failed adding sphere to the list", scene->err_m),
 			free_array(res), free(sphere), 1);
+	sphere->matrix = new_identity_matrix(4);//New
 	printf("SPHERE\n");
 	printf("cent %f %f %f\n", sphere->sp_center.x, sphere->sp_center.y,
 		sphere->sp_center.z);
