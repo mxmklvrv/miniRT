@@ -31,48 +31,50 @@
 
 // VERSION WITH CONTINUOUS MOVEMENT
 
-#define MOVE_SPEED 0.5f
-#define ROTATE_SPEED 0.1f
-#define RESIZE_SPEED 0.2f
+// #define MOVE_SPEED 0.5f
+// #define ROTATE_SPEED 0.1f
+// #define RESIZE_SPEED 0.2f
 
-#define KEY_W 119       // forward
-#define KEY_A 97        // left
-#define KEY_S 115       // back
-#define KEY_D 100       // right
-#define KEY_Q 113       // up
-#define KEY_E 101       // down
-#define KEY_C 99        // cam
-#define KEY_TAB 65289   // switch obj
-#define KEY_LEFT 65361  // rotate left
-#define KEY_RIGHT 65363 // rotate right
-#define KEY_UP 65362    // rotate up
-#define KEY_DOWN 65364  // rotate down
-#define KEY_PLUS 61     // resize up
-#define KEY_MINUS 45    // resize down
-#define KEY_ESC 65307   // esc
+// #define KEY_W 119       // forward
+// #define KEY_A 97        // left
+// #define KEY_S 115       // back
+// #define KEY_D 100       // right
+// #define KEY_Q 113       // up
+// #define KEY_E 101       // down
+// #define KEY_C 99        // cam
+// #define KEY_TAB 65289   // switch obj
+// #define KEY_LEFT 65361  // rotate left
+// #define KEY_RIGHT 65363 // rotate right
+// #define KEY_UP 65362    // rotate up
+// #define KEY_DOWN 65364  // rotate down
+// #define KEY_PLUS 61     // resize up
+// #define KEY_MINUS 45    // resize down
+// #define KEY_ESC 65307   // esc
 
-#define KEY_H 104 // height up
-#define KEY_J 106 // height down
+// #define KEY_H 104 // height up
+// #define KEY_J 106 // height down
 
-typedef enum e_axis
-{
-	Y_AXIS,
-	X_AXIS
-}		t_axis;
+// typedef enum e_axis
+// {
+// 	Y_AXIS,
+// 	X_AXIS
+// }		t_axis;
 
 // VERSION WITH ON RELEASE MOVEMENT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-void	set_hooks(t_data *data)
-{
-	// need to remove movestate from data struct
-	data->control_cam = 0;
-	mlx_hook(data->win, 2, 1L << 0, key_press_hook, data);
-	mlx_hook(data->win, 3, 1L << 1, key_release_hook, data);
-	mlx_hook(data->win, 17, 0, mlx_loop_end, data->mlx);
-}
+// void	set_hooks(t_data *data)
+// {
+// 	// need to remove movestate from data struct
+// 	data->control_cam = 0;
+// 	mlx_hook(data->win, 2, 1L << 0, key_press_hook, data);
+// 	mlx_hook(data->win, 3, 1L << 1, key_release_hook, data);
+// 	mlx_hook(data->win, 17, 0, mlx_loop_end, data->mlx);
+// }
 
 int	key_press_hook(int key, t_data *data)
 {
+	printf("scene ptr: %p\n", data->scene);
+	printf("Key pressed: %d\n", key);
 	if (key == KEY_C)
 	{
 		data->control_cam = !data->control_cam;
@@ -85,12 +87,14 @@ int	key_press_hook(int key, t_data *data)
 	return (0);
 }
 
-
 int	key_release_hook(int key, t_data *data)
 {
 	int	need_redraw;
 
 	need_redraw = 0;
+	printf("obj_selected: %p\n", data->scene->obj_selected);
+	if (data->scene->obj_selected)
+		printf("obj_type: %d\n", data->scene->obj_selected->obj_type);
 	if (handle_translation(key, data))
 		need_redraw = 1;
 	if (handle_rotation(key, data))
@@ -99,6 +103,8 @@ int	key_release_hook(int key, t_data *data)
 		need_redraw = 1;
 	if (need_redraw)
 		redraw_scene(data, data->scene);
+	printf("Key release hook\n");
+	return (0);
 }
 
 // add translate light
@@ -160,8 +166,9 @@ int	handle_rotation(int key, t_data *data)
 int	handle_resize(int key, t_data *data)
 {
 	if (!data->scene->obj_selected || data->scene->obj_selected->obj_type == PL
-		|| data->control_cam) // or data->light
-		return (0);
+		|| data->control_cam)
+		return (0); // or data->light // !data || !data->scene ||
+	return (0);
 	if (key == KEY_PLUS && resize_diameter(data->scene->obj_selected,
 			RESIZE_SPEED))
 		return (1);
@@ -179,9 +186,9 @@ int	handle_resize(int key, t_data *data)
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 {
 	if (data->control_cam)
-			rotate_cam(&data->scene->cam, angle, axis);
+		rotate_cam(&data->scene->cam, angle, axis);
 	else if (data->scene->obj_selected)
-			rotate_objects(data->scene->obj_selected, angle, axis);
+		rotate_objects(data->scene->obj_selected, angle, axis);
 }
 
 /**
@@ -190,6 +197,9 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
  */
 void	select_object(t_scene *scene)
 {
+	printf("Selecting object\n");
+	printf("scene: %p\n", scene);
+	printf("obj_list: %p\n", scene->obj_list);
 	if (!scene->obj_selected)
 		scene->obj_selected = scene->obj_list;
 	else if (scene->obj_selected->next)
@@ -210,6 +220,7 @@ void	translate_object(t_olist *node, t_vec3 move_vec)
 		return ;
 	if (node->obj_type == SP)
 	{
+		printf("trans obj SP\n");
 		sp = (t_sp *)node->obj;
 		sp->sp_center = vector_add(sp->sp_center, move_vec);
 	}
@@ -236,20 +247,20 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 	{
 		pl = (t_pl *)node->obj;
 		if (axis == Y_AXIS)
-			pl->normal.direction = vec_normalize(rotate_y(pl->normal.direction,
+			pl->normal.direction = vector_normalize(rotate_y(pl->normal.direction,
 						angle));
 		else
-			pl->normal.direction = vec_normalize(rotate_x(pl->normal.direction,
+			pl->normal.direction = vector_normalize(rotate_x(pl->normal.direction,
 						angle));
 	}
 	else if (node->obj_type == CY)
 	{
 		cy = (t_cy *)node->obj;
 		if (axis == Y_AXIS)
-			cy->normal.direction = vec_normalize(rotate_y(cy->normal.direction,
+			cy->normal.direction = vector_normalize(rotate_y(cy->normal.direction,
 						angle));
 		else
-			cy->normal.direction = vec_normalize(rotate_x(cy->normal.direction,
+			cy->normal.direction = vector_normalize(rotate_x(cy->normal.direction,
 						angle));
 	}
 }
@@ -257,10 +268,10 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 {
 	if (axis == Y_AXIS)
-		cam->orient.direction = vec_normalize(rotate_y(cam->orient.direction,
+		cam->orient.direction = vector_normalize(rotate_y(cam->orient.direction,
 					angle));
 	else if (axis == X_AXIS)
-		cam->orient.direction = vec_normalize(rotate_x(cam->orient.direction,
+		cam->orient.direction = vector_normalize(rotate_x(cam->orient.direction,
 					angle));
 	setup_camera_angle(cam);
 }
@@ -326,9 +337,9 @@ t_vec3	rotate_y(t_vec3 current, float angle)
 
 t_vec3	rotate_x(t_vec3 current, float angle)
 {
-	t_vec3 rotated;
-	float cosinus;
-	float sinus;
+	t_vec3	rotated;
+	float	cosinus;
+	float	sinus;
 
 	cosinus = cosf(angle);
 	sinus = sinf(angle);
@@ -338,8 +349,6 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 	rotated.w = current.w;
 	return (rotated);
 }
-
-
 
 // int	key_release_hook(int key, t_data *data)
 // {
@@ -403,7 +412,7 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 //         {
 //             resize_objects(data->scene->obj_selected, RESIZE_SPEED);
 //         }
-// 		 else if (key == KEY_MINUS && data->scene->obj_selected)
+// 			else if (key == KEY_MINUS && data->scene->obj_selected)
 //         {
 //             resize_objects(data->scene->obj_selected, -RESIZE_SPEED);
 //         }
