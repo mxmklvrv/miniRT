@@ -13,12 +13,37 @@ typedef struct s_data
 	float	aspect_ratio;
 }	t_data;
 
+<<<<<<< HEAD
 typedef struct s_pixel
 {
 	int		i;
 	int		j;
 	int		color;
 }	t_pixel;
+=======
+typedef struct s_data
+{
+	void	*mlx;
+	void	*win;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	float	aspect_ratio;
+	t_scene *scene;
+	void	*move_state;
+	int		control_cam;
+}	t_data;
+
+
+// typedef struct s_point
+// {
+// 	int		x;
+// 	int		y;
+// 	int		color;
+// }			t_point;
+>>>>>>> maxim/movement
 
 // Tuple - a vector or a point
 // w = 0 for vector;
@@ -128,6 +153,7 @@ typedef struct s_scene
 	int				qt_cam;
 	int				qt_light;
 	char			*err_m;
+	t_olist			*obj_selected;
 }					t_scene;
 
 #endif
