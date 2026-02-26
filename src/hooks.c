@@ -27,8 +27,8 @@ void	set_hooks(t_data *data)
 
 void	redraw_scene(t_data *data)
 {
-	ft_bzero(data->addr, WIDTH * HEIGHT * (data->bits_per_pixel / 8));
-	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+	//ft_bzero(data->addr, WIDTH * HEIGHT * (data->bits_per_pixel / 8));
+	//mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	draw_scene(data);
 	//mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 }

@@ -5,8 +5,8 @@
 # define EXIT_SUCCESS 0
 # define FAILURE -1
 # define SUCCESS 0
-# define WIDTH 1920
-# define HEIGHT 1080
+# define WIDTH 400
+# define HEIGHT 400
 
 # define ERR_MSG "Error"
 # define ERR_AC "Usage: ./miniRT file.rt"

@@ -10,7 +10,7 @@ void	draw_scene(t_data *data)
 	int		pixels_to_render;
 
 	setup_scene(data->scene);
-	render_cycle = 4;
+	render_cycle = 5;
 	pixels_to_render = get_pixels_to_render(render_cycle);
 	while (render_cycle > 0)
 	{
@@ -81,7 +81,7 @@ static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_ren
 void	setup_scene(t_scene *scene)
 {
 	setup_camera_angle(&scene->cam);
-	//setup_object_matrix(scene->obj_list);
+	setup_object_matrix(scene->obj_list);
 }
 
 /*
@@ -104,11 +104,11 @@ void	setup_camera_angle(t_cam *cam)
 
 void	setup_object_matrix(t_olist *obj_list)
 {
+
+
 	while (obj_list)
 	{
-		free_matrix(obj_list->matrix);
-		obj_list->matrix.ptr = NULL;
-		//set_matrix(&obj_list->matrix, new_scaling_matrix(0.5, 1, 1));
+		set_matrix(&obj_list->matrix, new_scaling_matrix(0.5, 1, 1));
 		obj_list = obj_list->next;
 	}
 }
