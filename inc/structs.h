@@ -140,6 +140,12 @@ typedef enum e_axis
 	X_AXIS
 }		t_axis;
 
+typedef enum e_exeption
+{
+	NO_ROT,
+	NO_RES
+}	t_exeption;
+
 typedef struct s_move_state
 {
 	int	forward;

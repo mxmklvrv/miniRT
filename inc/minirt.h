@@ -16,7 +16,8 @@
 
 // test
 void	print_pos(t_scene *scene);
-int is_rotatable(t_data *data);
+void print_cam_pos(t_scene *scene);
+int is_exeption(t_data *data, t_exeption action);
 // test
 
 /* ===== Visuals ============================================================ */

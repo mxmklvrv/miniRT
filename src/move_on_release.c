@@ -78,7 +78,10 @@ int	key_press_hook(int key, t_data *data)
 	if (key == KEY_C)
 	{
 		data->control_cam = !data->control_cam;
-		printf("controling cam\n");
+		if(data->control_cam == 0)
+			printf("switch back to objects\n");
+		else
+			printf("controling cam\n");
 	}
 	else if (key == KEY_TAB)
 		select_object(data->scene);
@@ -114,11 +117,17 @@ int	key_release_hook(int key, t_data *data)
 	// if (data->scene->obj_selected)
 	// 	printf("obj_type: %d\n", data->scene->obj_selected->obj_type);
 	if (handle_translation(key, data)){
-		print_pos(data->scene);
+		if(data->control_cam == 1)
+			print_cam_pos(data->scene);
+		else
+			print_pos(data->scene);
 		need_redraw = 1;
 	}
 	if (handle_rotation(key, data)){
-		print_pos(data->scene);
+		if(data->control_cam == 1)
+			print_cam_pos(data->scene);
+		else
+			print_pos(data->scene);
 		need_redraw = 1;
 	}
 	if (handle_resize(key, data)){
@@ -161,10 +170,25 @@ int	handle_translation(int key, t_data *data)
 	return (0);
 }
 
-int is_rotatable(t_data *data)
+// can we resize light ?? Looks like no
+// cannot resize pl
+// cannot resize cam
+
+// light cannot be rotated
+// sphere cannot be rotated
+int is_exeption(t_data *data, t_exeption action)
 {
-	if(data->scene->obj_selected == SP)
-		return (0);
+
+	if(action == NO_ROT)
+	{
+		if(data->scene->obj_selected->obj_type == SP) // and light here as well
+			return (0);
+	}
+	else if(action == NO_RES)
+	{
+		if(data->scene->obj_selected->obj_type == PL || data->control_cam) // add light here
+			return (0);
+	}
 	return (1);
 }
 
@@ -174,7 +198,7 @@ int is_rotatable(t_data *data)
 // sphere cannot be rotated
 int	handle_rotation(int key, t_data *data)
 {
-	if(is_rotatable(data))
+	if(is_exeption(data, NO_ROT))
 		return (0);
 	if (key == KEY_LEFT)
 	{
@@ -200,21 +224,21 @@ int	handle_rotation(int key, t_data *data)
 }
 
 // can we resize light ?? Looks like no
+// cannot resize pl
+// cannot resize cam
 int	handle_resize(int key, t_data *data)
 {
-	if (!data->scene->obj_selected || data->scene->obj_selected->obj_type == PL
-		|| data->control_cam)
+	if (!data->scene->obj_selected)
 		return (0); // or data->light // !data || !data->scene ||
-	return (0);
-	if (key == KEY_PLUS && resize_diameter(data->scene->obj_selected,
+	if (key == KEY_PLUS && is_exeption(data, NO_RES) && resize_diameter(data->scene->obj_selected,
 			RESIZE_SPEED))
 		return (1);
-	if (key == KEY_MINUS && resize_diameter(data->scene->obj_selected,
+	if (key == KEY_MINUS && is_exeption(data, NO_RES) && resize_diameter(data->scene->obj_selected,
 			-RESIZE_SPEED))
 		return (1);
-	if (key == KEY_H && resize_height(data->scene->obj_selected, RESIZE_SPEED))
+	if (key == KEY_H && is_exeption(data, NO_RES) && resize_height(data->scene->obj_selected, RESIZE_SPEED))
 		return (1);
-	if (key == KEY_J && resize_height(data->scene->obj_selected, -RESIZE_SPEED))
+	if (key == KEY_J && is_exeption(data, NO_RES) && resize_height(data->scene->obj_selected, -RESIZE_SPEED))
 		return (1);
 	return (0);
 }
@@ -278,7 +302,7 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 	t_pl	*pl;
 	t_cy	*cy;
 
-	if (!node || node->obj_type == SP)
+	if (!node)
 		return ;
 	if (node->obj_type == PL)
 	{
@@ -500,12 +524,22 @@ void	print_pos(t_scene *scene)
 	}
 }
 
-// void print_cam_pos(t_scene *scene)
-// {
-// 	if (!scene)
-// 	{
-// 		printf("YOLO");
-// 		return ;
-// 	}
-// 	printf("Cam position")
-// }
+void print_cam_pos(t_scene *scene)
+{
+	if (!scene)
+	{
+		printf("YOLO");
+		return ;
+	}
+	printf("Cam origin: x=%.2f y=%.2f z=%.2f\n",
+		scene->cam.orient.origin.x,
+		scene->cam.orient.origin.y,
+		scene->cam.orient.origin.z
+	);
+	printf("Cam direct: x=%.2f y=%.2f z=%.2f\n",
+		scene->cam.orient.direction.x,
+		scene->cam.orient.direction.y,
+		scene->cam.orient.direction.z
+	);
+
+}
