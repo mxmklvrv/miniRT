@@ -78,7 +78,7 @@ int	key_press_hook(int key, t_data *data)
 	if (key == KEY_C)
 	{
 		data->control_cam = !data->control_cam;
-		printf("controling cam");
+		printf("controling cam\n");
 	}
 	else if (key == KEY_TAB)
 		select_object(data->scene);
@@ -86,28 +86,55 @@ int	key_press_hook(int key, t_data *data)
 		mlx_loop_end(data->mlx);
 	return (0);
 }
+// clean version
+// int	key_release_hook(int key, t_data *data)
+// {
+// 	int	need_redraw;
+
+// 	need_redraw = 0;
+// 	printf("obj_selected: %p\n", data->scene->obj_selected);
+// 	if (data->scene->obj_selected)
+// 		printf("obj_type: %d\n", data->scene->obj_selected->obj_type);
+// 	if (handle_translation(key, data))
+// 		need_redraw = 1;
+// 	if (handle_rotation(key, data))
+// 		need_redraw = 1;
+// 	if (handle_resize(key, data))
+// 		need_redraw = 1;
+// 	if (need_redraw)
+// 		redraw_scene(data, data->scene);
+// 	printf("Key release hook\n");
+// 	return (0);
+// }
 
 int	key_release_hook(int key, t_data *data)
 {
 	int	need_redraw;
 
 	need_redraw = 0;
-	printf("obj_selected: %p\n", data->scene->obj_selected);
-	if (data->scene->obj_selected)
-		printf("obj_type: %d\n", data->scene->obj_selected->obj_type);
-	if (handle_translation(key, data))
+	// printf("obj_selected: %p\n", data->scene->obj_selected);
+	// if (data->scene->obj_selected)
+	// 	printf("obj_type: %d\n", data->scene->obj_selected->obj_type);
+	if (handle_translation(key, data)){
+		print_pos(data->scene);
 		need_redraw = 1;
-	if (handle_rotation(key, data))
+	}
+	if (handle_rotation(key, data)){
+		print_pos(data->scene);
 		need_redraw = 1;
-	if (handle_resize(key, data))
+	}
+	if (handle_resize(key, data)){
+		print_pos(data->scene);
 		need_redraw = 1;
+	}
 	if (need_redraw)
 		redraw_scene(data, data->scene);
-	printf("Key release hook\n");
 	return (0);
 }
 
+
 // add translate light
+// clean version
 int	handle_translation(int key, t_data *data)
 {
 	t_vec3	move_vec;
@@ -135,6 +162,8 @@ int	handle_translation(int key, t_data *data)
 	}
 	return (0);
 }
+
+
 
 // light cannot be rotated
 int	handle_rotation(int key, t_data *data)
@@ -206,7 +235,7 @@ void	select_object(t_scene *scene)
 		scene->obj_selected = scene->obj_selected->next;
 	else
 		scene->obj_selected = scene->obj_list;
-	printf("controlling obj"); // mb add coords of obj, type, etc
+	printf("controlling obj\n"); // mb add coords of obj, type, etc
 }
 
 // need to create move bector with new_vec
@@ -419,4 +448,56 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 //     }
 //     redraw_scene(data, data->scene);
 // 	return (0);
+// }
+
+
+void	print_pos(t_scene *scene)
+{
+	t_olist	*node;
+
+	if (!scene)
+		return ;
+
+	node = scene->obj_selected;
+
+	if (!node)
+	{
+		printf("No object selected\n");
+		return ;
+	}
+
+	if (node->obj_type == SP)
+	{
+		t_sp *sp = (t_sp *)node->obj;
+		printf("Sphere position: x=%.2f y=%.2f z=%.2f\n",
+			sp->sp_center.x,
+			sp->sp_center.y,
+			sp->sp_center.z);
+	}
+	else if (node->obj_type == PL)
+	{
+		t_pl *pl = (t_pl *)node->obj;
+		printf("Plane origin: x=%.2f y=%.2f z=%.2f\n",
+			pl->normal.origin.x,
+			pl->normal.origin.y,
+			pl->normal.origin.z);
+	}
+	else if (node->obj_type == CY)
+	{
+		t_cy *cy = (t_cy *)node->obj;
+		printf("Cylinder origin: x=%.2f y=%.2f z=%.2f\n",
+			cy->normal.origin.x,
+			cy->normal.origin.y,
+			cy->normal.origin.z);
+	}
+}
+
+// void print_cam_pos(t_scene *scene)
+// {
+// 	if (!scene)
+// 	{
+// 		printf("YOLO");
+// 		return ;
+// 	}
+// 	printf("Cam position")
 // }
