@@ -27,4 +27,6 @@ void	init_scene(t_scene *scene)
 	scene->qt_cam = 0;
 	scene->qt_light = 0;
 	scene->err_m = NULL;
+	scene->obj_selected = NULL; // maxim added 
+	scene->obj_list = NULL; // maxim added 
 }

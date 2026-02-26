@@ -6,6 +6,7 @@ bool	visuals_loop(t_scene *scene)
 
 	if (!set_visuals(&data))
 		return (false);
+	data.scene = scene; // maxim added 
 	set_hooks(&data);
 	draw_scene(&data, scene);//show scene here
 	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);

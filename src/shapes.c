@@ -9,9 +9,6 @@ t_intersection	hit_sp(t_ray ray, t_sp *sp)
 	float			discriminant;
 	t_intersection	intersection;
 
-	//sp_set_matrix(sp, new_scaling_matrix(2, 2, 2));
-	//ray = ray_transform(ray, sp->matrix);
-
 	vector_to_sphere = vector_substract(ray.origin, sp->sp_center);
 	a = vector_dot(ray.direction, ray.direction);
 	b = 2 * vector_dot(ray.direction, vector_to_sphere);
@@ -56,10 +53,4 @@ t_intersection	hit_pl(t_ray ray, t_pl *pl)
 		//intersection.val[0] = vector_multiply(ray.direction, multiplier);
 	}
 	return (intersection);
-}
-
-void	sp_set_matrix(t_sp *sp, t_matrix m)
-{
-	free_matrix(sp->matrix);
-	sp->matrix = m;
 }

@@ -16,6 +16,15 @@ t_ray	new_ray(t_vec3 origin, t_vec3 direction)
 t_ray	ray_transform(t_ray r, t_matrix m)
 {
 	t_ray		res;
+
+	res.origin = matrix_multiply_by_vector(m, r.origin);
+	res.direction = matrix_multiply_by_vector(m, r.direction);
+	return (res);
+}
+
+t_ray	ray_transform_inverse(t_ray r, t_matrix m)
+{
+	t_ray		res;
 	t_matrix	inverse;
 
 	inverse = new_inverse_matrix(m);

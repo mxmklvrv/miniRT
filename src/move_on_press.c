@@ -105,19 +105,12 @@ void	translate_object(t_olist *node, t_vec3 move_vec)
 	t_pl	*pl;
 	t_cy	*cy;
 
-	printf("1111111111111111111111111111111111\n");
-
 	if (!node)
-	{
-		printf("000000000000000000000000\n");
 		return ;
-	}
 	if (node->obj_type == SP)
 	{
-		printf("222222222222222222222222222\n");
 		sp = (t_sp *)node->obj;
 		sp->sp_center = vector_add(sp->sp_center, move_vec);
-		printf("7777777777777777777777777777777\n");
 	}
 	else if (node->obj_type == PL)
 	{
@@ -133,7 +126,6 @@ void	translate_object(t_olist *node, t_vec3 move_vec)
 		cy->normal.origin = vector_add(cy->normal.origin, move_vec);
 		printf("CY\n");
 	}
-	printf("3333333333333333333333333333\n");
 }
 
 void	translate_cam(t_cam *cam, t_vec3 move_vec)

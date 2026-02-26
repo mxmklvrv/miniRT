@@ -47,10 +47,13 @@ int	resize_height(t_olist *node, float value);
 
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data, t_scene *scene);
+void	setup_scene(t_scene *scene);
 void	setup_camera_angle(t_cam *cam);
+void	setup_object_matrix(t_olist *obj_list);
 t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam);
 int		trace_color(t_ray ray, t_scene *scene);
 bool	is_closest(t_intersection intersection, int *closest);
+void	set_matrix(t_matrix *old_m, t_matrix new_m);
 
 /* ===== Vector math ======================================================== */
 t_vec3	new_vector(float x, float y, float z);
@@ -93,12 +96,12 @@ bool	    matrix_is_invertible(t_matrix m, float *determinant);
 /* ===== Rays =============================================================== */
 t_ray	new_ray(t_vec3 origin, t_vec3 direction);
 t_ray	ray_transform(t_ray r, t_matrix m);
+t_ray	ray_transform_inverse(t_ray r, t_matrix m);
 
 /* ===== Shapes math ======================================================== */
 t_intersection	hit_sp(t_ray cam, t_sp *sp);
 t_intersection	hit_cy(t_ray cam, t_cy *cy);
 t_intersection	hit_pl(t_ray cam, t_pl *pl);
-void	sp_set_matrix(t_sp *sp, t_matrix m);
 float	degrees_to_radians(float degrees);
 
 /* ===== Color ============================================================== */
