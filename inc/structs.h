@@ -57,6 +57,7 @@ typedef struct s_olist
 	t_otype			obj_type;
 	int				obj_id;
 	int				colour;
+	t_matrix		matrix;
 	struct s_olist	*next;
 }	t_olist;
 
@@ -65,7 +66,6 @@ typedef struct s_sp
 	t_vec3			sp_center;
 	float			diameter;
 	int				colour;
-	t_matrix		matrix;
 }	t_sp;
 
 typedef struct s_pl
@@ -86,8 +86,8 @@ typedef struct s_cam
 {
 	t_ray			orient;
 	float			fov;
-	t_vec3			vector_i;
-	t_vec3			vector_j;
+	float			pixel_size;
+	t_matrix		matrix;
 }					t_cam;
 
 typedef struct s_ambient

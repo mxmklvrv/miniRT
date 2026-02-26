@@ -33,7 +33,6 @@ int	parse_sphere(char *line, t_scene *scene)
 	if (add_to_list(&scene->obj_list, sphere, SP, sphere->colour) == 1)
 		return (error("Failed adding sphere to the list", scene->err_m),
 			free_array(res), free(sphere), 1);
-	sphere->matrix = new_identity_matrix(4);//New
 	printf("SPHERE\n");
 	printf("cent %f %f %f\n", sphere->sp_center.x, sphere->sp_center.y,
 		sphere->sp_center.z);

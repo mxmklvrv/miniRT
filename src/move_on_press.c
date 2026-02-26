@@ -105,35 +105,23 @@ void	translate_object(t_olist *node, t_vec3 move_vec)
 	t_pl	*pl;
 	t_cy	*cy;
 
-	printf("1111111111111111111111111111111111\n");
-
 	if (!node)
-	{
-		printf("000000000000000000000000\n");
 		return ;
-	}
 	if (node->obj_type == SP)
 	{
-		printf("222222222222222222222222222\n");
 		sp = (t_sp *)node->obj;
 		sp->sp_center = vector_add(sp->sp_center, move_vec);
-		printf("7777777777777777777777777777777\n");
 	}
 	else if (node->obj_type == PL)
 	{
-		printf("PL\n");
 		pl = (t_pl *)node->obj;
 		pl->normal.origin = vector_add(pl->normal.origin, move_vec);
-		printf("PL\n");
 	}
 	else if (node->obj_type == CY)
 	{
-		printf("CY\n");
 		cy = (t_cy *)node->obj;
 		cy->normal.origin = vector_add(cy->normal.origin, move_vec);
-		printf("CY\n");
 	}
-	printf("3333333333333333333333333333\n");
 }
 
 void	translate_cam(t_cam *cam, t_vec3 move_vec)
@@ -290,9 +278,9 @@ int	handle_resize(t_data *data)
 	t_move_state	*move;
 
 	move = data->move_state;
-	//if ( data->scene->obj_selected->obj_type == PL
-	//	|| data->control_cam) // or data->light !data->scene->obj_selected ||
-	//	return (0);
+	if (!data->scene->obj_selected || data->scene->obj_selected->obj_type == PL
+		|| data->control_cam) // or data->light
+		return (0);
 	if (move->resize_up && resize_diameter(data->scene->obj_selected,
 			RESIZE_SPEED))
 		return (1);
