@@ -24,7 +24,7 @@ bool	set_visuals(t_data *data);
 void	free_visuals(t_data *data);
 void	ft_mlx_put_pixel(t_data *data, t_pixel pixel);
 void	set_hooks(t_data *data);
-void	redraw_scene(t_data *data, t_scene *scene);
+void	redraw_scene(t_data *data);
 
 /* ===== Hooks ============================================================== */
 int	key_press_hook(int key, t_data *data);
@@ -67,7 +67,7 @@ int	resize_height(t_olist *node, float value);
 // t_vec3	rotate_x(t_vec3 current, float angle);
 
 /* ===== Render ============================================================= */
-void	draw_scene(t_data *data, t_scene *scene);
+void	draw_scene(t_data *data);
 void	setup_scene(t_scene *scene);
 void	setup_camera_angle(t_cam *cam);
 void	setup_object_matrix(t_olist *obj_list);

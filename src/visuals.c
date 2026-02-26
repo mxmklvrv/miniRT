@@ -8,8 +8,8 @@ bool	visuals_loop(t_scene *scene)
 		return (false);
 	data.scene = scene; // added by max
 	set_hooks(&data);
-	draw_scene(&data, scene); // show scene here
-	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+	draw_scene(&data); // show scene here
+	//mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_loop(data.mlx);
 	free_visuals(&data);
 	return (true);

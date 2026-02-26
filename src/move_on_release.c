@@ -128,7 +128,7 @@ int	key_release_hook(int key, t_data *data)
 		need_redraw = 1;
 	}
 	if (need_redraw)
-		redraw_scene(data, data->scene);
+		redraw_scene(data);
 	return (0);
 }
 

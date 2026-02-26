@@ -39,7 +39,8 @@ void	free_list(t_olist *list)
 	{
 		temp = list->next;
 		if (list->obj)
-			free(list->obj);//Add free sphere matrix
+			free(list->obj);
+		free_matrix(list->matrix);
 		free(list);
 		list = temp;
 	}

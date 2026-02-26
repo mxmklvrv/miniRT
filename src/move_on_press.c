@@ -153,7 +153,7 @@ void	apply_movement(t_data *data)
 	if (handle_resize(data))
 		need_redraw = 1;
 	if (need_redraw)
-		redraw_scene(data, data->scene);
+		redraw_scene(data);
 }
 
 // add translate light
