@@ -14,6 +14,8 @@
 # define ERR_ALLOC "Memory allocation failed"
 
 # define ESCAPE 0xFF1B
+# define ON_PRESS 2
+# define ON_RELEASE 3
 # define ON_DESTROY 17
 
 # define EPSILON 0.001

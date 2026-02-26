@@ -17,7 +17,6 @@ int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
 	new->obj = object;
 	new->colour = colour;
 	new->next = NULL;
-	// id ??
 	if (*list == NULL)
 		*list = new;
 	else
