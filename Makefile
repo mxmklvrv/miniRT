@@ -51,7 +51,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	matrix.c \
 	ray.c \
 	print.c \
-	move_on_press.c \
+	move_on_release.c \
 	)
 
 

@@ -92,9 +92,6 @@ int	key_press_hook(int key, t_data *data)
 // 	int	need_redraw;
 
 // 	need_redraw = 0;
-// 	printf("obj_selected: %p\n", data->scene->obj_selected);
-// 	if (data->scene->obj_selected)
-// 		printf("obj_type: %d\n", data->scene->obj_selected->obj_type);
 // 	if (handle_translation(key, data))
 // 		need_redraw = 1;
 // 	if (handle_rotation(key, data))
@@ -103,10 +100,11 @@ int	key_press_hook(int key, t_data *data)
 // 		need_redraw = 1;
 // 	if (need_redraw)
 // 		redraw_scene(data, data->scene);
-// 	printf("Key release hook\n");
 // 	return (0);
 // }
 
+
+// DIRTY VERSION
 int	key_release_hook(int key, t_data *data)
 {
 	int	need_redraw;
@@ -163,11 +161,21 @@ int	handle_translation(int key, t_data *data)
 	return (0);
 }
 
+int is_rotatable(t_data *data)
+{
+	if(data->scene->obj_selected == SP)
+		return (0);
+	return (1);
+}
+
 
 
 // light cannot be rotated
+// sphere cannot be rotated
 int	handle_rotation(int key, t_data *data)
 {
+	if(is_rotatable(data))
+		return (0);
 	if (key == KEY_LEFT)
 	{
 		rotate_obj_or_cam(data, -ROTATE_SPEED, Y_AXIS);
