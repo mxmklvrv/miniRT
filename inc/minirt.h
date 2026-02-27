@@ -58,7 +58,7 @@ int	handle_translation(int key, t_data *data);
 int	handle_rotation(int key, t_data *data);
 int	handle_resize(int key, t_data *data);
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
-void	select_object(t_scene *scene);
+void	select_object(t_data *data);
 void	translate_object(t_olist *node, t_vec3 move_vec);
 void	rotate_objects(t_olist *node, float angle, t_axis axis);
 void	rotate_cam(t_cam *cam, float angle, t_axis axis);
