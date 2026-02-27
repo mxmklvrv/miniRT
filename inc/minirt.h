@@ -14,10 +14,6 @@
 # include <fcntl.h>
 # include <stdbool.h>
 
-// test
-void	print_pos(t_scene *scene);
-// test
-
 /* ===== Visuals ============================================================ */
 bool	visuals_loop(t_scene *scene);
 bool	set_visuals(t_data *data);
@@ -49,7 +45,7 @@ int	handle_resize(t_data *data);
 int	resize_diameter(t_olist *node, float value);
 int	resize_height(t_olist *node, float value);
 
-/* ===== Hooks on release ============================================================== */
+/* ===== Hooks on release =================================================== */
 // int	key_press_hook(int key, t_data *data);
 // int	key_release_hook(int key, t_data *data);
 // int	handle_translation(int key, t_data *data);
@@ -69,12 +65,9 @@ int	resize_height(t_olist *node, float value);
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data);
 void	setup_scene(t_scene *scene);
-void	setup_camera_angle(t_cam *cam);
-void	setup_object_matrix(t_olist *obj_list);
+void	set_matrix(t_matrix *old_m, t_matrix new_m);
 t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam);
 int		trace_color(t_ray ray, t_scene *scene);
-bool	is_closest(t_intersection intersection, int *closest);
-void	set_matrix(t_matrix *old_m, t_matrix new_m);
 
 /* ===== Vector math ======================================================== */
 t_vec3	new_vector(float x, float y, float z);
@@ -114,16 +107,15 @@ float		matrix_find_minor(t_matrix m, int row, int col);
 float		matrix_find_cofactor(t_matrix m, int row, int col);
 bool	    matrix_is_invertible(t_matrix m, float *determinant);
 
-/* ===== Rays =============================================================== */
-t_ray	new_ray(t_vec3 origin, t_vec3 direction);
-t_ray	ray_transform(t_ray r, t_matrix m);
-t_ray	ray_transform_inverse(t_ray r, t_matrix m);
-
 /* ===== Shapes math ======================================================== */
 t_intersection	hit_sp(t_ray cam, t_sp *sp);
 t_intersection	hit_cy(t_ray cam, t_cy *cy);
 t_intersection	hit_pl(t_ray cam, t_pl *pl);
-float	degrees_to_radians(float degrees);
+
+/* ===== Rays =============================================================== */
+t_ray	new_ray(t_vec3 origin, t_vec3 direction);
+t_ray	ray_transform(t_ray r, t_matrix m);
+t_ray	ray_transform_inverse(t_ray r, t_matrix m);
 
 /* ===== Color ============================================================== */
 int		new_color(int opacity, int red, int green, int blue);
@@ -138,7 +130,8 @@ int		color_mix(int c1, int c2);
 
 
 
-// test functions
+// test print functions
+void	print_pos(t_scene *scene);
 void	print_vars(t_scene *scene);
 void	print_list(t_scene *scene);
 void	print_vector(t_vec3	vector);

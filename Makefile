@@ -52,6 +52,8 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	ray.c \
 	print.c \
 	move_on_press.c \
+	render_setup.c \
+	ray_tracing.c \
 	)
 
 

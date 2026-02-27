@@ -53,34 +53,46 @@ typedef enum e_otype
 // linked list with objects
 typedef struct s_olist
 {
-	void			*obj;
-	t_otype			obj_type;
-	int				obj_id;
-	int				colour;
-	t_matrix		matrix;
+	t_shape			*shape;
+	//void			*obj;
+	//t_otype			obj_type;
+	//int				obj_id;
+	//int				colour;
 	struct s_olist	*next;
 }	t_olist;
 
-typedef struct s_sp
+typedef struct s_shape
 {
-	t_vec3			sp_center;
-	float			diameter;
+	t_otype			obj_type;
+	int				obj_id;
+	t_vec3			center;//sp
+	t_ray			normal;//pl, cy
+	float			diameter;//sp, cy
+	float			height;//cy
+	t_matrix		matrix;
 	int				colour;
-}	t_sp;
+}	t_shape;
 
-typedef struct s_pl
-{
-	t_ray			normal;
-	int				colour;
-}	t_pl;
+//typedef struct s_sp
+//{
+//	t_vec3			sp_center;
+//	float			diameter;
+//	int				colour;
+//}	t_sp;
 
-typedef struct s_cy
-{
-	t_ray			normal;
-	float			diameter;
-	float			height;
-	int				colour;
-}	t_cy;
+//typedef struct s_pl
+//{
+//	t_ray			normal;
+//	int				colour;
+//}	t_pl;
+
+//typedef struct s_cy
+//{
+//	t_ray			normal;
+//	float			diameter;
+//	float			height;
+//	int				colour;
+//}	t_cy;
 
 typedef struct s_cam
 {
