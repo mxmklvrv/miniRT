@@ -15,8 +15,12 @@ int	key_press_hook(int key, t_data *data)
 	else if (key == KEY_TAB)
 	{
 		if(data->control_cam == 1)
+		{
 			data->control_cam = 0;
-		print_pos(data->scene);
+			print_pos(data->scene);
+		}
+		else
+			select_object(data);
 	}
 	else if (key == KEY_ESC)
 		mlx_loop_end(data->mlx);
@@ -117,12 +121,15 @@ int	is_exeption(t_data *data, t_exeption action)
 		if (data->scene->obj_selected->obj_type == SP && !data->control_cam) // and light here as well
 			return (1);
 	}
-	else if (action == NO_RES)
+	if (action == NO_RES)
 	{
 		if (data->scene->obj_selected->obj_type == PL || data->control_cam)
 			// add light here
 			return (1);
 	}
+	if (action == NO_HIGHT_RES)
+		if (data->control_cam || data->scene->obj_selected->obj_type != CY) // add light
+			return (1);
 	return (0);
 }
 
@@ -168,10 +175,10 @@ int	handle_resize(int key, t_data *data)
 	if (key == KEY_MINUS && !is_exeption(data, NO_RES)
 		&& resize_diameter(data->scene->obj_selected, -RESIZE_SPEED))
 		return (1);
-	if (key == KEY_H && !is_exeption(data, NO_RES)
+	if (key == KEY_H && !is_exeption(data, NO_HIGHT_RES)
 		&& resize_height(data->scene->obj_selected, RESIZE_SPEED))
 		return (1);
-	if (key == KEY_J && !is_exeption(data, NO_RES)
+	if (key == KEY_J && !is_exeption(data, NO_HIGHT_RES)
 		&& resize_height(data->scene->obj_selected, -RESIZE_SPEED))
 		return (1);
 	return (0);

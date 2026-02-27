@@ -33,11 +33,22 @@ int	render_hook(t_data *data)
 void	set_general_keys(int key, t_data *data)
 {
 	if (key == KEY_TAB)
-		select_object(data->scene);
+	{
+		if (data->control_cam == 1)
+		{
+			data->control_cam = 0;
+			print_pos(data->scene);
+		}
+		else
+			select_object(data);
+	}
 	else if (key == KEY_C)
 	{
 		data->control_cam = !data->control_cam;
-		printf("controling cam");
+		if (data->control_cam == 0)
+			print_pos(data->scene);
+		else
+			print_cam_pos(data->scene);
 	}
 	else if (key == KEY_ESC)
 		mlx_loop_end(data->mlx);
@@ -87,15 +98,15 @@ void	set_resize_keys(int key, t_move_state *move, int value)
  * If there is next obj - select it
  * Otherwise select the first one
  */
-void	select_object(t_scene *scene)
+void	select_object(t_data *data)
 {
-	if (!scene->obj_selected)
-		scene->obj_selected = scene->obj_list;
-	else if (scene->obj_selected->next)
-		scene->obj_selected = scene->obj_selected->next;
+	if (!data->scene->obj_selected)
+		data->scene->obj_selected = data->scene->obj_list;
+	else if (data->scene->obj_selected->next)
+		data->scene->obj_selected = data->scene->obj_selected->next;
 	else
-		scene->obj_selected = scene->obj_list;
-	printf("controlling obj"); // mb add coords of obj, type, etc
+		data->scene->obj_selected = data->scene->obj_list;
+	print_pos(data->scene);
 }
 
 // need to create move bector with new_vec
@@ -186,12 +197,31 @@ int	handle_translation(t_data *data)
 	}
 	return (0);
 }
+int	is_exeption(t_data *data, t_exeption action)
+{
+	if (action == NO_ROT)
+	{
+		if (data->scene->obj_selected->obj_type == SP && !data->control_cam)
+			// and light here as well
+			return (1);
+	}
+	else if (action == NO_RES)
+	{
+		if (data->scene->obj_selected->obj_type == PL || data->control_cam)
+			// add light here
+			return (1);
+	}
+	return (0);
+}
+
 // light cannot be rotated
 int	handle_rotation(t_data *data)
 {
 	t_move_state	*move;
 
 	move = data->move_state;
+	if (is_exeption(data, NO_ROT))
+		return (0);
 	if (move->rotate_left)
 		rotate_obj_or_cam(data, -ROTATE_SPEED, Y_AXIS);
 	if (move->rotate_right)
@@ -278,20 +308,19 @@ int	handle_resize(t_data *data)
 	t_move_state	*move;
 
 	move = data->move_state;
-	if (!data->scene->obj_selected || data->scene->obj_selected->obj_type == PL
-		|| data->control_cam) // or data->light
+	if (!data->scene->obj_selected) // or data->light
 		return (0);
-	if (move->resize_up && resize_diameter(data->scene->obj_selected,
-			RESIZE_SPEED))
+	if (move->resize_up && !is_exeption(data, NO_RES)
+		&& resize_diameter(data->scene->obj_selected, RESIZE_SPEED))
 		return (1);
-	if (move->resize_down && resize_diameter(data->scene->obj_selected,
-			-RESIZE_SPEED))
+	if (move->resize_down && !is_exeption(data, NO_RES)
+		&& resize_diameter(data->scene->obj_selected, -RESIZE_SPEED))
 		return (1);
-	if (move->height_up && resize_height(data->scene->obj_selected,
-			RESIZE_SPEED))
+	if (move->height_up && !is_exeption(data, NO_RES)
+		&& resize_height(data->scene->obj_selected, RESIZE_SPEED))
 		return (1);
-	if (move->height_down && resize_height(data->scene->obj_selected,
-			-RESIZE_SPEED))
+	if (move->height_down && !is_exeption(data, NO_RES)
+		&& resize_height(data->scene->obj_selected, -RESIZE_SPEED))
 		return (1);
 	return (0);
 }
@@ -302,7 +331,7 @@ int	resize_diameter(t_olist *node, float value)
 	t_sp	*sp;
 	t_cy	*cy;
 
-	if (!node || node->obj_type == PL)
+	if (!node)
 		return (0);
 	if (node->obj_type == SP)
 	{
