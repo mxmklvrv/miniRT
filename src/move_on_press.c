@@ -17,7 +17,7 @@ int	key_release_hook(int key, t_data *data)
 	t_move_state	*move;
 
 	move = data->move_state;
-	set_general_keys(key, data);
+	// set_general_keys(key, data);
 	set_translation_keys(key, move, KEY_OFF);
 	set_rotation_keys(key, move, KEY_OFF);
 	set_resize_keys(key, move, KEY_OFF);
@@ -42,7 +42,7 @@ void	set_general_keys(int key, t_data *data)
 		else
 			select_object(data);
 	}
-	else if (key == KEY_C)
+	if (key == KEY_C)
 	{
 		data->control_cam = !data->control_cam;
 		if (data->control_cam == 0)
@@ -50,7 +50,7 @@ void	set_general_keys(int key, t_data *data)
 		else
 			print_cam_pos(data->scene);
 	}
-	else if (key == KEY_ESC)
+	if (key == KEY_ESC)
 		mlx_loop_end(data->mlx);
 }
 
@@ -201,14 +201,20 @@ int	is_exeption(t_data *data, t_exeption action)
 {
 	if (action == NO_ROT)
 	{
-		if (data->scene->obj_selected->obj_type == SP && !data->control_cam)
+		if (data->scene->obj_selected->obj_type == SP && !data->control_cam) //
 			// and light here as well
 			return (1);
 	}
-	else if (action == NO_RES)
+	if (action == NO_RES)
 	{
 		if (data->scene->obj_selected->obj_type == PL || data->control_cam)
 			// add light here
+			return (1);
+	}
+	if (action == NO_HIGHT_RES)
+	{
+		if (data->control_cam || data->scene->obj_selected->obj_type != CY) // add light // should be &&
+			// add light
 			return (1);
 	}
 	return (0);
@@ -219,6 +225,8 @@ int	handle_rotation(t_data *data)
 {
 	t_move_state	*move;
 
+	if (!data)
+		return (0);
 	move = data->move_state;
 	if (is_exeption(data, NO_ROT))
 		return (0);
@@ -248,7 +256,7 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 	t_pl	*pl;
 	t_cy	*cy;
 
-	if (!node || node->obj_type == SP)
+	if (!node)
 		return ;
 	if (node->obj_type == PL)
 	{
@@ -307,19 +315,19 @@ int	handle_resize(t_data *data)
 {
 	t_move_state	*move;
 
-	move = data->move_state;
-	if (!data->scene->obj_selected) // or data->light
+	if (!data->scene) // or data->light
 		return (0);
+	move = data->move_state;
 	if (move->resize_up && !is_exeption(data, NO_RES)
 		&& resize_diameter(data->scene->obj_selected, RESIZE_SPEED))
 		return (1);
 	if (move->resize_down && !is_exeption(data, NO_RES)
 		&& resize_diameter(data->scene->obj_selected, -RESIZE_SPEED))
 		return (1);
-	if (move->height_up && !is_exeption(data, NO_RES)
+	if (move->height_up && !is_exeption(data, NO_HIGHT_RES)
 		&& resize_height(data->scene->obj_selected, RESIZE_SPEED))
 		return (1);
-	if (move->height_down && !is_exeption(data, NO_RES)
+	if (move->height_down && !is_exeption(data, NO_HIGHT_RES)
 		&& resize_height(data->scene->obj_selected, -RESIZE_SPEED))
 		return (1);
 	return (0);
@@ -354,13 +362,63 @@ int	resize_height(t_olist *node, float value)
 {
 	t_cy	*cy;
 
-	if (!node || node->obj_type != CY)
+	if (!node) // || node->obj_type != CY
 		return (0);
 	cy = (t_cy *)node->obj;
 	cy->height += value;
 	if (cy->height < 0.1f)
 		cy->height = 0.1f;
 	return (1);
+}
+
+
+
+void	print_pos(t_scene *scene)
+{
+	t_olist	*node;
+	t_sp	*sp;
+	t_pl	*pl;
+	t_cy	*cy;
+
+	if (!scene)
+		return ;
+	node = scene->obj_selected;
+	if (!node)
+	{
+		printf("No object selected\n");
+		return ;
+	}
+	if (node->obj_type == SP)
+	{
+		sp = (t_sp *)node->obj;
+		printf("Controlling Sphere, coordinates: x=%.2f y=%.2f z=%.2f\n", sp->sp_center.x,
+			sp->sp_center.y, sp->sp_center.z);
+	}
+	else if (node->obj_type == PL)
+	{
+		pl = (t_pl *)node->obj;
+		printf("Controlling Plane, coordinates: x=%.2f y=%.2f z=%.2f\n", pl->normal.origin.x,
+			pl->normal.origin.y, pl->normal.origin.z);
+	}
+	else if (node->obj_type == CY)
+	{
+		cy = (t_cy *)node->obj;
+		printf("Contrlling Cylinder, coordinates: x=%.2f y=%.2f z=%.2f\n", cy->normal.origin.x,
+			cy->normal.origin.y, cy->normal.origin.z);
+	}
+}
+
+void	print_cam_pos(t_scene *scene)
+{
+	if (!scene)
+	{
+		printf("YOLO");
+		return ;
+	}
+	printf("Controlling Cam, origin: x=%.2f y=%.2f z=%.2f", scene->cam.orient.origin.x,
+		scene->cam.orient.origin.y, scene->cam.orient.origin.z);
+	printf(" and direct: x=%.2f y=%.2f z=%.2f\n", scene->cam.orient.direction.x,
+		scene->cam.orient.direction.y, scene->cam.orient.direction.z);
 }
 
 // void	apply_movement(t_data *data)

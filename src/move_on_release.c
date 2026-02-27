@@ -128,7 +128,7 @@ int	is_exeption(t_data *data, t_exeption action)
 			return (1);
 	}
 	if (action == NO_HIGHT_RES)
-		if (data->control_cam || data->scene->obj_selected->obj_type != CY) // add light
+		if (data->control_cam || data->scene->obj_selected->obj_type != CY) // add light // should be &&
 			return (1);
 	return (0);
 }
