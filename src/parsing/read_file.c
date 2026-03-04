@@ -18,17 +18,14 @@ int	parse_input_file(char *file, t_scene *scene)
 		free(line);
 		if (!trimmed)
 		{
-			close(fd);
-			return (error(ERR_ALLOC, NULL), 1);
+			error(ERR_ALLOC, NULL);
+			return (parse_fatal(scene, fd));
 		}
 		scene->err_m = trimmed;
 		check = dispatch(trimmed, scene);
 		free(trimmed);
 		if (check != 0)
-		{
-			close(fd);
-			return (1);
-		}
+			return(parse_fatal(scene, fd));
 		line = get_next_line(fd);
 	}
 	close(fd);
