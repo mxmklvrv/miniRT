@@ -7,9 +7,7 @@ int	trace_color(t_ray ray, t_scene *scene)
 {
 	t_olist	*obj_list;
 	int		color;
-	t_intersection	intersection;
 	int		closest;
-	t_ray	obj_ray;
 
 	color = scene->ambient.colour;
 	closest = -1;

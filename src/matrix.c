@@ -83,7 +83,7 @@ t_matrix	new_inverse_matrix(t_matrix m)
 
 	if (!matrix_is_invertible(m, &determinant))
 	{
-		ft_putendl_fd("Error: can't inverse matrix, determinant is 0, ", STDERR_FILENO);
+		ft_putendl_fd("Error: can't inverse matrix, determinant is 0", STDERR_FILENO);
 		res.ptr = NULL;
 		return (res);
 	}
@@ -117,6 +117,21 @@ t_matrix	new_translation_matrix(float x, float y, float z)
 	return (res);
 }
 
+t_matrix	new_translation_matrix_vec3(t_vec3 v)
+{
+	return (new_translation_matrix(v.x, v.y, v.z));
+}
+
+t_matrix	chain_matrices(t_matrix scaling, t_matrix rotation)
+{
+	t_matrix	chain;
+
+	chain = new_matrix_multiply(scaling, rotation);
+	free_matrix(scaling);
+	free_matrix(rotation);
+	return (chain);
+}
+
 t_matrix	new_scaling_matrix(float x, float y, float z)
 {
 	t_matrix	res;
@@ -129,6 +144,13 @@ t_matrix	new_scaling_matrix(float x, float y, float z)
 	res.ptr[2][2] = z;
 	return (res);
 }
+
+//t_matrix	new_rotation_matrix(t_vec3 v)
+//{
+//	v = vector_normalize(v);
+
+
+//}
 
 t_matrix	new_rotation_x_matrix(float radians)
 {

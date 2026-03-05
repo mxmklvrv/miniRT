@@ -5,13 +5,8 @@
 # define EXIT_SUCCESS 0
 # define FAILURE -1
 # define SUCCESS 0
-<<<<<<< HEAD
-# define WIDTH 400
-# define HEIGHT 400
-=======
 # define WIDTH 500
 # define HEIGHT 500
->>>>>>> origin/maxim/refactoring
 
 # define ERR_MSG "Error"
 # define ERR_AC "Usage: ./miniRT file.rt"

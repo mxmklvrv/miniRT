@@ -21,13 +21,6 @@ typedef struct s_vec3
 	float	w;
 }	t_vec3;
 
-typedef struct s_matrix
-{
-	int		row;
-	int		col;
-	float	**ptr;
-}	t_matrix;
-
 // ray has starting point and direction
 // starting point is a point;
 // direction is a vector.
@@ -36,6 +29,13 @@ typedef struct s_ray
 	t_vec3	origin;
 	t_vec3	direction;
 }	t_ray;
+
+typedef struct s_matrix
+{
+	int		row;
+	int		col;
+	float	**ptr;
+}	t_matrix;
 
 typedef struct s_intersection
 {
@@ -50,44 +50,6 @@ typedef enum e_otype
 	PL
 }	t_otype;
 
-// linked list with objects
-// typedef struct s_olist
-// {
-// 	void			*obj;
-// 	t_otype			obj_type;
-// 	int				obj_id;
-// 	int				colour;
-// 	t_matrix		matrix;
-// 	struct s_olist	*next;
-// }	t_olist;
-
-// typedef struct s_sp
-// {
-// 	t_vec3			sp_center;
-// 	float			diameter;
-// 	int				colour;
-// }	t_sp;
-
-// typedef struct s_pl
-// {
-// 	t_ray			normal;
-// 	int				colour;
-// }	t_pl;
-
-// typedef struct s_cy
-// {
-// 	t_ray			normal;
-// 	float			diameter;
-// 	float			height;
-// 	int				colour;
-// }	t_cy;
-
-typedef struct s_olist
-{
-	t_shape			*shape;
-	struct s_olist	*next;
-}	t_olist;
-
 typedef struct s_shape
 {
 	t_otype			obj_type;
@@ -99,6 +61,12 @@ typedef struct s_shape
 	t_matrix		matrix;
 	int				colour;
 }	t_shape;
+
+typedef struct s_olist
+{
+	t_shape			*shape;
+	struct s_olist	*next;
+}	t_olist;
 
 typedef struct s_cam
 {

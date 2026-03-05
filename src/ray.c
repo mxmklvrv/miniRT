@@ -24,16 +24,16 @@ t_ray	ray_transform(t_ray r, t_matrix m)
 	return (res);
 }
 
-t_ray	ray_transform_inverse(t_ray r, t_matrix m)
-{
-	t_ray		res;
-	t_matrix	inverse;
+//t_ray	ray_transform_inverse(t_ray r, t_matrix m)
+//{
+//	t_ray		res;
+//	t_matrix	inverse;
 
-	if (!m.ptr)
-		return (r);
-	inverse = new_inverse_matrix(m);
-	res.origin = matrix_multiply_by_vector(inverse, r.origin);
-	res.direction = matrix_multiply_by_vector(inverse, r.direction);
-	free_matrix(inverse);
-	return (res);
-}
+//	if (!m.ptr)
+//		return (r);
+//	inverse = new_inverse_matrix(m);
+//	res.origin = matrix_multiply_by_vector(inverse, r.origin);
+//	res.direction = matrix_multiply_by_vector(inverse, r.direction);
+//	free_matrix(inverse);
+//	return (res);
+//}

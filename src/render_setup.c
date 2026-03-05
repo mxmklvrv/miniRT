@@ -1,12 +1,13 @@
 #include "minirt.h"
 
 static void	setup_camera_angle(t_cam *cam);
-static void	setup_object_matrix(t_olist *obj_list);
+static void	setup_objects(t_olist *obj_list);
+static void	setup_object_matrix(t_shape *shape);
 
 void	setup_scene(t_scene *scene)
 {
 	setup_camera_angle(&scene->cam);
-	setup_object_matrix(scene->obj_list);
+	setup_objects(scene->obj_list);
 }
 
 /*
@@ -27,16 +28,37 @@ static void	setup_camera_angle(t_cam *cam)
 	//cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
 }
 
-static void	setup_object_matrix(t_olist *obj_list)
+static void	setup_objects(t_olist *obj_list)
 {
-	t_matrix	scaling;
-
 	while (obj_list)
 	{
-		//scaling = 
-		set_matrix(&obj_list->shape->matrix, new_scaling_matrix(0.5, 1, 1));
+		setup_object_matrix(obj_list->shape);
 		obj_list = obj_list->next;
 	}
+}
+
+static void	setup_object_matrix(t_shape *shape)
+{
+	t_matrix	scaling;
+	//t_matrix	rotation;
+	t_matrix	translate;
+	t_matrix	inverse;
+	t_matrix	chain;
+	float		scale;
+
+	scale = shape->diameter / 2;
+	scaling = new_scaling_matrix(scale, scale, scale);
+	//rotation = new_rotation_matrix(shape->normal.direction);
+	if (shape->obj_type == SP)
+		translate = new_translation_matrix_vec3(shape->center);
+	else if (shape->obj_type == PL || shape->obj_type == CY)
+		translate = new_translation_matrix_vec3(shape->normal.origin);
+	else
+		return ;
+	chain = chain_matrices(translate, scaling);
+	inverse = new_inverse_matrix(chain);
+	free_matrix(chain);
+	set_matrix(&shape->matrix, inverse);
 }
 
 void	set_matrix(t_matrix *old_m, t_matrix new_m)

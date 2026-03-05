@@ -1,30 +1,32 @@
 #include "minirt.h"
 
 static int		get_pixels_to_render(int render_cycles);
-static void		draw_one_render_cycle(t_data *data, int pixels_to_render);
+static void		draw_one_render_cycle(t_data *data, int pixels_to_render, bool *first_cycle);
 static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam);
-static void		fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_render);
+static void		fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_render, bool *first_cycle);
 
 void	draw_scene(t_data *data)
 {
-	int		render_cycle;
-	int		pixels_to_render;
+	const int	render_cycle = 5;
+	int			pixels_to_render;
+	bool		first_cycle;
 
 	setup_scene(data->scene);
-	render_cycle = 5;
 	pixels_to_render = get_pixels_to_render(render_cycle);
-	while (render_cycle > 0)
+	first_cycle = true;
+	while (1)
 	{
-		draw_one_render_cycle(data, render_cycle);
+		draw_one_render_cycle(data, pixels_to_render, &first_cycle);
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
+		printf("Pixels rendered: %i\n", pixels_to_render);
+		if (pixels_to_render == 1)
+			break ;
 		pixels_to_render /= 2;
-		render_cycle--;
-		printf("Cycle: %i\n", render_cycle);
 	}
 	printf("Finished\n");
 }
 
-static void	draw_one_render_cycle(t_data *data, int pixels_to_render)
+static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *first_cycle)
 {
 	t_pixel	pixel;
 	t_ray	ray;
@@ -38,7 +40,7 @@ static void	draw_one_render_cycle(t_data *data, int pixels_to_render)
 		{
 			ray.direction = get_direction_for_position(pixel, data->scene->cam);
 			pixel.color = trace_color(ray, data->scene);
-			fill_pixels_for_cycle(data, pixel, pixels_to_render);
+			fill_pixels_for_cycle(data, pixel, pixels_to_render, first_cycle);
 			pixel.i += pixels_to_render;
 		}
 		pixel.j += pixels_to_render;
@@ -79,7 +81,7 @@ static int	get_pixels_to_render(int render_cycles)
 	return (res);
 }
 
-static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_render)
+static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_render, bool *first_cycle)
 {
 	int	max_i;
 	int	max_j;
@@ -88,9 +90,14 @@ static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_ren
 	max_i = pixel.i + pixels_to_render;
 	max_j = pixel.j + pixels_to_render;
 	start_i = pixel.i;
+	pixels_to_render *= 2;
 	while (pixel.j <= max_j && pixel.j < HEIGHT)
 	{
 		pixel.i = start_i;
+		if (*first_cycle)
+			*first_cycle = false;
+		else if (pixel.i % pixels_to_render == 0 && pixel.j % pixels_to_render == 0)
+			pixel.i++;
 		while (pixel.i <= max_i && pixel.i < WIDTH)
 		{
 			ft_mlx_put_pixel(data, pixel);//TODO: add writting to ppm(?)
