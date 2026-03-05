@@ -1,11 +1,24 @@
 #include "minirt.h"
 
-void	free_scene(t_scene *scene)
+int	parse_error(t_scene *scene, char *msg, char **res, t_shape *shape)
 {
-	free_list(scene->obj_list);
+	if (msg)
+		error(msg, scene->err_m);
+	if (res)
+		free_array(res);
+	if (shape)
+		free(shape);
+	return (1);
+}
+int	parse_fatal(t_scene *scene, int fd)
+{
+	if (fd >= 0)
+		close(fd);
+	free_scene(scene);
+	return (1);
 }
 
-int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
+int	add_to_list(t_olist **list, t_shape *shape)
 {
 	t_olist	*new;
 	t_olist	*temp;
@@ -13,9 +26,7 @@ int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
 	new = malloc(sizeof(t_olist));
 	if (!new)
 		return (1);
-	new->obj_type = type;
-	new->obj = object;
-	new->colour = colour;
+	new->shape = shape;
 	new->next = NULL;
 	if (*list == NULL)
 		*list = new;
@@ -29,6 +40,11 @@ int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
 	return (0);
 }
 
+void	free_scene(t_scene *scene)
+{
+	free_list(scene->obj_list);
+}
+
 void	free_list(t_olist *list)
 {
 	t_olist	*temp;
@@ -38,9 +54,9 @@ void	free_list(t_olist *list)
 	while (list)
 	{
 		temp = list->next;
-		if (list->obj)
-			free(list->obj);
-		free_matrix(list->matrix);
+		if (list->shape)
+			free(list->shape);
+		free_matrix(list->shape->matrix);
 		free(list);
 		list = temp;
 	}
@@ -322,3 +338,44 @@ int	parse_float(char *str, float min, float max, float *res)
 		return (1);
 	return (0);
 }
+
+// int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
+// {
+// 	t_olist	*new;
+// 	t_olist	*temp;
+
+// 	new = malloc(sizeof(t_olist));
+// 	if (!new)
+// 		return (1);
+// 	new->obj_type = type;
+// 	new->obj = object;
+// 	new->colour = colour;
+// 	new->next = NULL;
+// 	if (*list == NULL)
+// 		*list = new;
+// 	else
+// 	{
+// 		temp = *list;
+// 		while (temp->next)
+// 			temp = temp->next;
+// 		temp->next = new;
+// 	}
+// 	return (0);
+// }
+
+// void	free_list(t_olist *list)
+// {
+// 	t_olist	*temp;
+
+// 	if (!list)
+// 		return ;
+// 	while (list)
+// 	{
+// 		temp = list->next;
+// 		if (list->obj)
+// 			free(list->obj);//Add free sphere matrix
+// 		free(list);
+// 		list = temp;
+// 	}
+// 	list = NULL;
+// }

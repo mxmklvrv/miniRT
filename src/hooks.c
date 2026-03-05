@@ -17,13 +17,16 @@ void	set_hooks(t_data *data)
 }
 
 // // on release
-//void	set_hooks(t_data *data)
-//{
-//	data->control_cam = 0;
-//	mlx_hook(data->win, 2, 1L << 0, key_press_hook, data);
-//	mlx_hook(data->win, 3, 1L << 1, key_release_hook, data);
-//	mlx_hook(data->win, ON_DESTROY, 0, mlx_loop_end, data->mlx);
-//}
+
+// void	set_hooks(t_data *data)
+// {
+// 	data->control_cam = 0;
+// 	data->scene->obj_selected = data->scene->obj_list;
+// 	mlx_hook(data->win, ON_PRESS, 1L << 0, key_press_hook, data);
+// 	mlx_hook(data->win, ON_RELEASE, 1L << 1, key_release_hook, data);
+// 	mlx_hook(data->win, ON_DESTROY, 0, mlx_loop_end, data->mlx);
+// }
+
 
 void	redraw_scene(t_data *data)
 {

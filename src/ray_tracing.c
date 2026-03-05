@@ -1,27 +1,7 @@
 #include "minirt.h"
 
+static bool	intersection_is_closest(t_ray ray, t_shape *shape, int *closest);
 static bool	is_closest(t_intersection intersection, int *closest);
-
-/*
- * Returns normalized vector from camera origin to point in 3d coordinates
- */
-t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
-{
-	t_vec3		direction;
-	t_matrix	rotation;
-	float		multiplier;
-
-
-	multiplier = degrees_to_radians(cam.fov) / ft_max(2, WIDTH, HEIGHT);
-	rotation = new_rotation_y_matrix((pixel.i - WIDTH / 2) * multiplier);
-	direction = matrix_multiply_by_vector(rotation, cam.orient.direction);
-	free_matrix(rotation);
-	rotation = new_rotation_x_matrix((pixel.j - HEIGHT / 2) * multiplier);
-	direction = matrix_multiply_by_vector(rotation, direction);
-	free_matrix(rotation);
-	direction = vector_normalize(direction);
-	return (direction);
-}
 
 int	trace_color(t_ray ray, t_scene *scene)
 {
@@ -36,30 +16,29 @@ int	trace_color(t_ray ray, t_scene *scene)
 	obj_list = scene->obj_list;
 	while (obj_list)
 	{
-		obj_ray = ray_transform_inverse(ray, obj_list->matrix);//ray;
-		if (obj_list->obj_type == SP)
-		{
-			intersection = hit_sp(obj_ray, (t_sp *)obj_list->obj);
-			if (is_closest(intersection, &closest))
-				color = obj_list->colour;
-		}
-		else if (obj_list->obj_type == CY)
-		{
-			intersection = hit_cy(obj_ray, (t_cy *)obj_list->obj);
-			if (is_closest(intersection, &closest))
-				color = obj_list->colour;
-		}
-		else if (obj_list->obj_type == PL)
-		{
-			intersection = hit_pl(obj_ray, (t_pl *)obj_list->obj);
-			if (is_closest(intersection, &closest))
-				color = obj_list->colour;
-		}
-		else
-			continue ;
+		if (intersection_is_closest(ray, obj_list->shape, &closest))
+			color = obj_list->shape->colour;
 		obj_list = obj_list->next;
 	}
 	return (color);
+}
+
+static bool	intersection_is_closest(t_ray ray, t_shape *shape, int *closest)
+{
+	t_intersection	intersection;
+
+	ray = ray_transform(ray, shape->matrix);
+	if (shape->obj_type == SP)
+		intersection = hit_sp(ray, shape);
+	else if (shape->obj_type == CY)
+		intersection = hit_cy(ray, shape);
+	else if (shape->obj_type == PL)
+		intersection = hit_pl(ray, shape);
+	else
+		intersection.count = 0;
+	if (is_closest(intersection, closest))
+		return (true);
+	return (false);
 }
 
 static bool	is_closest(t_intersection intersection, int *closest)

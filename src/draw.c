@@ -1,8 +1,9 @@
 #include "minirt.h"
 
-static int	get_pixels_to_render(int render_cycles);
-static void	draw_one_render_cycle(t_data *data, int pixels_to_render);
-static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_render);
+static int		get_pixels_to_render(int render_cycles);
+static void		draw_one_render_cycle(t_data *data, int pixels_to_render);
+static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam);
+static void		fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_render);
 
 void	draw_scene(t_data *data)
 {
@@ -42,6 +43,27 @@ static void	draw_one_render_cycle(t_data *data, int pixels_to_render)
 		}
 		pixel.j += pixels_to_render;
 	}
+}
+
+/*
+ * Returns normalized vector from camera origin to point in 3d coordinates
+ */
+static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
+{
+	t_vec3		direction;
+	t_matrix	rotation;
+	float		multiplier;
+
+
+	multiplier = degrees_to_radians(cam.fov) / ft_max(2, WIDTH, HEIGHT);
+	rotation = new_rotation_y_matrix((pixel.i - WIDTH / 2) * multiplier);
+	direction = matrix_multiply_by_vector(rotation, cam.orient.direction);
+	free_matrix(rotation);
+	rotation = new_rotation_x_matrix((pixel.j - HEIGHT / 2) * multiplier);
+	direction = matrix_multiply_by_vector(rotation, direction);
+	free_matrix(rotation);
+	direction = vector_normalize(direction);
+	return (direction);
 }
 
 static int	get_pixels_to_render(int render_cycles)

@@ -14,6 +14,20 @@
 # include <fcntl.h>
 # include <stdbool.h>
 
+
+// test print functions
+void print_cam_pos(t_scene *scene);
+int is_exeption(t_data *data, t_exeption action);
+void	print_pos(t_scene *scene);
+void	print_vars(t_scene *scene);
+void	print_list(t_scene *scene);
+void	print_vector(t_vec3	vector);
+void	print_ray(t_ray	ray);
+void	print_color(int color);
+void	print_matrix(t_matrix matrix);
+void	print_intersection(t_intersection intersection);
+// test
+
 /* ===== Visuals ============================================================ */
 bool	visuals_loop(t_scene *scene);
 bool	set_visuals(t_data *data);
@@ -30,7 +44,7 @@ void	set_general_keys(int key, t_data *data);
 void	set_translation_keys(int key, t_move_state *move, int value);
 void	set_rotation_keys(int key, t_move_state *move, int value);
 void	set_resize_keys(int key, t_move_state *move, int value);
-void	select_object(t_scene *scene);
+void	select_object(t_data *data);
 void	translate_object(t_olist *node, t_vec3 move_vec);
 void	translate_cam(t_cam *cam, t_vec3 move_vec);
 void	rotate_cam(t_cam *cam, float angle, t_axis axis);
@@ -52,7 +66,7 @@ int	resize_height(t_olist *node, float value);
 // int	handle_rotation(int key, t_data *data);
 // int	handle_resize(int key, t_data *data);
 // void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
-// void	select_object(t_scene *scene);
+// void	select_object(t_data *data);
 // void	translate_object(t_olist *node, t_vec3 move_vec);
 // void	rotate_objects(t_olist *node, float angle, t_axis axis);
 // void	rotate_cam(t_cam *cam, float angle, t_axis axis);
@@ -108,9 +122,9 @@ float		matrix_find_cofactor(t_matrix m, int row, int col);
 bool	    matrix_is_invertible(t_matrix m, float *determinant);
 
 /* ===== Shapes math ======================================================== */
-t_intersection	hit_sp(t_ray cam, t_sp *sp);
-t_intersection	hit_cy(t_ray cam, t_cy *cy);
-t_intersection	hit_pl(t_ray cam, t_pl *pl);
+t_intersection	hit_sp(t_ray cam, t_shape *sp);
+t_intersection	hit_cy(t_ray cam, t_shape *cy);
+t_intersection	hit_pl(t_ray cam, t_shape *pl);
 
 /* ===== Rays =============================================================== */
 t_ray	new_ray(t_vec3 origin, t_vec3 direction);
@@ -130,14 +144,6 @@ int		color_mix(int c1, int c2);
 
 
 
-// test print functions
-void	print_pos(t_scene *scene);
-void	print_vars(t_scene *scene);
-void	print_list(t_scene *scene);
-void	print_vector(t_vec3	vector);
-void	print_ray(t_ray	ray);
-void	print_color(int color);
-void	print_matrix(t_matrix matrix);
-void	print_intersection(t_intersection intersection);
+
 
 #endif

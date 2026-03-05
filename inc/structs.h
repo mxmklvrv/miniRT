@@ -51,13 +51,40 @@ typedef enum e_otype
 }	t_otype;
 
 // linked list with objects
+// typedef struct s_olist
+// {
+// 	void			*obj;
+// 	t_otype			obj_type;
+// 	int				obj_id;
+// 	int				colour;
+// 	t_matrix		matrix;
+// 	struct s_olist	*next;
+// }	t_olist;
+
+// typedef struct s_sp
+// {
+// 	t_vec3			sp_center;
+// 	float			diameter;
+// 	int				colour;
+// }	t_sp;
+
+// typedef struct s_pl
+// {
+// 	t_ray			normal;
+// 	int				colour;
+// }	t_pl;
+
+// typedef struct s_cy
+// {
+// 	t_ray			normal;
+// 	float			diameter;
+// 	float			height;
+// 	int				colour;
+// }	t_cy;
+
 typedef struct s_olist
 {
 	t_shape			*shape;
-	//void			*obj;
-	//t_otype			obj_type;
-	//int				obj_id;
-	//int				colour;
 	struct s_olist	*next;
 }	t_olist;
 
@@ -73,40 +100,19 @@ typedef struct s_shape
 	int				colour;
 }	t_shape;
 
-//typedef struct s_sp
-//{
-//	t_vec3			sp_center;
-//	float			diameter;
-//	int				colour;
-//}	t_sp;
-
-//typedef struct s_pl
-//{
-//	t_ray			normal;
-//	int				colour;
-//}	t_pl;
-
-//typedef struct s_cy
-//{
-//	t_ray			normal;
-//	float			diameter;
-//	float			height;
-//	int				colour;
-//}	t_cy;
-
 typedef struct s_cam
 {
 	t_ray			orient;
 	float			fov;
 	float			pixel_size;
 	t_matrix		matrix;
-}					t_cam;
+}	t_cam;
 
 typedef struct s_ambient
 {
 	float			amb;
 	int				colour;
-}					t_ambient;
+}	t_ambient;
 
 typedef struct s_light
 {
@@ -115,7 +121,7 @@ typedef struct s_light
 	int				color;
 	// struct s_light *next;
 
-}					t_light;
+}	t_light;
 
 // main struct
 typedef struct s_scene
@@ -151,6 +157,13 @@ typedef enum e_axis
 	Y_AXIS,
 	X_AXIS
 }		t_axis;
+
+typedef enum e_exeption
+{
+	NO_ROT,
+	NO_RES,
+	NO_HIGHT_RES
+}	t_exeption;
 
 typedef struct s_move_state
 {

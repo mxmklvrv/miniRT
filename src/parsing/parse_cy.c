@@ -1,54 +1,98 @@
 #include "minirt.h"
 
 // 50.0,0.0,20.6    0.0,0.0,1.0    14.2    21.42   10,0,255
+// !!!!!!!!DIRTY VERSION FOR TEST !!!!!!!!!!!!!!!!!!!!!!
+
+// int	parse_cylinder(char *line, t_scene *scene)
+// {
+// 	char	**res;
+// 	t_cy	*cylinder;
+// 	float	diameter;
+// 	float	height;
+// 	int		colour;
+
+// 	if (count_elements(line) != 5)
+// 		return (error("Invalid specs for cylinder", scene->err_m), 1);
+// 	cylinder = malloc(sizeof(t_cy));
+// 	if (!cylinder)
+// 		return (error(ERR_ALLOC, NULL), 1);
+// 	res = ft_split(line, ' ');
+// 	if (!res)
+// 		return (error(ERR_ALLOC, NULL), free(cylinder), 1);
+// 	if (parse_vector(res[0], &cylinder->normal.origin, -100.0f, 100.0f) == 1)
+// 		return (error("Invalid coordinates of the center of the cylinder",
+// 				scene->err_m), free(cylinder), free_array(res), 1);
+// 	if (parse_vector(res[1], &cylinder->normal.direction, 0.0f, 1.0f) == 1)
+// 		return (error("Invalid coordinates of the center of the cylinder",
+// 				scene->err_m), free(cylinder), free_array(res), 1);
+// 	diameter = 0.0f;
+// 	height = 0.0f;
+// 	colour = 0;
+// 	if (parse_float(res[2], 0.0f, 100.0f, &diameter) == 1)
+// 		return (error("Invalid cylinder diameter", scene->err_m),
+// 			free(cylinder), free_array(res), 1);
+// 	if (parse_float(res[3], 0.0f, 100.0f, &height) == 1)
+// 		return (error("Invalid cylinder height", scene->err_m), free(cylinder),
+// 			free_array(res), 1);
+// 	if (parse_rgb(res[4], &colour) == 1)
+// 		return (error("Invalid cylinder colour", scene->err_m), free(cylinder),
+// 			free_array(res), 1);
+// 	cylinder->diameter = diameter;
+// 	cylinder->height = height;
+// 	cylinder->colour = colour;
+// 	if (add_to_list(&scene->obj_list, cylinder, CY, cylinder->colour) == 1)
+// 		return (error("Failed adding cylinder to the list", scene->err_m),
+// 			free(cylinder), free_array(res), 1);
+// 	printf("CYLINDR\n");
+// 	printf("cy cent %f %f %f\n", cylinder->normal.origin.x,
+//		cylinder->normal.origin.y,
+// 		cylinder->normal.origin.z);
+// 	printf("norm %f %f %f\n", cylinder->normal.direction.x,
+//		cylinder->normal.direction.y,
+// 		cylinder->normal.direction.z);
+// 	printf("diam %f\n", cylinder->diameter);
+// 	printf("height %f", cylinder->height);
+// 	printf("color %d\n\n", cylinder->colour);
+// 	free_array(res);
+// 	return (0);
+// }
+
+// new version for shape
 int	parse_cylinder(char *line, t_scene *scene)
 {
 	char	**res;
-	t_cy	*cylinder;
-	float	diameter;
-	float	height;
-	int		colour;
+	t_shape	*shape;
 
 	if (count_elements(line) != 5)
 		return (error("Invalid specs for cylinder", scene->err_m), 1);
-	cylinder = malloc(sizeof(t_cy));
-	if (!cylinder)
+	shape = ft_calloc(1, sizeof(t_shape));
+	if (!shape)
 		return (error(ERR_ALLOC, NULL), 1);
 	res = ft_split(line, ' ');
 	if (!res)
-		return (error(ERR_ALLOC, NULL), free(cylinder), 1);
-	if (parse_vector(res[0], &cylinder->normal.origin, -100.0f, 100.0f) == 1)
-		return (error("Invalid coordinates of the center of the cylinder",
-				scene->err_m), free(cylinder), free_array(res), 1);
-	if (parse_vector(res[1], &cylinder->normal.direction, 0.0f, 1.0f) == 1)
-		return (error("Invalid coordinates of the center of the cylinder",
-				scene->err_m), free(cylinder), free_array(res), 1);
-	diameter = 0.0f;
-	height = 0.0f;
-	colour = 0;
-	if (parse_float(res[2], 0.0f, 100.0f, &diameter) == 1)
-		return (error("Invalid cylinder diameter", scene->err_m),
-			free(cylinder), free_array(res), 1);
-	if (parse_float(res[3], 0.0f, 100.0f, &height) == 1)
-		return (error("Invalid cylinder height", scene->err_m), free(cylinder),
-			free_array(res), 1);
-	if (parse_rgb(res[4], &colour) == 1)
-		return (error("Invalid cylinder colour", scene->err_m), free(cylinder),
-			free_array(res), 1);
-	cylinder->diameter = diameter;
-	cylinder->height = height;
-	cylinder->colour = colour;
-	if (add_to_list(&scene->obj_list, cylinder, CY, cylinder->colour) == 1)
+		return (error(ERR_ALLOC, NULL), free(shape), 1);
+	if (init_cylinder(shape, res, scene))
+		return (free(shape), free_array(res), 1);
+	if (add_to_list(&scene->obj_list, shape) == 1)
 		return (error("Failed adding cylinder to the list", scene->err_m),
-			free(cylinder), free_array(res), 1);
-	printf("CYLINDR\n");
-	printf("cy cent %f %f %f\n", cylinder->normal.origin.x, cylinder->normal.origin.y,
-		cylinder->normal.origin.z);
-	printf("norm %f %f %f\n", cylinder->normal.direction.x, cylinder->normal.direction.y,
-		cylinder->normal.direction.z);
-	printf("diam %f\n", cylinder->diameter);
-	printf("height %f", cylinder->height);
-	printf("color %d\n\n", cylinder->colour);
+			free(shape), free_array(res), 1);
 	free_array(res);
+	return (0);
+}
+
+int	init_cylinder(t_shape *shape, char **res, t_scene *scene)
+{
+	shape->obj_type = CY;
+	if (parse_vector(res[0], &shape->normal.origin, -100.0f, 100.0f) == 1)
+		return (error("Invalid cylinder center", scene->err_m), 1);
+	if (parse_vector(res[1], &shape->normal.direction, -1.0f, 1.0f) == 1)
+		return (error("Invalid cylinder axis", scene->err_m), 1);
+	// should i normilize it here ?
+	if (parse_float(res[2], 0.0f, 100.0f, &shape->diameter) == 1)
+		return (error("Invalid cylinder diameter", scene->err_m), 1);
+	if (parse_float(res[3], 0.0f, 100.0f, &shape->height) == 1)
+		return (error("Invalid cylinder height", scene->err_m), 1);
+	if (parse_rgb(res[4], &shape->colour) == 1)
+		return (error("Invalid cylinder colour", scene->err_m), 1);
 	return (0);
 }
