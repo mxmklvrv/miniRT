@@ -17,8 +17,8 @@ int	rt_file_extension(char *file)
 int	confirm_input(int ac, char **av)
 {
 	if (ac != 2)
-		return (error(ERR_AC, NULL), 1);
+		return (error_return(ERR_AC, NULL));
 	if (rt_file_extension(av[1]) == 1)
-		return (error(ERR_EXT, av[1]), 1);
+		return (error_return(ERR_EXT, av[1]));
 	return (0);
 }

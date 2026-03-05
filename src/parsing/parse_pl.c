@@ -47,31 +47,31 @@ int	parse_plane(char *line, t_scene *scene)
 	t_shape *shape;
 
 	if (count_elements(line) != 3)
-		return (error("Invalid specs for plane", scene->err_m), 1);
+		return (error_return(ERR_PL_SPEC, scene->err_m));
 	shape = ft_calloc(1, sizeof(t_shape));
 	if (!shape)
 		return (error(ERR_ALLOC, NULL), 1);
 	res = ft_split(line, ' ');
 	if (!res)
-		return (error(ERR_ALLOC, NULL), free(shape), 1);
+		return (parse_error(scene, ERR_ALLOC, NULL, shape));
 	if(init_plane(shape, res, scene))
-		return (free(shape), free_array(res), 1);
+		return (parse_error(scene, NULL, res, shape));
 	if (add_to_list(&scene->obj_list, shape) == 1)
-		return (error("Failed adding plane to the list", scene->err_m),
-			free(shape), free_array(res), 1);
-	return (free_array(res), 0);
+		return (parse_error(scene, ERR_PL_LIST, res, shape));
+    free_array(res);
+	return (0);
 }
 
 int init_plane(t_shape *shape, char **res, t_scene *scene)
 {
 	shape->obj_type = PL;
 	if (parse_vector(res[0], &shape->normal.origin, -100.0f, 100.0f) == 1)
-		return (error("Invalid plane point", scene->err_m), 1);
+		return (error_return(ERR_PL_POINT, scene->err_m));
 	if (parse_vector(res[1], &shape->normal.direction, -1.0f, 1.0f) == 1)
-		return (error("Invalid plane normal", scene->err_m), 1);
+		return (error_return(ERR_PL_NORM, scene->err_m));
 	// normilize direction here ?
 	if (parse_rgb(res[2], &shape->colour) == 1)
-		return (error("Invalid plane colour", scene->err_m), 1);
+		return (error_return(ERR_PL_COLR, scene->err_m));
 	return (0);
 }
 

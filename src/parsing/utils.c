@@ -3,7 +3,7 @@
 int	parse_error(t_scene *scene, char *msg, char **res, t_shape *shape)
 {
 	if (msg)
-		error(msg, scene->err_m);
+		error_msg(msg, scene->err_m);
 	if (res)
 		free_array(res);
 	if (shape)
@@ -16,6 +16,41 @@ int	parse_fatal(t_scene *scene, int fd)
 		close(fd);
 	free_scene(scene);
 	return (1);
+}
+
+int	error_return(char *msg, char *line)
+{
+	error_msg(msg, line);
+    return (1)
+}
+void error_msg(char *msg, char *line)
+{
+    ft_putendl_fd(ERR_MSG, 2);
+	ft_putendl_fd(msg, 2);
+	if (line != NULL) // might be a problem here 
+		ft_printf("Problem in line: %s\n", line);
+}
+
+void	free_scene(t_scene *scene)
+{
+	free_list(scene->obj_list);
+	scene->obj_list = NULL;
+}
+
+void	free_list(t_olist *list)
+{
+	t_olist	*temp;
+
+	if (!list)
+		return ;
+	while (list)
+	{
+		temp = list->next;
+		if (list->shape)
+			free(list->shape); // Add free sphere matrix when implemented
+		free(list);
+		list = temp;
+	}
 }
 
 int	add_to_list(t_olist **list, t_shape *shape)
@@ -40,27 +75,7 @@ int	add_to_list(t_olist **list, t_shape *shape)
 	return (0);
 }
 
-void	free_scene(t_scene *scene)
-{
-	free_list(scene->obj_list);
-}
 
-void	free_list(t_olist *list)
-{
-	t_olist	*temp;
-
-	if (!list)
-		return ;
-	while (list)
-	{
-		temp = list->next;
-		if (list->shape)
-			free(list->shape); // Add free sphere matrix
-		free(list);
-		list = temp;
-	}
-	list = NULL;
-}
 
 t_vec3	creat_vec3(float x, float y, float z)
 {
@@ -84,13 +99,7 @@ void	free_array(char **arr)
 	free(arr);
 }
 
-void	error(char *msg, char *line)
-{
-	ft_putendl_fd(ERR_MSG, 2);
-	ft_putendl_fd(msg, 2);
-	if (line != NULL)
-		ft_printf("Problem in line: %s\n", line);
-}
+
 
 // checks how many elements in the string
 int	count_elements(char *line)

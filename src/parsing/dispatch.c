@@ -40,5 +40,5 @@ int	dispatch(char *line, t_scene *scene)
 		return (parse_cylinder(line, scene));
 	}
 	else
-		return (error("Unknown char detected in .rt", scene->err_m), 1);
+		return (error_return(ERR_WRONG_CHAR, scene->err_m));
 }

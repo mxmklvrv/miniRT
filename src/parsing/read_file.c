@@ -10,7 +10,7 @@ int	parse_input_file(char *file, t_scene *scene)
 	check = 1;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (error("cannot open file for reading", NULL), 1);
+		return (error_return("cannot open file for reading", NULL));
 	line = get_next_line(fd);
 	while (line)
 	{
@@ -18,7 +18,7 @@ int	parse_input_file(char *file, t_scene *scene)
 		free(line);
 		if (!trimmed)
 		{
-			error(ERR_ALLOC, NULL);
+			error_msg(ERR_ALLOC, NULL); // add to ft_strtrim this line
 			return (parse_fatal(scene, fd));
 		}
 		scene->err_m = trimmed;
@@ -31,3 +31,7 @@ int	parse_input_file(char *file, t_scene *scene)
 	close(fd);
 	return (0);
 }
+
+
+
+
