@@ -12,6 +12,45 @@
 # define ERR_AC "Usage: ./miniRT file.rt"
 # define ERR_EXT "Wrong file extension, should be file.rt"
 # define ERR_ALLOC "Memory allocation failed"
+# define ERR_WRONG_CHAR "Unknown char detected in .rt"
+
+# define ERR_PL_SPEC "Invalid specs for plane"
+# define ERR_PL_LIST "Failed adding plane to the list"
+# define ERR_PL_POINT "Invalid plane point"
+# define ERR_PL_NORM "Invalid plane normal"
+# define ERR_PL_COLR "Invalid plane colour"
+
+# define ERR_SP_SPEC "Invalid specs for sphere"
+# define ERR_SP_LIST "Failed adding sphere to the list"
+# define ERR_SP_CNTR "Invalid sphere center"
+# define ERR_SP_DIAM "Invalid sphere diameter"
+# define ERR_SP_COLR "Invalid sphere colour"
+
+# define ERR_CY_SPEC "Invalid specs for cylinder"
+# define ERR_CY_LIST "Failed adding cylinder to the list"
+# define ERR_CY_CNTR "Invalid cylinder center"
+# define ERR_CY_AXIS "Invalid cylinder axis"
+# define ERR_CY_DIAM"Invalid cylinder diameter"
+# define ERR_CY_HGHT "Invalid cylinder height"
+# define ERR_CY_COLR "Invalid cylinder colour"
+
+# define ERR_CAM_QTY "Only 1 camera is alowed"
+# define ERR_CAM_SPEC "Invalid specs for camera"
+# define ERR_CAM_VIEW "Invalid camera view point"
+# define ERR_CAM_ORIT "Invalid camera orientation"
+# define ERR_CAM_FOV "Invalid camera FOV"
+
+# define ERR_AMB_QTY "Only 1 Ambient is allowed"
+# define ERR_AMB_SPEC "Invalid Ambient specs"
+# define ERR_AMB_RATI "Invalid Ambient ratio"
+# define ERR_AMB_COLR "Invalid Ambient colour"
+
+# define ERR_LIGT_QTY "Only 1 light is allowed"
+# define ERR_LIGT_SPEC "Invalid light specs"
+# define ERR_LIGT_POS "Invalid light position"
+# define ERR_LIGT_BRIT "Invalid light brightness"
+# define ERR_LIGT_COLOR "Invalid light colour"
+
 
 # define ESCAPE 0xFF1B
 # define ON_PRESS 2
