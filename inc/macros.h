@@ -13,6 +13,7 @@
 # define ERR_EXT "Wrong file extension, should be file.rt"
 # define ERR_ALLOC "Memory allocation failed"
 # define ERR_WRONG_CHAR "Unknown char detected in .rt"
+# define ERR_OPEN "Failed open file for reading"
 
 # define ERR_PL_SPEC "Invalid specs for plane"
 # define ERR_PL_LIST "Failed adding plane to the list"
@@ -30,7 +31,7 @@
 # define ERR_CY_LIST "Failed adding cylinder to the list"
 # define ERR_CY_CNTR "Invalid cylinder center"
 # define ERR_CY_AXIS "Invalid cylinder axis"
-# define ERR_CY_DIAM"Invalid cylinder diameter"
+# define ERR_CY_DIAM "Invalid cylinder diameter"
 # define ERR_CY_HGHT "Invalid cylinder height"
 # define ERR_CY_COLR "Invalid cylinder colour"
 
@@ -50,6 +51,8 @@
 # define ERR_LIGT_POS "Invalid light position"
 # define ERR_LIGT_BRIT "Invalid light brightness"
 # define ERR_LIGT_COLOR "Invalid light colour"
+
+
 
 
 # define ESCAPE 0xFF1B
