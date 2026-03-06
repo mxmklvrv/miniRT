@@ -48,7 +48,7 @@ static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *firs
 }
 
 /*
- * Returns normalized vector from camera origin to point in 3d coordinates
+ * Returns normalized vector from camera origin to pixel in 3d coordinates
  */
 static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 {
@@ -106,4 +106,3 @@ static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_ren
 		pixel.j++;
 	}
 }
-
