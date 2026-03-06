@@ -50,31 +50,31 @@ int	parse_sphere(char *line, t_scene *scene)
 	t_shape	*shape;
 
 	if (count_elements(line) != 3)
-		return (error("Invalid specs for sphere", scene->err_m), 1);
+		return (error_return(ERR_SP_SPEC, scene->err_m));
 	shape = ft_calloc(1, sizeof(t_shape));
 	if (!shape)
-		return (error(ERR_ALLOC, NULL), 1);
+		return (error_return(ERR_ALLOC, NULL));
 	res = ft_split(line, ' ');
 	if (!res)
-		return (error(ERR_ALLOC, NULL), free(shape), 1);
+		return (parse_error(scene, ERR_ALLOC, NULL, shape));
 	if(init_sphere(shape, res, scene))
-		return (free(shape), free_array(res), 1);
-	if (add_to_list(&scene->obj_list, shape) == 1)
-		return (error("Failed adding sphere to the list", scene->err_m),
-			free_array(res), free(shape), 1);
-	return (free_array(res), 0);
+		return (parse_error(scene, NULL, res, shape));
+	if (add_to_list(scene, shape) == 1)
+		return (parse_error(scene, ERR_SP_LIST, res, shape));
+    free_array(res);
+	return (0);
 }
 
 int init_sphere(t_shape *shape, char **res, t_scene *scene)
 {
 	shape->obj_type = SP;
 	if (parse_vector(res[0], &shape->center, -100.0f, 100.0f))
-		return (error("Invalid sphere center", scene->err_m), 1);
+		return (error_return(ERR_SP_CNTR, scene->err_m));
 	shape->center.w = 1;
 	if (parse_float(res[1], 0.0f, 100.0f, &shape->diameter))
-		return (error("Invalid sphere diameter", scene->err_m), 1);
+		return (error_return(ERR_SP_DIAM, scene->err_m));
 	if (parse_rgb(res[2], &shape->colour))
-		return (error("Invalid sphere colour", scene->err_m), 1);
+		return (error_return(ERR_SP_COLR, scene->err_m));
 	return (0);
 }
 

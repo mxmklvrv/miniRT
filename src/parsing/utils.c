@@ -3,7 +3,7 @@
 int	parse_error(t_scene *scene, char *msg, char **res, t_shape *shape)
 {
 	if (msg)
-		error(msg, scene->err_m);
+		error_msg(msg, scene->err_m);
 	if (res)
 		free_array(res);
 	if (shape)
@@ -18,31 +18,23 @@ int	parse_fatal(t_scene *scene, int fd)
 	return (1);
 }
 
-int	add_to_list(t_olist **list, t_shape *shape)
+int	error_return(char *msg, char *line)
 {
-	t_olist	*new;
-	t_olist	*temp;
-
-	new = malloc(sizeof(t_olist));
-	if (!new)
-		return (1);
-	new->shape = shape;
-	new->next = NULL;
-	if (*list == NULL)
-		*list = new;
-	else
-	{
-		temp = *list;
-		while (temp->next)
-			temp = temp->next;
-		temp->next = new;
-	}
-	return (0);
+	error_msg(msg, line);
+    return (1);
+}
+void error_msg(char *msg, char *line)
+{
+    ft_putendl_fd(ERR_MSG, 2);
+	ft_putendl_fd(msg, 2);
+	if (line != NULL) 
+		ft_printf("Problem in line: %s\n", line);
 }
 
 void	free_scene(t_scene *scene)
 {
 	free_list(scene->obj_list);
+	scene->obj_list = NULL;
 }
 
 void	free_list(t_olist *list)
@@ -60,7 +52,29 @@ void	free_list(t_olist *list)
 		free(list);
 		list = temp;
 	}
-	list = NULL;
+}
+
+int	add_to_list(t_scene *scene, t_shape *shape)
+{
+	t_olist	*new;
+	t_olist	*temp;
+
+	new = malloc(sizeof(t_olist));
+	if (!new)
+		return (1);
+    shape->obj_id = scene->next_obj_id++;
+	new->shape = shape;
+	new->next = NULL;
+	if (scene->obj_list == NULL)
+		scene->obj_list = new;
+	else
+	{
+		temp = scene->obj_list;
+		while (temp->next)
+			temp = temp->next;
+		temp->next = new;
+	}
+	return (0);
 }
 
 t_vec3	creat_vec3(float x, float y, float z)
@@ -83,14 +97,6 @@ void	free_array(char **arr)
 	while (arr[i])
 		free(arr[i++]);
 	free(arr);
-}
-
-void	error(char *msg, char *line)
-{
-	ft_putendl_fd(ERR_MSG, 2);
-	ft_putendl_fd(msg, 2);
-	if (line != NULL)
-		ft_printf("Problem in line: %s\n", line);
 }
 
 // checks how many elements in the string

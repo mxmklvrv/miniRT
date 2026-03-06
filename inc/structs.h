@@ -101,6 +101,7 @@ typedef struct s_scene
 	int				qt_ambiant;
 	int				qt_cam;
 	int				qt_light;
+    int             next_obj_id;
 	char			*err_m;
 	t_olist			*obj_selected;
 }					t_scene;

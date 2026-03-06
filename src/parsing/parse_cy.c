@@ -64,18 +64,17 @@ int	parse_cylinder(char *line, t_scene *scene)
 	t_shape	*shape;
 
 	if (count_elements(line) != 5)
-		return (error("Invalid specs for cylinder", scene->err_m), 1);
+		return (error_return(ERR_CY_SPEC, scene->err_m));
 	shape = ft_calloc(1, sizeof(t_shape));
 	if (!shape)
-		return (error(ERR_ALLOC, NULL), 1);
+		return (error_return(ERR_ALLOC, NULL));
 	res = ft_split(line, ' ');
 	if (!res)
-		return (error(ERR_ALLOC, NULL), free(shape), 1);
+		return (parse_error(scene, ERR_ALLOC, NULL, shape));
 	if (init_cylinder(shape, res, scene))
-		return (free(shape), free_array(res), 1);
-	if (add_to_list(&scene->obj_list, shape) == 1)
-		return (error("Failed adding cylinder to the list", scene->err_m),
-			free(shape), free_array(res), 1);
+		return (parse_error(scene, NULL, res, shape));
+	if (add_to_list(scene, shape) == 1)
+		return (parse_error(scene, ERR_CY_LIST, res, shape));
 	free_array(res);
 	return (0);
 }
@@ -84,15 +83,15 @@ int	init_cylinder(t_shape *shape, char **res, t_scene *scene)
 {
 	shape->obj_type = CY;
 	if (parse_vector(res[0], &shape->normal.origin, -100.0f, 100.0f) == 1)
-		return (error("Invalid cylinder center", scene->err_m), 1);
+		return (error_return(ERR_CY_CNTR, scene->err_m));
 	if (parse_vector(res[1], &shape->normal.direction, -1.0f, 1.0f) == 1)
-		return (error("Invalid cylinder axis", scene->err_m), 1);
+		return (error_return(ERR_CY_AXIS, scene->err_m));
 	// should i normilize it here ?
 	if (parse_float(res[2], 0.0f, 100.0f, &shape->diameter) == 1)
-		return (error("Invalid cylinder diameter", scene->err_m), 1);
+		return (error_return(ERR_CY_DIAM, scene->err_m));
 	if (parse_float(res[3], 0.0f, 100.0f, &shape->height) == 1)
-		return (error("Invalid cylinder height", scene->err_m), 1);
+		return (error_return(ERR_CY_HGHT, scene->err_m));
 	if (parse_rgb(res[4], &shape->colour) == 1)
-		return (error("Invalid cylinder colour", scene->err_m), 1);
+		return (error_return(ERR_CY_COLR, scene->err_m));
 	return (0);
 }

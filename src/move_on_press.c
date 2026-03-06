@@ -112,20 +112,17 @@ void	select_object(t_data *data)
 // need to create move bector with new_vec
 void	translate_object(t_olist *node, t_vec3 move_vec)
 {
-	if (!node)
+	t_shape *obj;
+
+	if (!node || !node->shape)
 		return ;
-	if (node->shape->obj_type == SP)
-	{
-		node->shape->center = vector_add(node->shape->center, move_vec);
-	}
-	else if (node->shape->obj_type == PL)
-	{
-		node->shape->normal.origin = vector_add(node->shape->normal.origin, move_vec);
-	}
-	else if (node->shape->obj_type == CY)
-	{
-		node->shape->normal.origin = vector_add(node->shape->normal.origin, move_vec);
-	}
+    obj = node->shape;
+	if (obj->obj_type == SP)
+		obj->center = vector_add(obj->center, move_vec);
+	else if (obj->obj_type == PL)
+		obj->normal.origin = vector_add(obj->normal.origin , move_vec);
+	else if (obj->obj_type == CY)
+		obj->normal.origin = vector_add(obj->normal.origin, move_vec);
 }
 
 void	translate_cam(t_cam *cam, t_vec3 move_vec)
@@ -242,6 +239,7 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 		rotate_objects(data->scene->obj_selected, angle, axis);
 }
 
+/*
 void	rotate_objects(t_olist *node, float angle, t_axis axis)
 {
 	if (!node)
@@ -264,6 +262,23 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 			node->shape->normal.direction = vector_normalize(rotate_x(node->shape->normal.direction,
 						angle));
 	}
+}
+*/
+
+void	rotate_objects(t_olist *node, float angle, t_axis axis)
+{
+	t_shape *obj;
+
+	if (!node || !node->shape)
+		return ;
+    obj = node->shape;
+    if(obj->obj_type == PL || obj->obj_type == CY)
+    {
+        if(axis == Y_AXIS)
+            obj->normal.direction = vector_normalize(rotate_y(obj->normal.direction, angle));
+        else
+            obj->normal.direction = vector_normalize(rotate_x(obj->normal.direction, angle));
+    }
 }
 
 t_vec3	rotate_y(t_vec3 current, float angle)
@@ -320,6 +335,7 @@ int	handle_resize(t_data *data)
 }
 
 // resizing diam of sphere and cy
+/*
 int	resize_diameter(t_olist *node, float value)
 {
 	if (!node)
@@ -338,7 +354,25 @@ int	resize_diameter(t_olist *node, float value)
 	}
 	return (1);
 }
+*/
 
+int	resize_diameter(t_olist *node, float value)
+{
+	t_shape *obj;
+
+	if (!node || !node->shape)
+		return (0);
+    obj = node->shape;
+    if(obj->obj_type == SP || obj->obj_type == CY)
+    {
+        obj->diameter += value;
+        if(obj->diameter < 0.1f)
+            obj->diameter = 0.1f;
+        return (1);
+    }
+    return (0);
+}
+/*
 int	resize_height(t_olist *node, float value)
 {
 	if (!node) // || node->obj_type != CY
@@ -347,6 +381,93 @@ int	resize_height(t_olist *node, float value)
 	if (node->shape->height < 0.1f)
 		node->shape->height = 0.1f;
 	return (1);
+}
+*/
+
+int	resize_height(t_olist *node, float value)
+{
+	t_shape *obj;
+
+	if (!node || !node->shape) 
+		return (0);
+    obj = node->shape;
+	obj->height += value;
+	if (obj->height < 0.1f)
+		obj->height = 0.1f;
+	return (1);
+}
+/*
+void	print_pos(t_scene *scene)
+{
+	t_olist	*node;
+	t_sp	*sp;
+	t_pl	*pl;
+	t_cy	*cy;
+
+	if (!scene)
+		return ;
+	node = scene->obj_selected;
+	if (!node)
+	{
+		printf("No object selected\n");
+		return ;
+	}
+	if (node->obj_type == SP)
+	{
+		sp = (t_sp *)node->obj;
+		printf("Controlling Sphere, coordinates: x=%.2f y=%.2f z=%.2f\n", sp->sp_center.x,
+			sp->sp_center.y, sp->sp_center.z);
+	}
+	else if (node->obj_type == PL)
+	{
+		pl = (t_pl *)node->obj;
+		printf("Controlling Plane, coordinates: x=%.2f y=%.2f z=%.2f\n", pl->normal.origin.x,
+			pl->normal.origin.y, pl->normal.origin.z);
+	}
+	else if (node->obj_type == CY)
+	{
+		cy = (t_cy *)node->obj;
+		printf("Contrlling Cylinder, coordinates: x=%.2f y=%.2f z=%.2f\n", cy->normal.origin.x,
+			cy->normal.origin.y, cy->normal.origin.z);
+	}
+}
+*/
+void	print_pos(t_scene *scene)
+{
+	t_shape	*obj;
+
+	if (!scene || !scene->obj_selected)
+	{
+		printf("No object selected\n");
+		return ;
+	}
+
+	obj = scene->obj_selected->shape;
+
+	if (obj->obj_type == SP)
+		printf("Controlling Sphere: x=%.2f y=%.2f z=%.2f\n",
+			obj->center.x, obj->center.y, obj->center.z);
+
+	else if (obj->obj_type == PL)
+		printf("Controlling Plane: x=%.2f y=%.2f z=%.2f\n",
+			obj->normal.origin.x, obj->normal.origin.y, obj->normal.origin.z);
+
+	else if (obj->obj_type == CY)
+		printf("Controlling Cylinder: x=%.2f y=%.2f z=%.2f\n",
+			obj->normal.origin.x, obj->normal.origin.y, obj->normal.origin.z);
+}
+
+void	print_cam_pos(t_scene *scene)
+{
+	if (!scene)
+	{
+		printf("YOLO");
+		return ;
+	}
+	printf("Controlling Cam, origin: x=%.2f y=%.2f z=%.2f", scene->cam.orient.origin.x,
+		scene->cam.orient.origin.y, scene->cam.orient.origin.z);
+	printf(" and direct: x=%.2f y=%.2f z=%.2f\n", scene->cam.orient.direction.x,
+		scene->cam.orient.direction.y, scene->cam.orient.direction.z);
 }
 
 // void	apply_movement(t_data *data)
