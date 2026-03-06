@@ -21,13 +21,13 @@ int	parse_fatal(t_scene *scene, int fd)
 int	error_return(char *msg, char *line)
 {
 	error_msg(msg, line);
-    return (1)
+    return (1);
 }
 void error_msg(char *msg, char *line)
 {
     ft_putendl_fd(ERR_MSG, 2);
 	ft_putendl_fd(msg, 2);
-	if (line != NULL) // might be a problem here 
+	if (line != NULL) 
 		ft_printf("Problem in line: %s\n", line);
 }
 
@@ -53,7 +53,7 @@ void	free_list(t_olist *list)
 	}
 }
 
-int	add_to_list(t_olist **list, t_shape *shape)
+int	add_to_list(t_scene *scene, t_shape *shape)
 {
 	t_olist	*new;
 	t_olist	*temp;
@@ -61,21 +61,20 @@ int	add_to_list(t_olist **list, t_shape *shape)
 	new = malloc(sizeof(t_olist));
 	if (!new)
 		return (1);
+    shape->obj_id = scene->next_obj_id++;
 	new->shape = shape;
 	new->next = NULL;
-	if (*list == NULL)
-		*list = new;
+	if (scene->obj_list == NULL)
+		scene->obj_list = new;
 	else
 	{
-		temp = *list;
+		temp = scene->obj_list;
 		while (temp->next)
 			temp = temp->next;
 		temp->next = new;
 	}
 	return (0);
 }
-
-
 
 t_vec3	creat_vec3(float x, float y, float z)
 {

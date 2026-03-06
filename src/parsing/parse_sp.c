@@ -59,7 +59,7 @@ int	parse_sphere(char *line, t_scene *scene)
 		return (parse_error(scene, ERR_ALLOC, NULL, shape));
 	if(init_sphere(shape, res, scene))
 		return (parse_error(scene, NULL, res, shape));
-	if (add_to_list(&scene->obj_list, shape) == 1)
+	if (add_to_list(scene, shape) == 1)
 		return (parse_error(scene, ERR_SP_LIST, res, shape));
     free_array(res);
 	return (0);
