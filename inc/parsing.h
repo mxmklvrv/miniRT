@@ -1,6 +1,11 @@
 #ifndef PARSING_H
 # define PARSING_H
 
+
+// test
+void	print_scene(t_scene *scene);
+
+
 int	add_to_list(t_scene *scene, t_shape *shape); // new version
 // int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
 void	free_list(t_olist *list);

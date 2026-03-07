@@ -82,23 +82,6 @@ typedef enum e_otype
 // 	int				colour;
 // }	t_cy;
 
-typedef struct s_olist
-{
-	t_shape			*shape;
-	struct s_olist	*next;
-}	t_olist;
-
-typedef struct s_shape
-{
-	t_otype			obj_type;
-	int				obj_id;
-	t_vec3			center;//sp
-	t_ray			normal;//pl, cy
-	float			diameter;//sp, cy
-	float			height;//cy
-	t_matrix		matrix;
-	int				colour;
-}	t_shape;
 
 
 typedef struct s_cam
@@ -123,6 +106,24 @@ typedef struct s_light
 	// struct s_light *next;
 
 }					t_light;
+
+typedef struct s_shape
+{
+	t_otype			obj_type;
+	int				obj_id;
+	t_vec3			center;//sp
+	t_ray			normal;//pl, cy
+	float			diameter;//sp, cy
+	float			height;//cy
+	t_matrix		matrix;
+	int				colour;
+}	t_shape;
+typedef struct s_olist
+{
+	t_shape			*shape;
+	struct s_olist	*next;
+}	t_olist;
+
 
 // main struct
 typedef struct s_scene
@@ -184,5 +185,7 @@ typedef struct s_move_state
 	int	height_up;
 	int	height_down;
 }		t_move_state;
+
+
 
 #endif
