@@ -128,7 +128,6 @@ void	translate_object(t_olist *node, t_vec3 move_vec)
 void	translate_cam(t_cam *cam, t_vec3 move_vec)
 {
 	cam->orient.origin = vector_add(cam->orient.origin, move_vec);
-	setup_camera_angle(cam);
 }
 
 void	rotate_cam(t_cam *cam, float angle, t_axis axis)
@@ -139,7 +138,6 @@ void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 	else if (axis == X_AXIS)
 		cam->orient.direction = vector_normalize(rotate_x(cam->orient.direction,
 					angle));
-	setup_camera_angle(cam);
 }
 
 void	apply_movement(t_data *data)
@@ -154,7 +152,7 @@ void	apply_movement(t_data *data)
 	if (handle_resize(data))
 		need_redraw = 1;
 	if (need_redraw)
-		redraw_scene(data, data->scene);
+		redraw_scene(data);
 }
 
 // add translate light
@@ -244,29 +242,24 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 /*
 void	rotate_objects(t_olist *node, float angle, t_axis axis)
 {
-	t_pl	*pl;
-	t_cy	*cy;
-
 	if (!node)
 		return ;
-	if (node->obj_type == PL)
+	if (node->shape->obj_type == PL)
 	{
-		pl = (t_pl *)node->obj;
 		if (axis == Y_AXIS)
-			pl->normal.direction = vector_normalize(rotate_y(pl->normal.direction,
+			node->shape->normal.direction = vector_normalize(rotate_y(node->shape->normal.direction,
 						angle));
 		else
-			pl->normal.direction = vector_normalize(rotate_x(pl->normal.direction,
+			node->shape->normal.direction = vector_normalize(rotate_x(node->shape->normal.direction,
 						angle));
 	}
-	else if (node->obj_type == CY)
+	else if (node->shape->obj_type == CY)
 	{
-		cy = (t_cy *)node->obj;
 		if (axis == Y_AXIS)
-			cy->normal.direction = vector_normalize(rotate_y(cy->normal.direction,
+			node->shape->normal.direction = vector_normalize(rotate_y(node->shape->normal.direction,
 						angle));
 		else
-			cy->normal.direction = vector_normalize(rotate_x(cy->normal.direction,
+			node->shape->normal.direction = vector_normalize(rotate_x(node->shape->normal.direction,
 						angle));
 	}
 }
@@ -345,24 +338,19 @@ int	handle_resize(t_data *data)
 /*
 int	resize_diameter(t_olist *node, float value)
 {
-	t_sp	*sp;
-	t_cy	*cy;
-
 	if (!node)
 		return (0);
-	if (node->obj_type == SP)
+	if (node->shape->obj_type == SP)
 	{
-		sp = (t_sp *)node->obj;
-		sp->diameter += value;
-		if (sp->diameter < 0.1f)
-			sp->diameter = 0.1f;
+		node->shape->diameter += value;
+		if (node->shape->diameter < 0.1f)
+			node->shape->diameter = 0.1f;
 	}
-	else if (node->obj_type == CY)
+	else if (node->shape->obj_type == CY)//Are the same
 	{
-		cy = (t_cy *)node->obj;
-		cy->diameter += value;
-		if (cy->diameter < 0.1f)
-			cy->diameter = 0.1f;
+		node->shape->diameter += value;
+		if (node->shape->diameter < 0.1f)
+			node->shape->diameter = 0.1f;
 	}
 	return (1);
 }
@@ -387,14 +375,11 @@ int	resize_diameter(t_olist *node, float value)
 /*
 int	resize_height(t_olist *node, float value)
 {
-	t_cy	*cy;
-
 	if (!node) // || node->obj_type != CY
 		return (0);
-	cy = (t_cy *)node->obj;
-	cy->height += value;
-	if (cy->height < 0.1f)
-		cy->height = 0.1f;
+	node->shape->height += value;
+	if (node->shape->height < 0.1f)
+		node->shape->height = 0.1f;
 	return (1);
 }
 */

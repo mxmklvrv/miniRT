@@ -68,9 +68,9 @@ int	parse_sphere(char *line, t_scene *scene)
 int init_sphere(t_shape *shape, char **res, t_scene *scene)
 {
 	shape->obj_type = SP;
-	shape->center.w = 1;
 	if (parse_vector(res[0], &shape->center, -100.0f, 100.0f))
 		return (error_return(ERR_SP_CNTR, scene->err_m));
+	shape->center.w = 1;
 	if (parse_float(res[1], 0.0f, 100.0f, &shape->diameter))
 		return (error_return(ERR_SP_DIAM, scene->err_m));
 	if (parse_rgb(res[2], &shape->colour))

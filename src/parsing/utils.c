@@ -47,7 +47,8 @@ void	free_list(t_olist *list)
 	{
 		temp = list->next;
 		if (list->shape)
-			free(list->shape); // Add free sphere matrix when implemented
+			free(list->shape);
+		free_matrix(list->shape->matrix);
 		free(list);
 		list = temp;
 	}
@@ -97,8 +98,6 @@ void	free_array(char **arr)
 		free(arr[i++]);
 	free(arr);
 }
-
-
 
 // checks how many elements in the string
 int	count_elements(char *line)

@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-t_intersection	hit_sp(t_ray ray, t_sp *sp)
+t_intersection	hit_sp(t_ray ray, t_shape *sp)
 {
 	float			a;
 	float			b;
@@ -9,7 +9,7 @@ t_intersection	hit_sp(t_ray ray, t_sp *sp)
 	float			discriminant;
 	t_intersection	intersection;
 
-	vector_to_sphere = vector_substract(ray.origin, sp->sp_center);
+	vector_to_sphere = vector_substract(ray.origin, sp->center);
 	a = vector_dot(ray.direction, ray.direction);
 	b = 2 * vector_dot(ray.direction, vector_to_sphere);
 	c = vector_dot(vector_to_sphere, vector_to_sphere) - sp->diameter
@@ -26,7 +26,7 @@ t_intersection	hit_sp(t_ray ray, t_sp *sp)
 	return (intersection);
 }
 
-t_intersection	hit_cy(t_ray ray, t_cy *cy)
+t_intersection	hit_cy(t_ray ray, t_shape *cy)
 {
 	t_intersection	intersection;
 
@@ -36,7 +36,7 @@ t_intersection	hit_cy(t_ray ray, t_cy *cy)
 	return (intersection);
 }
 
-t_intersection	hit_pl(t_ray ray, t_pl *pl)
+t_intersection	hit_pl(t_ray ray, t_shape *pl)
 {
 	float	denominator;
 	float	multiplier;

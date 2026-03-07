@@ -10,7 +10,7 @@ void	print_list(t_scene *scene)
 	while (curr)
 	{
 		printf("Objects num  %d in object list\n", i);
-		printf("Object enunm num %d\n", curr->obj_type);
+		printf("Object enunm num %d\n", curr->shape->obj_type);
 		curr = curr->next;
 		i++;
 	}
@@ -48,6 +48,48 @@ void	print_vars(t_scene *scene)
 	printf("%f \n", scene->light.bright);
 	printf("(BONUS) R, G, B colors in the range [0-255]: ");
 	printf("%d\n\n", scene->light.color);
+}
+
+void	print_pos(t_scene *scene)
+{
+	t_olist	*node;
+
+	if (!scene)
+		return ;
+	node = scene->obj_selected;
+	if (!node)
+	{
+		printf("No object selected\n");
+		return ;
+	}
+	if (node->shape->obj_type == SP)
+	{
+		printf("Controlling Sphere, coordinates: x=%.2f y=%.2f z=%.2f\n", node->shape->center.x,
+			node->shape->center.y, node->shape->center.z);
+	}
+	else if (node->shape->obj_type == PL)
+	{
+		printf("Controlling Plane, coordinates: x=%.2f y=%.2f z=%.2f\n", node->shape->normal.origin.x,
+			node->shape->normal.origin.y, node->shape->normal.origin.z);
+	}
+	else if (node->shape->obj_type == CY)
+	{
+		printf("Contrlling Cylinder, coordinates: x=%.2f y=%.2f z=%.2f\n", node->shape->normal.origin.x,
+			node->shape->normal.origin.y, node->shape->normal.origin.z);
+	}
+}
+
+void	print_cam_pos(t_scene *scene)
+{
+	if (!scene)
+	{
+		printf("YOLO");
+		return ;
+	}
+	printf("Controlling Cam, origin: x=%.2f y=%.2f z=%.2f", scene->cam.orient.origin.x,
+		scene->cam.orient.origin.y, scene->cam.orient.origin.z);
+	printf(" and direct: x=%.2f y=%.2f z=%.2f\n", scene->cam.orient.direction.x,
+		scene->cam.orient.direction.y, scene->cam.orient.direction.z);
 }
 
 void	print_vector(t_vec3	vector)
