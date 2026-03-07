@@ -50,7 +50,7 @@ int	parse_plane(char *line, t_scene *scene)
 		return (error_return(ERR_PL_SPEC, scene->err_m));
 	shape = ft_calloc(1, sizeof(t_shape));
 	if (!shape)
-		return (error(ERR_ALLOC, NULL), 1);
+		return (error_return(ERR_ALLOC, NULL));
 	res = ft_split(line, ' ');
 	if (!res)
 		return (parse_error(scene, ERR_ALLOC, NULL, shape));

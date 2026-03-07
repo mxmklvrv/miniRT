@@ -1,16 +1,16 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-int	add_to_list(t_scene *scene, t_shape *shape); // new version
+int		add_to_list(t_scene *scene, t_shape *shape); // new version
 // int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
 void	free_list(t_olist *list);
 t_vec3	creat_vec3(float x, float y, float z);
 void	free_array(char **arr);
 int		parse_fatal(t_scene *scene, int fd);
 int		parse_error(t_scene *scene, char *msg, char **res, t_shape *shape);
-int	error_return(char *msg, char *line);
-void error_msg(char *msg, char *line);
-int parse_line(char *line, t_scene *scene);
+int		error_return(char *msg, char *line);
+void 	error_msg(char *msg, char *line);
+int 	parse_line(char *line, t_scene *scene);
 
 
 int		count_elements(char *line);

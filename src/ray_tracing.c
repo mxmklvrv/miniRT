@@ -25,7 +25,7 @@ static bool	intersection_is_closest(t_ray ray, t_shape *shape, int *closest)
 {
 	t_intersection	intersection;
 
-	ray = ray_transform(ray, shape->matrix);
+	//ray = ray_transform(ray, shape->matrix);
 	if (shape->obj_type == SP)
 		intersection = hit_sp(ray, shape);
 	else if (shape->obj_type == CY)

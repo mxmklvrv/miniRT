@@ -432,43 +432,6 @@ void	print_pos(t_scene *scene)
 	}
 }
 */
-void	print_pos(t_scene *scene)
-{
-	t_shape	*obj;
-
-	if (!scene || !scene->obj_selected)
-	{
-		printf("No object selected\n");
-		return ;
-	}
-
-	obj = scene->obj_selected->shape;
-
-	if (obj->obj_type == SP)
-		printf("Controlling Sphere: x=%.2f y=%.2f z=%.2f\n",
-			obj->center.x, obj->center.y, obj->center.z);
-
-	else if (obj->obj_type == PL)
-		printf("Controlling Plane: x=%.2f y=%.2f z=%.2f\n",
-			obj->normal.origin.x, obj->normal.origin.y, obj->normal.origin.z);
-
-	else if (obj->obj_type == CY)
-		printf("Controlling Cylinder: x=%.2f y=%.2f z=%.2f\n",
-			obj->normal.origin.x, obj->normal.origin.y, obj->normal.origin.z);
-}
-
-void	print_cam_pos(t_scene *scene)
-{
-	if (!scene)
-	{
-		printf("YOLO");
-		return ;
-	}
-	printf("Controlling Cam, origin: x=%.2f y=%.2f z=%.2f", scene->cam.orient.origin.x,
-		scene->cam.orient.origin.y, scene->cam.orient.origin.z);
-	printf(" and direct: x=%.2f y=%.2f z=%.2f\n", scene->cam.orient.direction.x,
-		scene->cam.orient.direction.y, scene->cam.orient.direction.z);
-}
 
 // void	apply_movement(t_data *data)
 // {

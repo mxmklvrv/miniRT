@@ -27,7 +27,7 @@ void error_msg(char *msg, char *line)
 {
     ft_putendl_fd(ERR_MSG, 2);
 	ft_putendl_fd(msg, 2);
-	if (line != NULL) 
+	if (line != NULL)
 		ft_printf("Problem in line: %s\n", line);
 }
 
@@ -281,7 +281,7 @@ int	parse_rgb(char *str, int *color)
 		return (1);
 	rgb = ft_split(str, ',');
 	if (!rgb)
-		return (error(ERR_ALLOC, NULL), 1);
+		return (error_return(ERR_ALLOC, NULL));
 	if (!rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
 		return (free_array(rgb), 1);
 	r = 0;
@@ -306,7 +306,7 @@ int	parse_vector(char *str, t_vec3 *vector, float min, float max)
 		return (1);
 	res = ft_split(str, ',');
 	if (!res)
-		return (error(ERR_ALLOC, NULL), 1);
+		return (error_return(ERR_ALLOC, NULL), 1);
 	if (!res[0] || !res[1] || !res[2] || res[3])
 		return (free_array(res), 1);
 	x = 0;

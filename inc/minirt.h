@@ -16,8 +16,8 @@
 
 
 // test print functions
-void print_cam_pos(t_scene *scene);
-int is_exeption(t_data *data, t_exeption action);
+void	print_cam_pos(t_scene *scene);
+int		is_exeption(t_data *data, t_exeption action);
 void	print_pos(t_scene *scene);
 void	print_vars(t_scene *scene);
 void	print_list(t_scene *scene);
@@ -26,6 +26,7 @@ void	print_ray(t_ray	ray);
 void	print_color(int color);
 void	print_matrix(t_matrix matrix);
 void	print_intersection(t_intersection intersection);
+void	print_scene(t_scene *scene);
 // test
 
 /* ===== Visuals ============================================================ */

@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-int	pars_cam_light(char *line, char ch, t_scene *scene)
+int	parse_cam_light(char *line, char ch, t_scene *scene)
 {
 	if (ch == 'C')
 	{
@@ -23,7 +23,7 @@ int	pars_cam_light(char *line, char ch, t_scene *scene)
 int	dispatch(char *line, t_scene *scene)
 {
 	if (ft_strchr("CAL", *line))
-		return (pars_cam_light(line, *line, scene));
+		return (parse_cam_light(line, *line, scene));
 	else if (ft_strncmp(line, "sp", 2) == 0)
 	{
 		line += 2;
