@@ -44,6 +44,8 @@ void	free_visuals(t_data *data)
 		mlx_destroy_image(data->mlx, data->img);
 	if (data->win)
 		mlx_destroy_window(data->mlx, data->win);
+	if (data->move_state)
+		free(data->move_state);
 	mlx_destroy_display(data->mlx);
 	free(data->mlx);
 }

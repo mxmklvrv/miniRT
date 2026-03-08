@@ -47,8 +47,10 @@ void	free_list(t_olist *list)
 	{
 		temp = list->next;
 		if (list->shape)
+		{
+			free_matrix(list->shape->matrix);
 			free(list->shape);
-		free_matrix(list->shape->matrix);
+		}
 		free(list);
 		list = temp;
 	}
@@ -306,7 +308,7 @@ int	parse_vector(char *str, t_vec3 *vector, float min, float max)
 		return (1);
 	res = ft_split(str, ',');
 	if (!res)
-		return (error_return(ERR_ALLOC, NULL), 1);
+		return (error_return(ERR_ALLOC, NULL));
 	if (!res[0] || !res[1] || !res[2] || res[3])
 		return (free_array(res), 1);
 	x = 0;

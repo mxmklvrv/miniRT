@@ -388,7 +388,7 @@ int	resize_height(t_olist *node, float value)
 {
 	t_shape *obj;
 
-	if (!node || !node->shape) 
+	if (!node || !node->shape)
 		return (0);
     obj = node->shape;
 	obj->height += value;

@@ -11,86 +11,121 @@
 
 */
 
-void	init_scene(t_scene *scene)
-{
-	scene->mlx = NULL;
-	scene->window = NULL;
-	scene->obj_list = NULL;
-	scene->qt_ambiant = 0;
-	scene->qt_cam = 0;
-	scene->qt_light = 0;
-	scene->err_m = NULL;
-    scene->obj_selected = NULL;
-}
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-int	main(int ac, char **av)
+int	main(int argc, char **argv)
 {
 	t_scene	scene;
 
+	if (confirm_input(argc, argv) == 1)
+		return (EXIT_FAILURE);
 	init_scene(&scene);
-	if (confirm_input(ac, av) == 1)
+	if (parse_input_file(argv[1], &scene) == 1)
 	{
-		kill_all(&scene);
+		free_scene(&scene);
 		return (EXIT_FAILURE);
 	}
-	if (pars_input_file(av[1], &scene) == 1)
+    print_scene(&scene);   // Test PRINT
+	if (!visuals_loop(&scene))
 	{
-		kill_all(&scene);
+		free_scene(&scene);
 		return (EXIT_FAILURE);
 	}
-	print_vars(&scene);
-	print_list(&scene);
-	kill_all(&scene);
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
-void	print_list(t_scene *scene)
+void	init_scene(t_scene *scene)
 {
-	t_olist	*curr;
-	int		i;
+	scene->qt_ambiant = 0;
+	scene->qt_cam = 0;
+	scene->qt_light = 0;
+    scene->next_obj_id = 0; // added
+	scene->err_m = NULL;
+	scene->obj_list = NULL;
+	scene->obj_selected = NULL;
+}
 
-	curr = scene->obj_list;
-	i = 0;
-	while (curr)
+
+
+void	print_scene(t_scene *scene)
+{
+	t_olist	*tmp;
+
+	printf("\n---- SCENE DEBUG ----\n");
+
+	printf("Ambient count: %d\n", scene->qt_ambiant);
+	printf("Camera count : %d\n", scene->qt_cam);
+	printf("Light count  : %d\n", scene->qt_light);
+
+	printf("\nCamera:\n");
+	printf("  pos: %.2f %.2f %.2f\n",
+		scene->cam.orient.origin.x,
+		scene->cam.orient.origin.y,
+		scene->cam.orient.origin.z);
+
+	printf("  dir: %.2f %.2f %.2f\n",
+		scene->cam.orient.direction.x,
+		scene->cam.orient.direction.y,
+		scene->cam.orient.direction.z);
+
+	printf("  fov: %.2f\n", scene->cam.fov);
+
+	printf("\nLight:\n");
+	printf("  pos: %.2f %.2f %.2f\n",
+		scene->light.pos.x,
+		scene->light.pos.y,
+		scene->light.pos.z);
+
+	printf("  brightness: %.2f\n", scene->light.bright);
+
+	printf("\nObjects:\n");
+
+	tmp = scene->obj_list;
+	while (tmp)
 	{
-		printf("Objects num  %d in object list\n", i);
-		printf("Object enunm num %d\n", curr->obj_type);
-		curr = curr->next;
-		i++;
-	}
-	printf("End printing object list\n");
-}
+		t_shape *s = tmp->shape;
 
-void	print_vars(t_scene *scene)
-{
-	printf("TESTING PARSING\n");
-	printf("---------------------------------------------------\n");
-	printf("Ambient Parsing\n");
-	printf("Ambient lighting ratio in the range [0.0,1.0]: ");
-	printf("%f\n", scene->ambient.amb);
-	printf("Ambient R, G, B colors in the range [0-255]: ");
-	printf("%d\n", scene->ambient.colour);
-	printf("---------------------------------------------------\n");
-	printf("Camera Parsing\n");
-	printf("x, y, z coordinates of the viewpoint: ");
-	printf("%f ", scene->cam.view_point.x);
-	printf("%f ", scene->cam.view_point.y);
-	printf("%f \n", scene->cam.view_point.z);
-	printf("3D norm orientation vector, in the range [-1,1] for x, y, z axis:");
-	printf("%f ", scene->cam.orient.x);
-	printf("%f ", scene->cam.orient.y);
-	printf("%f\n", scene->cam.orient.z);
-	printf("FOV: Horizontal field of view in degrees in the range [0,180]: ");
-	printf("%f\n", scene->cam.fov);
-	printf("---------------------------------------------------\n");
-	printf("Light Parsing\n");
-	printf("x, y, z coordinates of the light point: ");
-	printf("%f ", scene->light.pos.x);
-	printf("%f ", scene->light.pos.y);
-	printf("%f \n", scene->light.pos.z);
-	printf("the light brightness ratio in the range [0.0,1.0]: ");
-	printf("%f \n", scene->light.bright);
-	printf("(BONUS) R, G, B colors in the range [0-255]: ");
-	printf("%d\n\n", scene->light.color);
+		printf("\nObject ID: %d\n", s->obj_id);
+		printf("Type: %d\n", s->obj_type);
+
+		if (s->obj_type == SP)
+		{
+			printf("Sphere center: %.2f %.2f %.2f\n",
+				s->center.x, s->center.y, s->center.z);
+			printf("Diameter: %.2f\n", s->diameter);
+		}
+
+		if (s->obj_type == PL)
+		{
+			printf("Plane point: %.2f %.2f %.2f\n",
+				s->normal.origin.x,
+				s->normal.origin.y,
+				s->normal.origin.z);
+
+			printf("Normal: %.2f %.2f %.2f\n",
+				s->normal.direction.x,
+				s->normal.direction.y,
+				s->normal.direction.z);
+		}
+
+		if (s->obj_type == CY)
+		{
+			printf("Cylinder center: %.2f %.2f %.2f\n",
+				s->normal.origin.x,
+				s->normal.origin.y,
+				s->normal.origin.z);
+
+			printf("Axis: %.2f %.2f %.2f\n",
+				s->normal.direction.x,
+				s->normal.direction.y,
+				s->normal.direction.z);
+
+			printf("Diameter: %.2f\n", s->diameter);
+			printf("Height: %.2f\n", s->height);
+		}
+
+		printf("Color: %d\n", s->colour);
+
+		tmp = tmp->next;
+	}
+
+	printf("\n---------------------\n");
 }
