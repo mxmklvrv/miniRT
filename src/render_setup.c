@@ -18,7 +18,6 @@ static void	setup_camera_angle(t_cam *cam)
 {
 	cam->pixel_size = 1 * tanf(degrees_to_radians(cam->fov / 2)) * 2
 		/ ft_max(2, WIDTH, HEIGHT);
-	printf("Pixel size: %f\n", cam->pixel_size);
 	//cam->matrix = ;
 	//t_vec3	opposite_cam;
 	//const t_vec3	up_view = new_vector(0, 0, 1);
