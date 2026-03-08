@@ -24,7 +24,7 @@ HDR = $(addprefix $(HDR_DIR)/, \
 	)
 
 PARS_DIR = src/parsing
-PARS_OBJ_DIR = $(PARS_DIR)/obj_parsing
+PARS_OBJ_DIR = $(OBJ_DIR)/obj_parsing
 PARS_SRC = $(addprefix $(PARS_DIR)/, \
 	dispatch.c \
 	input_validation.c \
