@@ -59,13 +59,15 @@ static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 	float		angle;
 
 	angle = -atanf((pixel.i - WIDTH / 2) * cam.pixel_size);
+	//angle = (pixel.i - WIDTH / 2) * cam.pixel_size; //old
 	rotation_i = new_rotation_z_matrix(angle);
 	angle = atanf((pixel.j - HEIGHT / 2) * cam.pixel_size);
+	//angle = (pixel.j - HEIGHT / 2) * cam.pixel_size; //old
 	rotation_j = new_rotation_x_matrix(angle);
 	rotation = chain_matrices(rotation_i, rotation_j);
 	direction = matrix_multiply_by_vector(rotation, cam.orient.direction);
 	free_matrix(rotation);
-	//direction = vector_normalize(direction);
+	direction = vector_normalize(direction);
 	return (direction);
 }
 
