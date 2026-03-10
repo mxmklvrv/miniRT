@@ -1,13 +1,13 @@
 #include "minirt.h"
 
-static bool	intersection_is_closest(t_ray ray, t_shape *shape, int *closest);
-static bool	is_closest(t_intersection intersection, int *closest);
+static bool	intersection_is_closest(t_ray ray, t_shape *shape, float *closest);
+static bool	is_closest(t_intersection intersection, float *closest);
 
 int	trace_color(t_ray ray, t_scene *scene)
 {
 	t_olist	*obj_list;
 	int		color;
-	int		closest;
+	float	closest;
 
 	color = scene->ambient.colour;
 	closest = -1;
@@ -21,7 +21,7 @@ int	trace_color(t_ray ray, t_scene *scene)
 	return (color);
 }
 
-static bool	intersection_is_closest(t_ray ray, t_shape *shape, int *closest)
+static bool	intersection_is_closest(t_ray ray, t_shape *shape, float *closest)
 {
 	t_intersection	intersection;
 
@@ -39,7 +39,7 @@ static bool	intersection_is_closest(t_ray ray, t_shape *shape, int *closest)
 	return (false);
 }
 
-static bool	is_closest(t_intersection intersection, int *closest)
+static bool	is_closest(t_intersection intersection, float *closest)
 {
 	float	hit;
 

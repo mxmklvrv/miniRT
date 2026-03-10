@@ -28,6 +28,11 @@ static void	setup_camera_angle(t_cam *cam)
 	//cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
 }
 
+float	degrees_to_radians(float degrees)
+{
+	return (degrees * M_PI / 180);
+}
+
 //static void	setup_objects(t_olist *obj_list)
 //{
 //	while (obj_list)

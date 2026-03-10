@@ -18,12 +18,12 @@ void	draw_scene(t_data *data)
 	{
 		draw_one_render_cycle(data, pixels_to_render, &first_cycle);
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-		printf("Pixels rendered: %i\n", pixels_to_render);
+		//printf("Pixels rendered: %i\n", pixels_to_render);
 		if (pixels_to_render == 1)
 			break ;
 		pixels_to_render /= 2;
 	}
-	printf("Finished\n");
+	//printf("Finished\n");
 }
 
 static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *first_cycle)
@@ -103,6 +103,8 @@ static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_ren
 			pixel.i++;
 		while (pixel.i <= max_i && pixel.i < WIDTH)
 		{
+			//if (pixel.i == 325 && pixel.j == 250)
+			//	pixel.color = new_color(255, 255, 255, 255);
 			ft_mlx_put_pixel(data, pixel);//TODO: add writting to ppm(?)
 			pixel.i++;
 		}

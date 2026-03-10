@@ -26,6 +26,15 @@ t_intersection	hit_sp(t_ray ray, t_shape *sp)
 	return (intersection);
 }
 
+t_vec3	normal_at_sp(t_vec3 point, t_shape *sp)
+{
+	t_vec3	normal;
+
+	normal = vector_substract(point, sp->center);
+	normal = vector_normalize(normal);
+	return (normal);
+}
+
 t_intersection	hit_cy(t_ray ray, t_shape *cy)
 {
 	t_intersection	intersection;
