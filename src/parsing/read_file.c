@@ -53,6 +53,11 @@ int	parse_input_file(char *file, t_scene *scene)
         free(line);
 		line = get_next_line(fd);
 	}
+	if(!scene->obj_list) // test
+	{
+		printf("There are no objects to draaw\n");
+		return(parse_fatal(scene, fd));
+	}
 	close(fd);
 	return (0);
 }
@@ -73,4 +78,13 @@ int parse_line(char *line, t_scene *scene)
     }
     free(trimmed);
     return (0);
+}
+
+
+int	postpars_validation(t_scene *scene)
+{
+	if(scene->qt_ambiant != 1 && scene->qt_cam != 1 && scene->qt_light != 1)
+		return (error_return("Invalid nummber of mandotary objects", NULL));
+	if(!scene->obj_list)
+		return (error_return("There is nothing to render", NULL));
 }
