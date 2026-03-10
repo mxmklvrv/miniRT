@@ -4,6 +4,7 @@
 
 // test
 void	print_scene(t_scene *scene);
+int	postpars_validation(t_scene *scene);
 
 
 int	add_to_list(t_scene *scene, t_shape *shape); // new version
