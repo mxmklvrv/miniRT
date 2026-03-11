@@ -25,7 +25,7 @@ void	print_vars(t_scene *scene)
 	printf("Ambient lighting ratio in the range [0.0,1.0]: ");
 	printf("%f\n", scene->ambient.amb);
 	printf("Ambient R, G, B colors in the range [0-255]: ");
-	printf("%d\n", scene->ambient.colour);
+	printf("%d\n", scene->ambient.color);
 	printf("---------------------------------------------------\n");
 	printf("Camera Parsing\n");
 	printf("x, y, z coordinates of the viewpoint: ");
@@ -223,7 +223,7 @@ void	print_scene(t_scene *scene)
 			printf("Height: %.2f\n", s->height);
 		}
 
-		printf("Color: %d\n", s->colour);
+		printf("Color: %d\n", s->color);
 
 		tmp = tmp->next;
 	}

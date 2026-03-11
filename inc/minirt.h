@@ -128,14 +128,13 @@ bool	    matrix_is_invertible(t_matrix m, float *determinant);
 t_matrix	chain_matrices(t_matrix scaling, t_matrix rotation);
 
 /* ===== Shapes math ======================================================== */
-t_intersection	hit_sp(t_ray cam, t_shape *sp);
-t_intersection	hit_cy(t_ray cam, t_shape *cy);
-t_intersection	hit_pl(t_ray cam, t_shape *pl);
-t_vec3			normal_at_sp(t_vec3 point, t_shape *sp);
+t_intersection	get_intersection(t_ray ray, t_shape *shape);
+t_vec3			get_normal(t_shape *shape, t_vec3 point);
 
 /* ===== Rays =============================================================== */
 t_ray	new_ray(t_vec3 origin, t_vec3 direction);
 t_ray	ray_transform(t_ray r, t_matrix m);
+t_vec3	get_ray_point(t_ray ray, float scalar);
 //t_ray	ray_transform_inverse(t_ray r, t_matrix m);
 
 /* ===== Color ============================================================== */
@@ -147,6 +146,6 @@ int		get_blue(int color);
 int		color_add(int c1, int c2);
 int		color_substract(int c1, int c2);
 int		color_multiply(int c, float scalar);
-int		color_mix(int c1, int c2);
+//int		color_mix(int c1, int c2);
 
 #endif

@@ -7,7 +7,7 @@
 // 	char	**res;
 // 	t_sp	*sphere;
 // 	float	diameter;
-// 	int		colour;
+// 	int		color;
 
 // 	if (count_elements(line) != 3)
 // 		return (error("Invalid specs for sphere", scene->err_m), 1);
@@ -22,23 +22,23 @@
 // 			free_array(res), 1);
 // 	sphere->sp_center.w = 1;//New
 // 	diameter = 0;
-// 	colour = 0;
+// 	color = 0;
 // 	if (parse_float(res[1], 0.0f, 100.0f, &diameter) == 1)
 // 		return (error("Invalid sphere diameter", scene->err_m), free(sphere),
 // 			free_array(res), 1);
-// 	if (parse_rgb(res[2], &colour) == 1)
-// 		return (error("Invalid sphere colour", scene->err_m), free(sphere),
+// 	if (parse_rgb(res[2], &color) == 1)
+// 		return (error("Invalid sphere color", scene->err_m), free(sphere),
 // 			free_array(res), 1);
 // 	sphere->diameter = diameter;
-// 	sphere->colour = colour;
-// 	if (add_to_list(&scene->obj_list, sphere, SP, sphere->colour) == 1)
+// 	sphere->color = color;
+// 	if (add_to_list(&scene->obj_list, sphere, SP, sphere->color) == 1)
 // 		return (error("Failed adding sphere to the list", scene->err_m),
 // 			free_array(res), free(sphere), 1);
 // 	printf("SPHERE\n");
 // 	printf("cent %f %f %f\n", sphere->sp_center.x, sphere->sp_center.y,
 // 		sphere->sp_center.z);
 // 	printf("diam %f\n", sphere->diameter);
-// 	printf("color %d\n\n", sphere->colour);
+// 	printf("color %d\n\n", sphere->color);
 // 	return (free_array(res), 0);
 // }
 
@@ -73,7 +73,7 @@ int init_sphere(t_shape *shape, char **res, t_scene *scene)
 	shape->center.w = 1;
 	if (parse_float(res[1], 0.0f, 100.0f, &shape->diameter))
 		return (error_return(ERR_SP_DIAM, scene->err_m));
-	if (parse_rgb(res[2], &shape->colour))
+	if (parse_rgb(res[2], &shape->color))
 		return (error_return(ERR_SP_COLR, scene->err_m));
 	return (0);
 }

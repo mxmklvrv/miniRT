@@ -24,6 +24,11 @@ t_ray	ray_transform(t_ray r, t_matrix m)
 	return (res);
 }
 
+t_vec3	get_ray_point(t_ray ray, float scalar)
+{
+	return(vector_add(ray.origin, vector_multiply(ray.direction, scalar)));
+}
+
 //t_ray	ray_transform_inverse(t_ray r, t_matrix m)
 //{
 //	t_ray		res;

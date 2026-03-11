@@ -37,12 +37,6 @@ typedef struct s_matrix
 	float	**ptr;
 }	t_matrix;
 
-typedef struct s_intersection
-{
-	int		count;
-	float	val[2];
-}	t_intersection;
-
 typedef enum e_otype
 {
 	SP,
@@ -65,7 +59,7 @@ typedef struct s_shape
 	float			diameter;//sp, cy
 	float			height;//cy
 	t_matrix		matrix;
-	int				colour;
+	int				color;
 }	t_shape;
 
 typedef struct s_olist
@@ -73,6 +67,13 @@ typedef struct s_olist
 	t_shape			*shape;
 	struct s_olist	*next;
 }	t_olist;
+
+typedef struct s_intersection
+{
+	int		count;
+	float	val[2];
+	t_shape	*shape;
+}	t_intersection;
 
 typedef struct s_cam
 {
@@ -85,7 +86,7 @@ typedef struct s_cam
 typedef struct s_ambient
 {
 	float			amb;
-	int				colour;
+	int				color;
 }	t_ambient;
 
 typedef struct s_light

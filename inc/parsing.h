@@ -2,7 +2,7 @@
 # define PARSING_H
 
 int		add_to_list(t_scene *scene, t_shape *shape); // new version
-// int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
+// int		add_to_list(t_olist **list, void *object, t_otype type, int color);
 void	free_list(t_olist *list);
 t_vec3	creat_vec3(float x, float y, float z);
 void	free_array(char **arr);
