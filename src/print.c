@@ -52,31 +52,27 @@ void	print_vars(t_scene *scene)
 
 void	print_pos(t_scene *scene)
 {
-	t_olist	*node;
+	t_shape	*obj;
 
-	if (!scene)
-		return ;
-	node = scene->obj_selected;
-	if (!node)
+	if (!scene || !scene->obj_selected)
 	{
 		printf("No object selected\n");
 		return ;
 	}
-	if (node->shape->obj_type == SP)
-	{
-		printf("Controlling Sphere, coordinates: x=%.2f y=%.2f z=%.2f\n", node->shape->center.x,
-			node->shape->center.y, node->shape->center.z);
-	}
-	else if (node->shape->obj_type == PL)
-	{
-		printf("Controlling Plane, coordinates: x=%.2f y=%.2f z=%.2f\n", node->shape->normal.origin.x,
-			node->shape->normal.origin.y, node->shape->normal.origin.z);
-	}
-	else if (node->shape->obj_type == CY)
-	{
-		printf("Contrlling Cylinder, coordinates: x=%.2f y=%.2f z=%.2f\n", node->shape->normal.origin.x,
-			node->shape->normal.origin.y, node->shape->normal.origin.z);
-	}
+
+	obj = scene->obj_selected->shape;
+
+	if (obj->obj_type == SP)
+		printf("Controlling Sphere: x=%.2f y=%.2f z=%.2f\n",
+			obj->center.x, obj->center.y, obj->center.z);
+
+	else if (obj->obj_type == PL)
+		printf("Controlling Plane: x=%.2f y=%.2f z=%.2f\n",
+			obj->normal.origin.x, obj->normal.origin.y, obj->normal.origin.z);
+
+	else if (obj->obj_type == CY)
+		printf("Controlling Cylinder: x=%.2f y=%.2f z=%.2f\n",
+			obj->normal.origin.x, obj->normal.origin.y, obj->normal.origin.z);
 }
 
 void	print_cam_pos(t_scene *scene)
@@ -148,4 +144,89 @@ void	print_intersection(t_intersection intersection)
 		printf("[%i] %f\n", i, intersection.val[i]);
 		i++;
 	}
+}
+
+void	print_scene(t_scene *scene)
+{
+	t_olist	*tmp;
+
+	printf("\n---- SCENE DEBUG ----\n");
+
+	printf("Ambient count: %d\n", scene->qt_ambiant);
+	printf("Camera count : %d\n", scene->qt_cam);
+	printf("Light count  : %d\n", scene->qt_light);
+
+	printf("\nCamera:\n");
+	printf("  pos: %.2f %.2f %.2f\n",
+		scene->cam.orient.origin.x,
+		scene->cam.orient.origin.y,
+		scene->cam.orient.origin.z);
+
+	printf("  dir: %.2f %.2f %.2f\n",
+		scene->cam.orient.direction.x,
+		scene->cam.orient.direction.y,
+		scene->cam.orient.direction.z);
+
+	printf("  fov: %.2f\n", scene->cam.fov);
+
+	printf("\nLight:\n");
+	printf("  pos: %.2f %.2f %.2f\n",
+		scene->light.pos.x,
+		scene->light.pos.y,
+		scene->light.pos.z);
+
+	printf("  brightness: %.2f\n", scene->light.bright);
+
+	printf("\nObjects:\n");
+
+	tmp = scene->obj_list;
+	while (tmp)
+	{
+		t_shape *s = tmp->shape;
+
+		printf("\nObject ID: %d\n", s->obj_id);
+		printf("Type: %d\n", s->obj_type);
+
+		if (s->obj_type == SP)
+		{
+			printf("Sphere center: %.2f %.2f %.2f\n",
+				s->center.x, s->center.y, s->center.z);
+			printf("Diameter: %.2f\n", s->diameter);
+		}
+
+		if (s->obj_type == PL)
+		{
+			printf("Plane point: %.2f %.2f %.2f\n",
+				s->normal.origin.x,
+				s->normal.origin.y,
+				s->normal.origin.z);
+
+			printf("Normal: %.2f %.2f %.2f\n",
+				s->normal.direction.x,
+				s->normal.direction.y,
+				s->normal.direction.z);
+		}
+
+		if (s->obj_type == CY)
+		{
+			printf("Cylinder center: %.2f %.2f %.2f\n",
+				s->normal.origin.x,
+				s->normal.origin.y,
+				s->normal.origin.z);
+
+			printf("Axis: %.2f %.2f %.2f\n",
+				s->normal.direction.x,
+				s->normal.direction.y,
+				s->normal.direction.z);
+
+			printf("Diameter: %.2f\n", s->diameter);
+			printf("Height: %.2f\n", s->height);
+		}
+
+		printf("Color: %d\n", s->colour);
+
+		tmp = tmp->next;
+	}
+
+	printf("\n---------------------\n");
 }

@@ -18,12 +18,12 @@ void	draw_scene(t_data *data)
 	{
 		draw_one_render_cycle(data, pixels_to_render, &first_cycle);
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-		printf("Pixels rendered: %i\n", pixels_to_render);
+		//printf("Pixels rendered: %i\n", pixels_to_render);
 		if (pixels_to_render == 1)
 			break ;
 		pixels_to_render /= 2;
 	}
-	printf("Finished\n");
+	//printf("Finished\n");
 }
 
 static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *first_cycle)
@@ -53,16 +53,19 @@ static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *firs
 static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 {
 	t_vec3		direction;
+	t_matrix	rotation_i;
+	t_matrix	rotation_j;
 	t_matrix	rotation;
-	float		multiplier;
+	float		angle;
 
-
-	multiplier = degrees_to_radians(cam.fov) / ft_max(2, WIDTH, HEIGHT);
-	rotation = new_rotation_y_matrix((pixel.i - WIDTH / 2) * multiplier);
+	angle = -atanf((pixel.i - WIDTH / 2) * cam.pixel_size);
+	//angle = (pixel.i - WIDTH / 2) * cam.pixel_size; //old
+	rotation_i = new_rotation_z_matrix(angle);
+	angle = atanf((pixel.j - HEIGHT / 2) * cam.pixel_size);
+	//angle = (pixel.j - HEIGHT / 2) * cam.pixel_size; //old
+	rotation_j = new_rotation_x_matrix(angle);
+	rotation = chain_matrices(rotation_i, rotation_j);
 	direction = matrix_multiply_by_vector(rotation, cam.orient.direction);
-	free_matrix(rotation);
-	rotation = new_rotation_x_matrix((pixel.j - HEIGHT / 2) * multiplier);
-	direction = matrix_multiply_by_vector(rotation, direction);
 	free_matrix(rotation);
 	direction = vector_normalize(direction);
 	return (direction);
@@ -100,6 +103,8 @@ static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_ren
 			pixel.i++;
 		while (pixel.i <= max_i && pixel.i < WIDTH)
 		{
+			//if (pixel.i == 325 && pixel.j == 250)
+			//	pixel.color = new_color(255, 255, 255, 255);
 			ft_mlx_put_pixel(data, pixel);//TODO: add writting to ppm(?)
 			pixel.i++;
 		}

@@ -88,9 +88,12 @@ t_vec3	vector_divide(t_vec3 v, float scalar)
 {
 	if (is_point(v))
 		ft_putendl_fd("Error: dividing a point", STDERR_FILENO);
-	if (is_equalf(scalar, 0))
-	//if (scalar == 0)
+	//if (is_equalf(scalar, 0))
+	if (scalar == 0)
+	{
 		ft_putendl_fd("Error: dividing by zero", STDERR_FILENO);
+		return (v);
+	}
 	return (new_vector(
 		v.x / scalar,
 		v.y / scalar,
@@ -145,7 +148,13 @@ t_vec3	vector_cross(t_vec3 v1, t_vec3 v2)
 	));
 }
 
-float	degrees_to_radians(float degrees)
+
+
+t_vec3	vector_reflect(t_vec3 v, t_vec3 normal)
 {
-	return (degrees * M_PI / 180);
+	t_vec3	reflection;
+
+	reflection = vector_multiply(normal, vector_dot(v, normal) * 2);
+	reflection = vector_substract(v, reflection);
+	return (reflection);
 }

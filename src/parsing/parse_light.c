@@ -54,9 +54,9 @@ int	parse_light(char *line, t_scene *scene)
 	if (parse_vector(res[0], &scene->light.pos, -100.0f, 100.0f) == 1)
 		return (parse_error(scene,ERR_LIGT_POS, res, NULL));
 	if (parse_float(res[1], 0.0f, 1.0f, &bright) == 1)
-		return(parse_error(scene,ERR_LIGT_BRIT,res, NULL));
+		return (parse_error(scene,ERR_LIGT_BRIT,res, NULL));
 	if (parse_rgb(res[2], &colour) == 1) // this is for bonus
-		return(parse_error(scene, ERR_LIGT_COLOR, res, NULL));
+		return (parse_error(scene, ERR_LIGT_COLOR, res, NULL));
 	scene->light.bright = bright;
 	scene->light.color = colour; // this is for bonus
 	free_array(res);

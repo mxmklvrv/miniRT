@@ -26,6 +26,15 @@ t_intersection	hit_sp(t_ray ray, t_shape *sp)
 	return (intersection);
 }
 
+t_vec3	normal_at_sp(t_vec3 point, t_shape *sp)
+{
+	t_vec3	normal;
+
+	normal = vector_substract(point, sp->center);
+	normal = vector_normalize(normal);
+	return (normal);
+}
+
 t_intersection	hit_cy(t_ray ray, t_shape *cy)
 {
 	t_intersection	intersection;
@@ -39,7 +48,6 @@ t_intersection	hit_cy(t_ray ray, t_shape *cy)
 t_intersection	hit_pl(t_ray ray, t_shape *pl)
 {
 	float	denominator;
-	float	multiplier;
 	t_intersection	intersection;
 
 	denominator = vector_dot(ray.direction, pl->normal.direction);
@@ -48,9 +56,8 @@ t_intersection	hit_pl(t_ray ray, t_shape *pl)
 	else//Find intersection:
 	{
 		intersection.count = 1;
-		multiplier = -vector_dot(pl->normal.direction, vector_substract(ray.origin,
-			pl->normal.origin)) / denominator;
-		//intersection.val[0] = vector_multiply(ray.direction, multiplier);
+		intersection.val[0] = vector_dot(vector_substract(ray.origin,
+			pl->normal.origin), pl->normal.direction) / denominator;
 	}
 	return (intersection);
 }

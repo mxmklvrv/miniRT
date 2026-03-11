@@ -47,9 +47,9 @@ int	parse_ambient(char *line, t_scene *scene)
 	ratio = 0.0f;
 	colour = 0;
 	if (parse_float(res[0], 0.0f, 1.0f, &ratio) == 1)
-		return(parse_error(scene,ERR_AMB_RATI, res, NULL));
+		return (parse_error(scene,ERR_AMB_RATI, res, NULL));
 	if (parse_rgb(res[1], &colour) == 1)
-		return(parse_error(scene, ERR_AMB_COLR, res, NULL));
+		return (parse_error(scene, ERR_AMB_COLR, res, NULL));
 	scene->ambient.amb = ratio;
 	scene->ambient.colour = colour;
 	free_array(res);

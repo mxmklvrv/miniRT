@@ -16,8 +16,8 @@
 
 
 // test print functions
-void print_cam_pos(t_scene *scene);
-int is_exeption(t_data *data, t_exeption action);
+void	print_cam_pos(t_scene *scene);
+int		is_exeption(t_data *data, t_exeption action);
 void	print_pos(t_scene *scene);
 void	print_vars(t_scene *scene);
 void	print_list(t_scene *scene);
@@ -26,6 +26,7 @@ void	print_ray(t_ray	ray);
 void	print_color(int color);
 void	print_matrix(t_matrix matrix);
 void	print_intersection(t_intersection intersection);
+void	print_scene(t_scene *scene);
 // test
 
 /* ===== Visuals ============================================================ */
@@ -80,6 +81,7 @@ int	resize_height(t_olist *node, float value);
 void	draw_scene(t_data *data);
 void	setup_scene(t_scene *scene);
 void	set_matrix(t_matrix *old_m, t_matrix new_m);
+float	degrees_to_radians(float degrees);
 int		trace_color(t_ray ray, t_scene *scene);
 
 /* ===== Vector math ======================================================== */
@@ -96,7 +98,7 @@ float	vector_magnitude(t_vec3 v);
 t_vec3	vector_normalize(t_vec3 v);
 float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
-float	degrees_to_radians(float degrees);
+t_vec3	vector_reflect(t_vec3 v, t_vec3 normal);
 
 /* ===== Matrix math ======================================================== */
 t_matrix	new_matrix(int row, int col);
@@ -129,6 +131,7 @@ t_matrix	chain_matrices(t_matrix scaling, t_matrix rotation);
 t_intersection	hit_sp(t_ray cam, t_shape *sp);
 t_intersection	hit_cy(t_ray cam, t_shape *cy);
 t_intersection	hit_pl(t_ray cam, t_shape *pl);
+t_vec3			normal_at_sp(t_vec3 point, t_shape *sp);
 
 /* ===== Rays =============================================================== */
 t_ray	new_ray(t_vec3 origin, t_vec3 direction);

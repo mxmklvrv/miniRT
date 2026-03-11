@@ -433,7 +433,6 @@ void	print_pos(t_scene *scene)
 }
 */
 
-
 // void	apply_movement(t_data *data)
 // {
 // 	t_move_state	*move;

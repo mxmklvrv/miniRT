@@ -49,14 +49,14 @@ int	parse_cam(char *line, t_scene *scene)
 	if (!res)
 		return (error_return(ERR_ALLOC, NULL));
 	if (parse_vector(res[0], &scene->cam.orient.origin, -100.0f, 100.0f) == 1)
-		return(parse_error(scene, ERR_CAM_VIEW, res, NULL));
+		return (parse_error(scene, ERR_CAM_VIEW, res, NULL));
 	scene->cam.orient.origin.w = 1;
 	if (parse_vector(res[1], &scene->cam.orient.direction, 0.0f, 1.0f) == 1)
-		return(parse_error(scene, ERR_CAM_ORIT, res, NULL));
+		return (parse_error(scene, ERR_CAM_ORIT, res, NULL));
 	scene->cam.orient.direction.w = 0;
 	fov = 0;
 	if (parse_float(res[2], 0.0f, 180.0f, &fov) == 1)
-		return(parse_error(scene, ERR_CAM_FOV, res, NULL));
+		return (parse_error(scene, ERR_CAM_FOV, res, NULL));
 	scene->cam.fov = fov;
 	free_array(res);
 	return (0);
