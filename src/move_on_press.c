@@ -1,10 +1,103 @@
 #include "minirt.h"
 
+// // test functions
+
+void	reset_move_state(t_move_state *move)
+{
+	ft_bzero(move, sizeof(t_move_state));
+}
+
+//
+// === 1. ADD THESE HELPER FUNCTIONS (put them near your other vector functions,
+// t_vec3	camera_forward(t_cam *cam)
+// {
+// 	return (vector_normalize(cam->orient.direction));
+// }
+
+// t_vec3	camera_right(t_cam *cam)
+// {
+// 	t_vec3	forward;
+// 	t_vec3	world_up;
+// 	t_vec3	right;
+
+// 	forward = camera_forward(cam);
+// 	world_up = new_vector(0, 1, 0);
+// 	right = vector_cross(world_up, forward); // right = vector_cross(world_up, forward);
+// 	// fallback if camera is looking straight up/down (prevents zero vector)
+// 	if (vector_magnitude(right) < 0.01f)
+// 		right = new_vector(1, 0, 0);
+// 	return (vector_normalize(right));
+// }
+// int	handle_translation(t_data *data)
+// {
+// 	t_move_state	*move;
+// 	t_vec3			move_vec;
+// 	float			speed;
+// 	t_vec3			fwd;
+// 	t_vec3			right;
+
+// 	move = data->move_state;
+// 	move_vec = new_vector(0, 0, 0);
+// 	speed = MOVE_SPEED;
+// 	if (data->control_cam)
+// 	{
+// 		// CAMERA MOVEMENT = camera-relative (what your teammate expects)
+// 		fwd = camera_forward(&data->scene->cam);
+// 		right = camera_right(&data->scene->cam);
+// 		// now move up move->forward (W) vert
+// 		if (move->forward)
+// 			move_vec.y += speed;
+// 		// now move down move->backword (S) vert
+// 		if (move->backward)
+// 			move_vec.y -= speed;
+// 		if (move->left)
+// 			move_vec = vector_add(move_vec, vector_multiply(right, -speed));
+// 		// A = left
+// 		if (move->right)
+// 			move_vec = vector_add(move_vec, vector_multiply(right, speed));
+// 		// D = right
+// 		// now Q moves up
+// 		if (move->up)
+// 			move_vec = vector_add(move_vec, vector_multiply(fwd, speed));
+// 		// now E moves down
+// 		if (move->down)
+// 			move_vec = vector_add(move_vec, vector_multiply(fwd, -speed));
+// 	}
+// 	else if (data->scene->obj_selected)
+// 	{
+// 		// OBJECT MOVEMENT = world space (standard for selected objects in miniRT)
+// 		// This fixes "W moves object up" and "Q/E moves it closer/farther"
+// 		if (move->forward)
+// 			move_vec.z -= speed;
+// 		if (move->backward)
+// 			move_vec.z += speed;
+// 		if (move->left)
+// 			move_vec.x -= speed;
+// 		if (move->right)
+// 			move_vec.x += speed;
+// 		if (move->up)
+// 			move_vec.y += speed;
+// 		if (move->down)
+// 			move_vec.y -= speed;
+// 	}
+// 	if (move_vec.x != 0 || move_vec.y != 0 || move_vec.z != 0)
+// 	{
+// 		if (data->control_cam)
+// 			translate_cam(&data->scene->cam, move_vec);
+// 		else
+// 			translate_object(data->scene->obj_selected, move_vec);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
+
+
 int	key_press_hook(int key, t_data *data)
 {
 	t_move_state	*move;
 
 	move = data->move_state;
+	// print_pos(data->scene); // test
 	set_general_keys(key, data);
 	set_translation_keys(key, move, KEY_ON);
 	set_rotation_keys(key, move, KEY_ON);
@@ -17,7 +110,8 @@ int	key_release_hook(int key, t_data *data)
 	t_move_state	*move;
 
 	move = data->move_state;
-	// set_general_keys(key, data);
+	if (key != KEY_C && key != KEY_TAB && key != KEY_ESC)
+		set_general_keys(key, data);
 	set_translation_keys(key, move, KEY_OFF);
 	set_rotation_keys(key, move, KEY_OFF);
 	set_resize_keys(key, move, KEY_OFF);
@@ -34,6 +128,9 @@ void	set_general_keys(int key, t_data *data)
 {
 	if (key == KEY_TAB)
 	{
+
+		reset_move_state(data->move_state);
+
 		if (data->control_cam == 1)
 		{
 			data->control_cam = 0;
@@ -44,6 +141,8 @@ void	set_general_keys(int key, t_data *data)
 	}
 	if (key == KEY_C)
 	{
+		reset_move_state(data->move_state);
+
 		data->control_cam = !data->control_cam;
 		if (data->control_cam == 0)
 			print_pos(data->scene);
@@ -112,15 +211,15 @@ void	select_object(t_data *data)
 // need to create move bector with new_vec
 void	translate_object(t_olist *node, t_vec3 move_vec)
 {
-	t_shape *obj;
+	t_shape	*obj;
 
 	if (!node || !node->shape)
 		return ;
-    obj = node->shape;
+	obj = node->shape;
 	if (obj->obj_type == SP)
 		obj->center = vector_add(obj->center, move_vec);
 	else if (obj->obj_type == PL)
-		obj->normal.origin = vector_add(obj->normal.origin , move_vec);
+		obj->normal.origin = vector_add(obj->normal.origin, move_vec);
 	else if (obj->obj_type == CY)
 		obj->normal.origin = vector_add(obj->normal.origin, move_vec);
 }
@@ -138,7 +237,36 @@ void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 	else if (axis == X_AXIS)
 		cam->orient.direction = vector_normalize(rotate_x(cam->orient.direction,
 					angle));
+	setup_camera_angle(cam);
 }
+
+// void	rotate_cam(t_cam *cam, float angle, t_axis axis)
+// {
+// 	if (axis == Y_AXIS)
+// 	{
+// 		cam->yaw += angle;
+// 		// Keep yaw within 0-2PI range
+// 	}
+// 	else if (axis == X_AXIS)
+// 	{
+// 		cam->pitch += angle;
+// 		// Clamp pitch to avoid flipping
+// 		if (cam->pitch > 89.0f * M_PI / 180.0f)
+// 			cam->pitch = 89.0f * M_PI / 180.0f;
+// 		if (cam->pitch < -89.0f * M_PI / 180.0f)
+// 			cam->pitch = -89.0f * M_PI / 180.0f;
+// 	}
+
+// 	// Recalculate direction from yaw and pitch
+// 	cam->orient.direction.x = cosf(cam->yaw) * cosf(cam->pitch);
+// 	cam->orient.direction.y = sinf(cam->pitch);
+// 	cam->orient.direction.z = sinf(cam->yaw) * cosf(cam->pitch);
+// 	cam->orient.direction = vector_normalize(cam->orient.direction);
+
+// 	setup_camera_angle(cam);
+// }
+
+
 
 void	apply_movement(t_data *data)
 {
@@ -185,23 +313,29 @@ int	handle_translation(t_data *data)
 	}
 	return (0);
 }
+
+
+//&& data->control_cam == 0 	// and light here as well
 int	is_exeption(t_data *data, t_exeption action)
 {
 	if (action == NO_ROT)
 	{
-		if (data->scene->obj_selected->shape->obj_type == SP && !data->control_cam) //
-			// and light here as well
+		if (data->scene->obj_selected->shape->obj_type == SP
+			&& data->control_cam == 0)
 			return (1);
 	}
 	if (action == NO_RES)
 	{
-		if (data->scene->obj_selected->shape->obj_type == PL || data->control_cam)
+		if (data->scene->obj_selected->shape->obj_type == PL
+			|| data->control_cam)
 			// add light here
 			return (1);
 	}
 	if (action == NO_HIGHT_RES)
 	{
-		if (data->control_cam || data->scene->obj_selected->shape->obj_type != CY) // add light // should be &&
+		if (data->control_cam
+			|| data->scene->obj_selected->shape->obj_type != CY) // add light
+			// should be &&
 			// add light
 			return (1);
 	}
@@ -239,46 +373,22 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 		rotate_objects(data->scene->obj_selected, angle, axis);
 }
 
-/*
 void	rotate_objects(t_olist *node, float angle, t_axis axis)
 {
-	if (!node)
-		return ;
-	if (node->shape->obj_type == PL)
-	{
-		if (axis == Y_AXIS)
-			node->shape->normal.direction = vector_normalize(rotate_y(node->shape->normal.direction,
-						angle));
-		else
-			node->shape->normal.direction = vector_normalize(rotate_x(node->shape->normal.direction,
-						angle));
-	}
-	else if (node->shape->obj_type == CY)
-	{
-		if (axis == Y_AXIS)
-			node->shape->normal.direction = vector_normalize(rotate_y(node->shape->normal.direction,
-						angle));
-		else
-			node->shape->normal.direction = vector_normalize(rotate_x(node->shape->normal.direction,
-						angle));
-	}
-}
-*/
-
-void	rotate_objects(t_olist *node, float angle, t_axis axis)
-{
-	t_shape *obj;
+	t_shape	*obj;
 
 	if (!node || !node->shape)
 		return ;
-    obj = node->shape;
-    if(obj->obj_type == PL || obj->obj_type == CY)
-    {
-        if(axis == Y_AXIS)
-            obj->normal.direction = vector_normalize(rotate_y(obj->normal.direction, angle));
-        else
-            obj->normal.direction = vector_normalize(rotate_x(obj->normal.direction, angle));
-    }
+	obj = node->shape;
+	if (obj->obj_type == PL || obj->obj_type == CY)
+	{
+		if (axis == Y_AXIS)
+			obj->normal.direction = vector_normalize(rotate_y(obj->normal.direction,
+						angle));
+		else
+			obj->normal.direction = vector_normalize(rotate_x(obj->normal.direction,
+						angle));
+	}
 }
 
 t_vec3	rotate_y(t_vec3 current, float angle)
@@ -334,329 +444,32 @@ int	handle_resize(t_data *data)
 	return (0);
 }
 
-// resizing diam of sphere and cy
-/*
 int	resize_diameter(t_olist *node, float value)
 {
-	if (!node)
-		return (0);
-	if (node->shape->obj_type == SP)
-	{
-		node->shape->diameter += value;
-		if (node->shape->diameter < 0.1f)
-			node->shape->diameter = 0.1f;
-	}
-	else if (node->shape->obj_type == CY)//Are the same
-	{
-		node->shape->diameter += value;
-		if (node->shape->diameter < 0.1f)
-			node->shape->diameter = 0.1f;
-	}
-	return (1);
-}
-*/
-
-int	resize_diameter(t_olist *node, float value)
-{
-	t_shape *obj;
+	t_shape	*obj;
 
 	if (!node || !node->shape)
 		return (0);
-    obj = node->shape;
-    if(obj->obj_type == SP || obj->obj_type == CY)
-    {
-        obj->diameter += value;
-        if(obj->diameter < 0.1f)
-            obj->diameter = 0.1f;
-        return (1);
-    }
-    return (0);
+	obj = node->shape;
+	if (obj->obj_type == SP || obj->obj_type == CY)
+	{
+		obj->diameter += value;
+		if (obj->diameter < 0.1f)
+			obj->diameter = 0.1f;
+		return (1);
+	}
+	return (0);
 }
-/*
-int	resize_height(t_olist *node, float value)
-{
-	if (!node) // || node->obj_type != CY
-		return (0);
-	node->shape->height += value;
-	if (node->shape->height < 0.1f)
-		node->shape->height = 0.1f;
-	return (1);
-}
-*/
 
 int	resize_height(t_olist *node, float value)
 {
-	t_shape *obj;
+	t_shape	*obj;
 
 	if (!node || !node->shape)
 		return (0);
-    obj = node->shape;
+	obj = node->shape;
 	obj->height += value;
 	if (obj->height < 0.1f)
 		obj->height = 0.1f;
 	return (1);
 }
-/*
-void	print_pos(t_scene *scene)
-{
-	t_olist	*node;
-	t_sp	*sp;
-	t_pl	*pl;
-	t_cy	*cy;
-
-	if (!scene)
-		return ;
-	node = scene->obj_selected;
-	if (!node)
-	{
-		printf("No object selected\n");
-		return ;
-	}
-	if (node->obj_type == SP)
-	{
-		sp = (t_sp *)node->obj;
-		printf("Controlling Sphere, coordinates: x=%.2f y=%.2f z=%.2f\n", sp->sp_center.x,
-			sp->sp_center.y, sp->sp_center.z);
-	}
-	else if (node->obj_type == PL)
-	{
-		pl = (t_pl *)node->obj;
-		printf("Controlling Plane, coordinates: x=%.2f y=%.2f z=%.2f\n", pl->normal.origin.x,
-			pl->normal.origin.y, pl->normal.origin.z);
-	}
-	else if (node->obj_type == CY)
-	{
-		cy = (t_cy *)node->obj;
-		printf("Contrlling Cylinder, coordinates: x=%.2f y=%.2f z=%.2f\n", cy->normal.origin.x,
-			cy->normal.origin.y, cy->normal.origin.z);
-	}
-}
-*/
-
-// void	apply_movement(t_data *data)
-// {
-// 	t_move_state	*move;
-// 	t_vec3			move_vec;
-// 	int				need_redraw;
-
-// 	need_redraw = 0;
-// 	move = data->move_state;
-// 	move_vec = new_vector(0, 0, 0);
-// 	if (move->forward)
-// 		move_vec = vector_add(move_vec, new_vector(0, 0, -MOVE_SPEED));
-// 	if (move->backward)
-// 		move_vec = vector_add(move_vec, new_vector(0, 0, MOVE_SPEED));
-// 	if (move->left)
-// 		move_vec = vector_add(move_vec, new_vector(-MOVE_SPEED, 0, 0));
-// 	if (move->right)
-// 		move_vec = vector_add(move_vec, new_vector(MOVE_SPEED, 0, 0));
-// 	if (move->up)
-// 		move_vec = vector_add(move_vec, new_vector(0, MOVE_SPEED, 0));
-// 	if (move->down)
-// 		move_vec = vector_add(move_vec, new_vector(0, -MOVE_SPEED, 0));
-// 	// to check if we pressed smth
-// 	if (move_vec.x != 0 || move_vec.y != 0 || move_vec.z != 0)
-// 	{
-// 		if (data->control_cam)
-// 			translate_cam(&data->scene->cam, move_vec);
-// 		else if (data->scene->obj_selected)
-// 			translate_object(data->scene->obj_selected, move_vec);
-// 		need_redraw = 1;
-// 	}
-// 	if (move->rotate_left)
-// 	{
-// 		rotate_obj_or_cam(data, -ROTATE_SPEED, Y_AXIS);
-// 		need_redraw = 1;
-// 	}
-// 	if (move->rotate_right)
-// 	{
-// 		rotate_obj_or_cam(data, ROTATE_SPEED, Y_AXIS);
-// 		need_redraw = 1;
-// 	}
-// 	if (move->rotate_up)
-// 	{
-// 		rotate_obj_or_cam(data, -ROTATE_SPEED, X_AXIS);
-// 		need_redraw = 1;
-// 	}
-// 	if (move->rotate_down)
-// 	{
-// 		rotate_obj_or_cam(data, ROTATE_SPEED, X_AXIS);
-// 		need_redraw = 1;
-// 	}
-// 	if (move->resize_up)
-// 	{
-// 		if (data->scene->obj_selected && !data->control_cam)
-// 		{
-// 			resize_objects(data->scene->obj_selected, RESIZE_SPEED);
-// 			need_redraw = 1;
-// 		}
-// 	}
-// 	if (move->resize_down)
-// 	{
-// 		if (data->scene->obj_selected && !data->control_cam)
-// 		{
-// 			resize_objects(data->scene->obj_selected, -RESIZE_SPEED);
-// 			need_redraw = 1;
-// 		}
-// 	}
-// 	if (need_redraw)
-// 		redraw_scene(data, data->scene);
-// }
-
-// int	handle_rotation(t_data *data)
-// {
-// 	t_move_state	*move;
-// 	int				changed;
-
-// 	move = data->move_state;
-// 	changed = 0;
-// 	if (move->rotate_left)
-// 	{
-// 		rotate_obj_or_cam(data, -ROTATE_SPEED, Y_AXIS);
-// 		changed = 1;
-// 	}
-// 	if (move->rotate_right)
-// 	{
-// 		rotate_obj_or_cam(data, ROTATE_SPEED, Y_AXIS);
-// 		changed = 1;
-// 	}
-// 	if (move->rotate_up)
-// 	{
-// 		rotate_obj_or_cam(data, -ROTATE_SPEED, X_AXIS);
-// 		changed = 1;
-// 	}
-// 	if (move->rotate_down)
-// 	{
-// 		rotate_obj_or_cam(data, ROTATE_SPEED, X_AXIS);
-// 		changed = 1;
-// 	}
-// 	return (changed);
-// }
-
-// void	rotate_objects(t_olist *node, float angle)
-// {
-// 	t_pl	*pl;
-// 	t_cy	*cy;
-
-// 	if (!node || node->obj_type == SP)
-// 		return ;
-// 	if (node->obj_type == PL)
-// 	{
-// 		pl = (t_pl *)node->obj;
-// 		pl->normal.direction = vector_normalize(rotate_y(pl->normal.direction,
-// 					angle));
-// 	}
-// 	else if (node->obj_type == CY)
-// 	{
-// 		cy = (t_cy *)node->obj;
-// 		cy->normal.direction = vector_normalize(rotate_y(cy->normal.direction,
-// 					angle));
-// 	}
-// }
-
-// void	rotate_objects_x(t_olist *node, float angle)
-// {
-// 	t_pl	*pl;
-// 	t_cy	*cy;
-
-// 	if (!node)
-// 		return ;
-// 	if (node->obj_type == PL)
-// 	{
-// 		pl = (t_pl *)node->obj;
-// 		pl->normal.direction = vector_normalize(rotate_x(pl->normal.direction,
-// 					angle));
-// 	}
-// 	else if (node->obj_type == CY)
-// 	{
-// 		cy = (t_cy *)node->obj;
-// 		cy->normal.direction = vector_normalize(rotate_x(cy->normal.direction,
-// 					angle));
-// 	}
-// }
-
-// int	key_press_hook(int key, t_data *data)
-// {
-// 	t_move_state	*move;
-
-// 	move = data->move_state;
-// 	if (key == KEY_TAB)
-// 		select_object(data->scene);
-// 	else if (key == KEY_C)
-// 	{
-// 		data->control_cam = !data->control_cam;
-// 		printf("controling cam");
-// 	}
-// 	else if (key == KEY_W)
-// 		move->forward = 1;
-// 	else if (key == KEY_S)
-// 		move->backward = 1;
-// 	else if (key == KEY_A)
-// 		move->left = 1;
-// 	else if (key == KEY_D)
-// 		move->right = 1;
-// 	else if (key == KEY_Q)
-// 		move->up = 1;
-// 	else if (key == KEY_E)
-// 		move->down = 1;
-// 	// rotation
-// 	else if (key == KEY_LEFT)
-// 		move->rotate_left = 1;
-// 	else if (key == KEY_RIGHT)
-// 		move->rotate_right = 1;
-// 	else if (key == KEY_UP)
-// 		move->rotate_up = 1;
-// 	else if (key == KEY_DOWN)
-// 		move->rotate_down = 1;
-// 	// resize
-// 	else if (key == KEY_PLUS)
-// 		move->resize_up = 1;
-// 	else if (key == KEY_MINUS)
-// 		move->resize_down = 1;
-// 	else if (key == KEY_H)
-// 		move->height_up = 1;
-// 	else if (key == KEY_J)
-// 		move->height_down = 1;
-// 	else if (key == KEY_ESC)
-// 		mlx_loop_end(data->mlx);
-// 	return (0);
-// }
-
-// int	key_release_hook(int key, t_data *data)
-// {
-// 	t_move_state	*move;
-
-// 	move = data->move_state;
-// 	if (key == KEY_W)
-// 		move->forward = 0;
-// 	else if (key == KEY_S)
-// 		move->backward = 0;
-// 	else if (key == KEY_A)
-// 		move->left = 0;
-// 	else if (key == KEY_D)
-// 		move->right = 0;
-// 	else if (key == KEY_Q)
-// 		move->up = 0;
-// 	else if (key == KEY_E)
-// 		move->down = 0;
-// 	// rotation
-// 	else if (key == KEY_LEFT)
-// 		move->rotate_left = 0;
-// 	else if (key == KEY_RIGHT)
-// 		move->rotate_right = 0;
-// 	else if (key == KEY_UP)
-// 		move->rotate_up = 0;
-// 	else if (key == KEY_DOWN)
-// 		move->rotate_down = 0;
-// 	// size
-// 	else if (key == KEY_PLUS)
-// 		move->resize_up = 0;
-// 	else if (key == KEY_MINUS)
-// 		move->resize_down = 0;
-// 	// height of cy
-// 	else if (key == KEY_H)
-// 		move->height_up = 0;
-// 	else if (key == KEY_J)
-// 		move->height_down = 0;
-// 	return (0);
-// }

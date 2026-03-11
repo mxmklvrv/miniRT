@@ -80,6 +80,8 @@ typedef struct s_cam
 	float			fov;
 	float			pixel_size;
 	t_matrix		matrix;
+	float	yaw;    // Add these
+	float	pitch;  // Add these
 }	t_cam;
 
 typedef struct s_ambient

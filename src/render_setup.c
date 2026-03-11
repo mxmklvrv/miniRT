@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static void	setup_camera_angle(t_cam *cam);
+void	setup_camera_angle(t_cam *cam);
 //static void	setup_objects(t_olist *obj_list);
 //static void	setup_object_matrix(t_shape *shape);
 
@@ -14,7 +14,7 @@ void	setup_scene(t_scene *scene)
  * Calculates pixel size relative to 3d world depending on camera fov.
  * Distance between camera and 2d screen is assumed to be 1.
  */
-static void	setup_camera_angle(t_cam *cam)
+void	setup_camera_angle(t_cam *cam)
 {
 	cam->pixel_size = 1 * tanf(degrees_to_radians(cam->fov / 2)) * 2
 		/ ft_max(2, WIDTH, HEIGHT);
