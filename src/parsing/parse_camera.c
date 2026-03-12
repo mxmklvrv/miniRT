@@ -58,7 +58,8 @@ int	parse_cam(char *line, t_scene *scene)
 	if (parse_float(res[2], 0.0f, 180.0f, &fov) == 1)
 		return (parse_error(scene, ERR_CAM_FOV, res, NULL));
 	scene->cam.fov = fov;
+	scene->cam.yaw = 0;
+	scene->cam.pitch = 0;
 	free_array(res);
 	return (0);
 }
-

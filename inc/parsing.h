@@ -4,10 +4,6 @@
 
 // test
 
-t_vec3	camera_forward(t_cam *cam);
-t_vec3	camera_right(t_cam *cam);
-
-
 
 void	print_scene(t_scene *scene);
 int	postpars_validation(t_scene *scene);

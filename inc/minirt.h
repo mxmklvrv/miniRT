@@ -46,19 +46,31 @@ void	set_translation_keys(int key, t_move_state *move, int value);
 void	set_rotation_keys(int key, t_move_state *move, int value);
 void	set_resize_keys(int key, t_move_state *move, int value);
 void	select_object(t_data *data);
-void	translate_object(t_olist *node, t_vec3 move_vec);
-void	translate_cam(t_cam *cam, t_vec3 move_vec);
-void	rotate_cam(t_cam *cam, float angle, t_axis axis);
 void	apply_movement(t_data *data);
 int	handle_translation(t_data *data);
-int	handle_rotation(t_data *data);
-void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
-void	rotate_objects(t_olist *node, float angle, t_axis axis);
-t_vec3	rotate_y(t_vec3 current, float angle);
-t_vec3	rotate_x(t_vec3 current, float angle);
+int handle_translation_cam(t_data *data);
+void	translate_object(t_olist *node, t_vec3 move_vec);
+void	translate_cam(t_cam *cam, t_vec3 move_vec);
+// t_vec3 cam_axis_z(t_cam *cam);
+// t_vec3 cam_axis_x(t_cam *cam);
+// t_vec3 cam_axis_y(t_cam *cam);
+t_vec3 rotate_around_axis(t_vec3 v, t_vec3 axis, float angle);
+// void rotate_cam_local(t_cam *cam, float angle, t_vec3 axis);
+void rotate_object_local(t_shape *obj, float angle, t_axis axis);
+void rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
+int handle_rotation(t_data *data);
+int	is_exeption(t_data *data, t_exeption action);
 int	handle_resize(t_data *data);
 int	resize_diameter(t_olist *node, float value);
 int	resize_height(t_olist *node, float value);
+// void rotate_cam_angles(t_cam *cam, float yaw_delta, float pitch_delta);
+t_vec3 cam_forward(t_cam *cam);
+t_vec3 cam_right(t_cam *cam);
+t_vec3 cam_up(t_cam *cam);
+void update_cam_direction(t_cam *cam);
+void rotate_cam_yaw_pitch(t_cam *cam, float yaw_delta, float pitch_delta);
+
+
 
 /* ===== Hooks on release =================================================== */
 // int	key_press_hook(int key, t_data *data);
