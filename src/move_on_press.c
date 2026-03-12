@@ -44,7 +44,7 @@ void	set_general_keys(int key, t_data *data)
 	if (key == KEY_TAB)
 	{
 
-		reset_move_state(data->move_state);
+		// reset_move_state(data->move_state);
 
 		if (data->control_cam == 1)
 		{
@@ -56,7 +56,7 @@ void	set_general_keys(int key, t_data *data)
 	}
 	if (key == KEY_C)
 	{
-		reset_move_state(data->move_state);
+		// reset_move_state(data->move_state);
 
 		data->control_cam = !data->control_cam;
 		if (data->control_cam == 0)
@@ -176,24 +176,43 @@ int	handle_translation(t_data *data)
 // Updates orient.direction based on yaw/pitch
 void update_cam_direction(t_cam *cam)
 {
-    cam->orient.direction.x = cosf(cam->pitch) * sinf(cam->yaw);
+     cam->orient.direction.x = sinf(cam->yaw) * cosf(cam->pitch);
     cam->orient.direction.y = sinf(cam->pitch);
-    cam->orient.direction.z = cosf(cam->pitch) * cosf(cam->yaw);
+    cam->orient.direction.z = cosf(cam->yaw) * cosf(cam->pitch);
+
     cam->orient.direction = vector_normalize(cam->orient.direction);
 }
 
 void rotate_cam_yaw_pitch(t_cam *cam, float yaw_delta, float pitch_delta)
 {
-    cam->yaw += yaw_delta;
-    cam->pitch += pitch_delta;
+    // Scale the rotation speed appropriately
+    // ROTATE_SPEED is 0.1f, which might be too small for camera rotation
+    float sensitivity = 2.0f; // Increase sensitivity for camera
 
-    // Clamp pitch to avoid flipping
-    if (cam->pitch > M_PI_2 - 0.01f)
-        cam->pitch = M_PI_2 - 0.01f;
-    if (cam->pitch < -M_PI_2 + 0.01f)
-        cam->pitch = -M_PI_2 + 0.01f;
+    cam->yaw += yaw_delta * sensitivity;
+    cam->pitch += pitch_delta * sensitivity;
+
+    // Normalize yaw to keep within -PI to PI range
+    while (cam->yaw > M_PI)
+        cam->yaw -= 2 * M_PI;
+    while (cam->yaw < -M_PI)
+        cam->yaw += 2 * M_PI;
+
+    // Clamp pitch to avoid gimbal lock (slightly less than 90 degrees)
+    float max_pitch = 85.0f * M_PI / 180.0f;
+    if (cam->pitch > max_pitch)
+        cam->pitch = max_pitch;
+    if (cam->pitch < -max_pitch)
+        cam->pitch = -max_pitch;
 
     update_cam_direction(cam);
+
+    // Debug output to see what's happening
+    printf("Yaw: %.2f, Pitch: %.2f, Direction: (%.2f, %.2f, %.2f)\n",
+           cam->yaw * 180/M_PI, cam->pitch * 180/M_PI,
+           cam->orient.direction.x,
+           cam->orient.direction.y,
+           cam->orient.direction.z);
 }
 
 int handle_translation_cam(t_data *data)
@@ -336,10 +355,10 @@ void rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
     if(data->control_cam)
     {
         t_cam *cam = &data->scene->cam;
-        if(axis == Y_AXIS)       // LEFT/RIGHT
+        if(axis == Y_AXIS)       // LEFT/RIGHT - affects YAW
             rotate_cam_yaw_pitch(cam, angle, 0);
-        else if(axis == X_AXIS)  // UP/DOWN
-            rotate_cam_yaw_pitch(cam, 0, angle);
+        else if(axis == X_AXIS)  // UP/DOWN - affects PITCH
+            rotate_cam_yaw_pitch(cam, 0, -angle); // Negative for intuitive up/down
     }
     else if(data->scene->obj_selected)
     {
