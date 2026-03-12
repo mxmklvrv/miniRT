@@ -45,7 +45,8 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	visuals.c \
 	hooks.c \
 	draw.c \
-	shapes.c \
+	shapes_intersection.c \
+	shapes_normal.c \
 	vector.c \
 	color.c \
 	matrix.c \
@@ -53,7 +54,8 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	print.c \
 	move_on_press.c \
 	render_setup.c \
-	ray_tracing.c \
+	tracing_color.c \
+	tracing_lighting.c \
 	)
 
 
