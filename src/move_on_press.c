@@ -7,90 +7,6 @@ void	reset_move_state(t_move_state *move)
 	ft_bzero(move, sizeof(t_move_state));
 }
 
-//
-// === 1. ADD THESE HELPER FUNCTIONS (put them near your other vector functions,
-// t_vec3	camera_forward(t_cam *cam)
-// {
-// 	return (vector_normalize(cam->orient.direction));
-// }
-
-// t_vec3	camera_right(t_cam *cam)
-// {
-// 	t_vec3	forward;
-// 	t_vec3	world_up;
-// 	t_vec3	right;
-
-// 	forward = camera_forward(cam);
-// 	world_up = new_vector(0, 1, 0);
-// 	right = vector_cross(world_up, forward); // right = vector_cross(world_up, forward);
-// 	// fallback if camera is looking straight up/down (prevents zero vector)
-// 	if (vector_magnitude(right) < 0.01f)
-// 		right = new_vector(1, 0, 0);
-// 	return (vector_normalize(right));
-// }
-// int	handle_translation(t_data *data)
-// {
-// 	t_move_state	*move;
-// 	t_vec3			move_vec;
-// 	float			speed;
-// 	t_vec3			fwd;
-// 	t_vec3			right;
-
-// 	move = data->move_state;
-// 	move_vec = new_vector(0, 0, 0);
-// 	speed = MOVE_SPEED;
-// 	if (data->control_cam)
-// 	{
-// 		// CAMERA MOVEMENT = camera-relative (what your teammate expects)
-// 		fwd = camera_forward(&data->scene->cam);
-// 		right = camera_right(&data->scene->cam);
-// 		// now move up move->forward (W) vert
-// 		if (move->forward)
-// 			move_vec.y += speed;
-// 		// now move down move->backword (S) vert
-// 		if (move->backward)
-// 			move_vec.y -= speed;
-// 		if (move->left)
-// 			move_vec = vector_add(move_vec, vector_multiply(right, -speed));
-// 		// A = left
-// 		if (move->right)
-// 			move_vec = vector_add(move_vec, vector_multiply(right, speed));
-// 		// D = right
-// 		// now Q moves up
-// 		if (move->up)
-// 			move_vec = vector_add(move_vec, vector_multiply(fwd, speed));
-// 		// now E moves down
-// 		if (move->down)
-// 			move_vec = vector_add(move_vec, vector_multiply(fwd, -speed));
-// 	}
-// 	else if (data->scene->obj_selected)
-// 	{
-// 		// OBJECT MOVEMENT = world space (standard for selected objects in miniRT)
-// 		// This fixes "W moves object up" and "Q/E moves it closer/farther"
-// 		if (move->forward)
-// 			move_vec.z -= speed;
-// 		if (move->backward)
-// 			move_vec.z += speed;
-// 		if (move->left)
-// 			move_vec.x -= speed;
-// 		if (move->right)
-// 			move_vec.x += speed;
-// 		if (move->up)
-// 			move_vec.y += speed;
-// 		if (move->down)
-// 			move_vec.y -= speed;
-// 	}
-// 	if (move_vec.x != 0 || move_vec.y != 0 || move_vec.z != 0)
-// 	{
-// 		if (data->control_cam)
-// 			translate_cam(&data->scene->cam, move_vec);
-// 		else
-// 			translate_object(data->scene->obj_selected, move_vec);
-// 		return (1);
-// 	}
-// 	return (0);
-// }
-
 
 int	key_press_hook(int key, t_data *data)
 {
@@ -156,17 +72,17 @@ void	set_general_keys(int key, t_data *data)
 void	set_translation_keys(int key, t_move_state *move, int value)
 {
 	if (key == KEY_W)
-		move->forward = value;
+		move->up = value;
 	else if (key == KEY_S)
-		move->backward = value;
+		move->down = value;
 	else if (key == KEY_A)
 		move->left = value;
 	else if (key == KEY_D)
 		move->right = value;
 	else if (key == KEY_Q)
-		move->up = value;
+		move->forward = value;
 	else if (key == KEY_E)
-		move->down = value;
+		move->backward = value;
 }
 
 void	set_rotation_keys(int key, t_move_state *move, int value)
@@ -240,31 +156,74 @@ void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 	setup_camera_angle(cam);
 }
 
-// void	rotate_cam(t_cam *cam, float angle, t_axis axis)
-// {
-// 	if (axis == Y_AXIS)
-// 	{
-// 		cam->yaw += angle;
-// 		// Keep yaw within 0-2PI range
-// 	}
-// 	else if (axis == X_AXIS)
-// 	{
-// 		cam->pitch += angle;
-// 		// Clamp pitch to avoid flipping
-// 		if (cam->pitch > 89.0f * M_PI / 180.0f)
-// 			cam->pitch = 89.0f * M_PI / 180.0f;
-// 		if (cam->pitch < -89.0f * M_PI / 180.0f)
-// 			cam->pitch = -89.0f * M_PI / 180.0f;
-// 	}
+// test cam functions 
 
-// 	// Recalculate direction from yaw and pitch
-// 	cam->orient.direction.x = cosf(cam->yaw) * cosf(cam->pitch);
-// 	cam->orient.direction.y = sinf(cam->pitch);
-// 	cam->orient.direction.z = sinf(cam->yaw) * cosf(cam->pitch);
-// 	cam->orient.direction = vector_normalize(cam->orient.direction);
+t_vec3 cam_axis_z(t_cam *cam)
+{
+    return (vector_normalize(cam->orient.direction));
+}
 
-// 	setup_camera_angle(cam);
-// }
+t_vec3 cam_axis_x(t_cam *cam)
+{
+    t_vec3 forward;
+    t_vec3 world_up;
+    t_vec3 right;
+
+    forward = cam_axis_z(cam);
+    world_up = new_vector(0, 1, 0);
+    right = vector_cross(world_up, forward);
+
+    if(vector_magnitude(right) < 0.001f)
+        right = new_vector(1, 0, 0);
+    else
+        right = vector_normalize(right);
+    return (right);
+}
+
+t_vec3 cam_axis_y(t_cam *cam)
+{
+    t_vec3 forward;
+    t_vec3 right;
+
+    forward = cam_axis_z(cam);
+    right = cam_axis_x(cam);
+    return (vector_normalize(vector_cross(forward, right)));
+}
+
+int handle_translation_cam(t_data *data)
+{
+    t_vec3 move_vec;
+    t_vec3 forward;
+    t_vec3 right;
+    t_vec3 up;
+    t_move_state *move;
+
+    move = data->move_state;
+    forward = cam_axis_z(&data->scene->cam);
+    right = cam_axis_x(&data->scene->cam);
+    up = cam_axis_y(&data->scene->cam);
+
+    move_vec = new_vector(0, 0, 0);
+
+    if(move->forward)
+        move_vec = vector_add(move_vec, vector_multiply(forward, MOVE_SPEED));
+    if(move->backward)
+        move_vec = vector_add(move_vec, vector_multiply(forward, -MOVE_SPEED));
+    if(move->left)
+        move_vec = vector_add(move_vec, vector_multiply(right, -MOVE_SPEED));
+    if(move->right)
+        move_vec = vector_add(move_vec, vector_multiply(right, MOVE_SPEED));
+    if(move->up)
+        move_vec = vector_add(move_vec, vector_multiply(up, MOVE_SPEED));
+    if(move->down)
+        move_vec = vector_add(move_vec, vector_multiply(up, -MOVE_SPEED));
+    if(vector_magnitude(move_vec) > 0)
+    {
+        translate_cam(&data->scene->cam, move_vec);
+        return(1);
+    }
+    return (0);
+}
 
 
 
@@ -273,8 +232,16 @@ void	apply_movement(t_data *data)
 	int	need_redraw;
 
 	need_redraw = 0;
-	if (handle_translation(data))
-		need_redraw = 1;
+    if(data->control_cam)
+    {
+        if(handle_translation_cam(data))
+            need_redraw = 1;
+    }
+    else
+    {
+        if (handle_translation(data))
+		    need_redraw = 1;
+    }
 	if (handle_rotation(data))
 		need_redraw = 1;
 	if (handle_resize(data))
@@ -284,6 +251,7 @@ void	apply_movement(t_data *data)
 }
 
 // add translate light
+/* 
 int	handle_translation(t_data *data)
 {
 	t_move_state	*move;
@@ -308,6 +276,34 @@ int	handle_translation(t_data *data)
 		if (data->control_cam)
 			translate_cam(&data->scene->cam, move_vec);
 		else if (data->scene->obj_selected)
+			translate_object(data->scene->obj_selected, move_vec);
+		return (1);
+	}
+	return (0);
+}
+*/
+int	handle_translation(t_data *data)
+{
+	t_move_state	*move;
+	t_vec3			move_vec;
+
+	move = data->move_state;
+	move_vec = new_vector(0, 0, 0);
+	if (move->forward)
+		move_vec.z -= MOVE_SPEED;
+	if (move->backward)
+		move_vec.z += MOVE_SPEED;
+	if (move->left)
+		move_vec.x -= MOVE_SPEED;
+	if (move->right)
+		move_vec.x += MOVE_SPEED;
+	if (move->up)
+		move_vec.y += MOVE_SPEED;
+	if (move->down)
+		move_vec.y -= MOVE_SPEED;
+	if (move_vec.x != 0 || move_vec.y != 0 || move_vec.z != 0)
+	{
+		 if (data->scene->obj_selected)
 			translate_object(data->scene->obj_selected, move_vec);
 		return (1);
 	}
