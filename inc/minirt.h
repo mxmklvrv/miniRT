@@ -149,6 +149,6 @@ int		get_blue(int color);
 int		color_add(int c1, int c2);
 int		color_substract(int c1, int c2);
 int		color_multiply(int c, float scalar);
-int		color_mix(int c1, float intencity_1, int c2, float intencity_2);
+int		color_mix(int c1, int c2, float intencity);
 
 #endif

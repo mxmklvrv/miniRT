@@ -79,16 +79,16 @@ int	color_multiply(int c, float scalar)
 }
 /* Find the color of mix of 2 colors.
  * @param	int		c1			color 1;
- * @param	float	intencity_1	intencity of color 1;
  * @param	int		c2			color 2;
- * @param	float	intencity_2	intencity of color 2;
+ * @param	float	intencity	intencity of color 2;
  * @returns	int		resulting color.
  */
-int	color_mix(int c1, float intencity_1, int c2, float intencity_2)
+int	color_mix(int c1, int c2, float intencity)
 {
-	float	sum;
-
-	sum = intencity_1 + intencity_2;
-	return(color_add(color_multiply(c1, intencity_1 / sum), color_multiply(c2,
-		intencity_2 / sum)));
+	if (intencity < 0)
+		intencity = 0;
+	if (intencity > 1)
+		intencity = 1;
+	return(color_add(color_multiply(c1, 1 - intencity), color_multiply(c2,
+		intencity)));
 }
