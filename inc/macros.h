@@ -19,13 +19,13 @@
 # define ERR_PL_LIST "Failed adding plane to the list"
 # define ERR_PL_POINT "Invalid plane point"
 # define ERR_PL_NORM "Invalid plane normal"
-# define ERR_PL_COLR "Invalid plane colour"
+# define ERR_PL_COLR "Invalid plane color"
 
 # define ERR_SP_SPEC "Invalid specs for sphere"
 # define ERR_SP_LIST "Failed adding sphere to the list"
 # define ERR_SP_CNTR "Invalid sphere center"
 # define ERR_SP_DIAM "Invalid sphere diameter"
-# define ERR_SP_COLR "Invalid sphere colour"
+# define ERR_SP_COLR "Invalid sphere color"
 
 # define ERR_CY_SPEC "Invalid specs for cylinder"
 # define ERR_CY_LIST "Failed adding cylinder to the list"
@@ -33,7 +33,7 @@
 # define ERR_CY_AXIS "Invalid cylinder axis"
 # define ERR_CY_DIAM "Invalid cylinder diameter"
 # define ERR_CY_HGHT "Invalid cylinder height"
-# define ERR_CY_COLR "Invalid cylinder colour"
+# define ERR_CY_COLR "Invalid cylinder color"
 
 # define ERR_CAM_QTY "Only 1 camera is alowed"
 # define ERR_CAM_SPEC "Invalid specs for camera"
@@ -44,13 +44,13 @@
 # define ERR_AMB_QTY "Only 1 Ambient is allowed"
 # define ERR_AMB_SPEC "Invalid Ambient specs"
 # define ERR_AMB_RATI "Invalid Ambient ratio"
-# define ERR_AMB_COLR "Invalid Ambient colour"
+# define ERR_AMB_COLR "Invalid Ambient color"
 
 # define ERR_LIGT_QTY "Only 1 light is allowed"
 # define ERR_LIGT_SPEC "Invalid light specs"
 # define ERR_LIGT_POS "Invalid light position"
 # define ERR_LIGT_BRIT "Invalid light brightness"
-# define ERR_LIGT_COLOR "Invalid light colour"
+# define ERR_LIGT_COLOR "Invalid light color"
 
 
 

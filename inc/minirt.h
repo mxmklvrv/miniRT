@@ -83,6 +83,8 @@ void	setup_scene(t_scene *scene);
 void	set_matrix(t_matrix *old_m, t_matrix new_m);
 float	degrees_to_radians(float degrees);
 int		trace_color(t_ray ray, t_scene *scene);
+int		lighting(t_light light, t_ambient ambient, t_intersection intersection,
+		t_ray ray);
 
 /* ===== Vector math ======================================================== */
 t_vec3	new_vector(float x, float y, float z);
@@ -146,6 +148,6 @@ int		get_blue(int color);
 int		color_add(int c1, int c2);
 int		color_substract(int c1, int c2);
 int		color_multiply(int c, float scalar);
-//int		color_mix(int c1, int c2);
+int		color_mix(int c1, float intencity_1, int c2, float intencity_2);
 
 #endif

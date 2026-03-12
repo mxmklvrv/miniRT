@@ -41,6 +41,7 @@ static t_intersection	hit_sp(t_ray ray, t_shape *sp)
 		intersection.val[0] = (-b - sqrtf(discriminant)) / (2 * a);
 		intersection.val[1] = (-b + sqrtf(discriminant)) / (2 * a);
 	}
+	intersection.shape = sp;
 	return (intersection);
 }
 
@@ -51,6 +52,7 @@ static t_intersection	hit_cy(t_ray ray, t_shape *cy)
 	(void)ray;
 	(void)cy;
 	intersection.count = 0;
+	intersection.shape = cy;
 	return (intersection);
 }
 
@@ -68,6 +70,7 @@ static t_intersection	hit_pl(t_ray ray, t_shape *pl)
 		intersection.val[0] = vector_dot(vector_substract(ray.origin,
 			pl->normal.origin), pl->normal.direction) / denominator;
 	}
+	intersection.shape = pl;
 	return (intersection);
 }
 

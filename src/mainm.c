@@ -122,7 +122,7 @@ void	print_scene(t_scene *scene)
 			printf("Height: %.2f\n", s->height);
 		}
 
-		printf("Color: %d\n", s->colour);
+		printf("Color: %d\n", s->color);
 
 		tmp = tmp->next;
 	}

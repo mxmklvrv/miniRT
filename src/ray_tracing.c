@@ -3,8 +3,6 @@
 static void		find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closest);
 static float	get_closest_hit(t_intersection intersection);
 
-int	lighting(t_light light, t_intersection intersection, t_ray ray);
-
 int	trace_color(t_ray ray, t_scene *scene)
 {
 	t_olist			*obj_list;
@@ -18,12 +16,10 @@ int	trace_color(t_ray ray, t_scene *scene)
 		find_closest_intersection(ray, obj_list->shape, &closest);
 		obj_list = obj_list->next;
 	}
-	color = scene->ambient.color;
-	if (closest.count > 0)
-	{
-		color = closest.shape->color;
-		//color = lighting(scene->light, closest, ray);
-	}
+	if (closest.count == 0)
+		return (scene->ambient.color);
+	//color = closest.shape->color;
+	color = lighting(scene->light, scene->ambient, closest, ray);
 	return (color);
 }
 
@@ -56,22 +52,53 @@ static float	get_closest_hit(t_intersection intersection)
 	return (hit);
 }
 
-//int	lighting(t_light light, t_intersection intersection, t_ray ray)
-//{
-//	int	color;
-//	float	ambient;
-//	float	diffuse;
-//	float	specular;
-//	t_vec3	point;
+/* Material properties:
+ * ambient = 0.1;
+ * diffuse = 0.9;
+ * specular = 0.9;
+ * shininess = 200.0.
+ */
+int	lighting(t_light light, t_ambient background, t_intersection intersection, t_ray ray)
+{
+	int	color;
+	float	ambient;
+	float	diffuse;
+	float	specular;
+	t_vec3	point;
+	t_vec3	light_vector;
+	float	light_angle;
+	t_vec3	normal_vector;
+	t_vec3	reflect_vector;
+	float	reflect_angle;
+	float	shininess;
 
-//	color = color_mix(intersection.shape->color, color_multiply(light.color, light.bright));
-//	point = get_ray_point(ray, get_closest_hit(intersection));
-//	ambient = 0.1;
-//	diffuse = 0.9 * cosf(get_normal(intersection.shape, point), light.pos);
-//	specular = 0.9 * ;
-//	color = color_multiply(intersection.shape->color, ambient + diffuse + specular);
-//	return (color);
-//}
+	color = intersection.shape->color;//color_mix(intersection.shape->color, 1, light.color, light.bright);
+	point = get_ray_point(ray, get_closest_hit(intersection));
+	light_vector = vector_normalize(vector_substract(light.pos, point));
+	ambient = color_mix(color, 1, background.color, background.amb);
+	normal_vector = get_normal(intersection.shape, point);
+	light_angle = vector_dot(light_vector, normal_vector);
+	if (light_angle < 0)
+	{
+		diffuse = 0;
+		specular = 0;
+	}
+	else
+	{
+		diffuse = color_multiply(color, 0.9 * light_angle);
+		reflect_vector = vector_reflect(vector_negate(light_vector), normal_vector);
+		reflect_angle = vector_dot(reflect_vector, ray.direction);
+		if (reflect_angle < 0 || is_equalf(reflect_angle, 0))
+			specular = 0;
+		else
+		{
+			shininess = powf(reflect_angle, 200.0);
+			specular = light.bright * 0.9 * shininess;
+		}
+	}
+	color = color_add(ambient, color_add(diffuse, specular));
+	return (color);
+}
 
 
 

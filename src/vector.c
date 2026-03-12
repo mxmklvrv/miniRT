@@ -101,7 +101,6 @@ t_vec3	vector_divide(t_vec3 v, float scalar)
 	));
 }
 
-//Do we need to include v.w here? It's 0 for vectors...
 /* If magnitude equals 1 - it is a unit vector. */
 float	vector_magnitude(t_vec3 v)
 {
@@ -121,7 +120,6 @@ t_vec3	vector_normalize(t_vec3 v)
 }
 
 /* The smaller the dot product - the larger the angle between the vectors.
-
  For unit vectors: 
   Dot product is cosine of the angle between vectors.
   1 - vectors are identical;
