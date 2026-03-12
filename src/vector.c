@@ -148,8 +148,6 @@ t_vec3	vector_cross(t_vec3 v1, t_vec3 v2)
 	));
 }
 
-
-
 t_vec3	vector_reflect(t_vec3 v, t_vec3 normal)
 {
 	t_vec3	reflection;

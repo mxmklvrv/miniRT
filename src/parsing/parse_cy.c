@@ -9,7 +9,7 @@
 // 	t_cy	*cylinder;
 // 	float	diameter;
 // 	float	height;
-// 	int		colour;
+// 	int		color;
 
 // 	if (count_elements(line) != 5)
 // 		return (error("Invalid specs for cylinder", scene->err_m), 1);
@@ -27,20 +27,20 @@
 // 				scene->err_m), free(cylinder), free_array(res), 1);
 // 	diameter = 0.0f;
 // 	height = 0.0f;
-// 	colour = 0;
+// 	color = 0;
 // 	if (parse_float(res[2], 0.0f, 100.0f, &diameter) == 1)
 // 		return (error("Invalid cylinder diameter", scene->err_m),
 // 			free(cylinder), free_array(res), 1);
 // 	if (parse_float(res[3], 0.0f, 100.0f, &height) == 1)
 // 		return (error("Invalid cylinder height", scene->err_m), free(cylinder),
 // 			free_array(res), 1);
-// 	if (parse_rgb(res[4], &colour) == 1)
-// 		return (error("Invalid cylinder colour", scene->err_m), free(cylinder),
+// 	if (parse_rgb(res[4], &color) == 1)
+// 		return (error("Invalid cylinder color", scene->err_m), free(cylinder),
 // 			free_array(res), 1);
 // 	cylinder->diameter = diameter;
 // 	cylinder->height = height;
-// 	cylinder->colour = colour;
-// 	if (add_to_list(&scene->obj_list, cylinder, CY, cylinder->colour) == 1)
+// 	cylinder->color = color;
+// 	if (add_to_list(&scene->obj_list, cylinder, CY, cylinder->color) == 1)
 // 		return (error("Failed adding cylinder to the list", scene->err_m),
 // 			free(cylinder), free_array(res), 1);
 // 	printf("CYLINDR\n");
@@ -52,7 +52,7 @@
 // 		cylinder->normal.direction.z);
 // 	printf("diam %f\n", cylinder->diameter);
 // 	printf("height %f", cylinder->height);
-// 	printf("color %d\n\n", cylinder->colour);
+// 	printf("color %d\n\n", cylinder->color);
 // 	free_array(res);
 // 	return (0);
 // }
@@ -91,7 +91,7 @@ int	init_cylinder(t_shape *shape, char **res, t_scene *scene)
 		return (error_return(ERR_CY_DIAM, scene->err_m));
 	if (parse_float(res[3], 0.0f, 100.0f, &shape->height) == 1)
 		return (error_return(ERR_CY_HGHT, scene->err_m));
-	if (parse_rgb(res[4], &shape->colour) == 1)
+	if (parse_rgb(res[4], &shape->color) == 1)
 		return (error_return(ERR_CY_COLR, scene->err_m));
 	return (0);
 }

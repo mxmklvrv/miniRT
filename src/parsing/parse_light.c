@@ -4,7 +4,7 @@
 // {
 // 	char	**res;
 // 	float	bright;
-// 	int		colour;
+// 	int		color;
 
 // 	if (scene->qt_light > 1)
 // 		return (error_return(ERR_LIGT_QTY, NULL));
@@ -14,7 +14,7 @@
 // 	if (!res)
 // 		return (error_return(ERR_ALLOC, NULL));
 // 	bright = 0.0f;
-// 	colour = 0;
+// 	color = 0;
 // 	if (parse_vector(res[0], &scene->light.pos, -100.0f, 100.0f) == 1)
 // 	{
 // 		free_array(res);
@@ -25,13 +25,13 @@
 // 		free_array(res);
 // 		return (error_return(ERR_LIGT_BRIT, scene->err_m));
 // 	}
-// 	if (parse_rgb(res[2], &colour) == 1) // this is for bonus
+// 	if (parse_rgb(res[2], &color) == 1) // this is for bonus
 // 	{
 // 		free_array(res);
 // 		return (error_return(ERR_LIGT_COLOR, scene->err_m));
 // 	}
 // 	scene->light.bright = bright;
-// 	scene->light.color = colour; // this is for bonus
+// 	scene->light.color = color; // this is for bonus
 // 	free_array(res);
 // 	return (0);
 // }
@@ -40,7 +40,7 @@ int	parse_light(char *line, t_scene *scene)
 {
 	char	**res;
 	float	bright;
-	int		colour;
+	int		color;
 
 	if (scene->qt_light > 1)
 		return (error_return(ERR_LIGT_QTY, NULL));
@@ -50,15 +50,15 @@ int	parse_light(char *line, t_scene *scene)
 	if (!res)
 		return (error_return(ERR_ALLOC, NULL));
 	bright = 0.0f;
-	colour = 0;
+	color = 0;
 	if (parse_vector(res[0], &scene->light.pos, -100.0f, 100.0f) == 1)
 		return (parse_error(scene,ERR_LIGT_POS, res, NULL));
 	if (parse_float(res[1], 0.0f, 1.0f, &bright) == 1)
 		return (parse_error(scene,ERR_LIGT_BRIT,res, NULL));
-	if (parse_rgb(res[2], &colour) == 1) // this is for bonus
+	if (parse_rgb(res[2], &color) == 1) // this is for bonus
 		return (parse_error(scene, ERR_LIGT_COLOR, res, NULL));
 	scene->light.bright = bright;
-	scene->light.color = colour; // this is for bonus
+	scene->light.color = color; // this is for bonus
 	free_array(res);
 	return (0);
 }

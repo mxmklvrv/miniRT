@@ -11,8 +11,6 @@ int	add_to_list(t_scene *scene, t_shape *shape); // new version
 
 void	setup_camera_angle(t_cam *cam);
 void	reset_move_state(t_move_state *move);
-
-// int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
 void	free_list(t_olist *list);
 t_vec3	creat_vec3(float x, float y, float z);
 void	free_array(char **arr);

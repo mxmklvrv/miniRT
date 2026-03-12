@@ -347,7 +347,7 @@ int	parse_float(char *str, float min, float max, float *res)
 	return (0);
 }
 
-// int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
+// int	add_to_list(t_olist **list, void *object, t_otype type, int color)
 // {
 // 	t_olist	*new;
 // 	t_olist	*temp;
@@ -357,7 +357,7 @@ int	parse_float(char *str, float min, float max, float *res)
 // 		return (1);
 // 	new->obj_type = type;
 // 	new->obj = object;
-// 	new->colour = colour;
+// 	new->color = color;
 // 	new->next = NULL;
 // 	if (*list == NULL)
 // 		*list = new;

@@ -1,6 +1,24 @@
 #include "minirt.h"
 
-t_intersection	hit_sp(t_ray ray, t_shape *sp)
+static t_intersection	hit_sp(t_ray ray, t_shape *sp);
+static t_intersection	hit_cy(t_ray ray, t_shape *cy);
+static t_intersection	hit_pl(t_ray ray, t_shape *pl);
+
+t_intersection	get_intersection(t_ray ray, t_shape *shape)
+{
+	t_intersection	intersection;
+
+	intersection.count = 0;
+	if (shape->obj_type == SP)
+		intersection = hit_sp(ray, shape);
+	else if (shape->obj_type == CY)
+		intersection = hit_cy(ray, shape);
+	else if (shape->obj_type == PL)
+		intersection = hit_pl(ray, shape);
+	return (intersection);
+}
+
+static t_intersection	hit_sp(t_ray ray, t_shape *sp)
 {
 	float			a;
 	float			b;
@@ -26,16 +44,7 @@ t_intersection	hit_sp(t_ray ray, t_shape *sp)
 	return (intersection);
 }
 
-t_vec3	normal_at_sp(t_vec3 point, t_shape *sp)
-{
-	t_vec3	normal;
-
-	normal = vector_substract(point, sp->center);
-	normal = vector_normalize(normal);
-	return (normal);
-}
-
-t_intersection	hit_cy(t_ray ray, t_shape *cy)
+static t_intersection	hit_cy(t_ray ray, t_shape *cy)
 {
 	t_intersection	intersection;
 
@@ -45,7 +54,7 @@ t_intersection	hit_cy(t_ray ray, t_shape *cy)
 	return (intersection);
 }
 
-t_intersection	hit_pl(t_ray ray, t_shape *pl)
+static t_intersection	hit_pl(t_ray ray, t_shape *pl)
 {
 	float	denominator;
 	t_intersection	intersection;
@@ -60,4 +69,28 @@ t_intersection	hit_pl(t_ray ray, t_shape *pl)
 			pl->normal.origin), pl->normal.direction) / denominator;
 	}
 	return (intersection);
+}
+
+
+
+
+static t_vec3	normal_at_sp(t_vec3 point, t_shape *sp);
+
+t_vec3	get_normal(t_shape *shape, t_vec3 point)
+{
+	if (shape->obj_type == SP)
+		return (normal_at_sp(point, shape));
+	if (shape->obj_type == PL)
+		return (shape->normal.direction);
+	else
+		return (point);
+}
+
+static t_vec3	normal_at_sp(t_vec3 point, t_shape *sp)
+{
+	t_vec3	normal;
+
+	normal = vector_substract(point, sp->center);
+	normal = vector_normalize(normal);
+	return (normal);
 }
