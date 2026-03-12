@@ -18,7 +18,6 @@ void	draw_scene(t_data *data)
 	{
 		draw_one_render_cycle(data, pixels_to_render, &first_cycle);
 		mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
-		//printf("Pixels rendered: %i\n", pixels_to_render);
 		if (pixels_to_render == 1)
 			break ;
 		pixels_to_render /= 2;
@@ -59,10 +58,8 @@ static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 	float		angle;
 
 	angle = -atanf((pixel.i - WIDTH / 2) * cam.pixel_size);
-	//angle = (pixel.i - WIDTH / 2) * cam.pixel_size; //old
 	rotation_i = new_rotation_z_matrix(angle);
 	angle = atanf((pixel.j - HEIGHT / 2) * cam.pixel_size);
-	//angle = (pixel.j - HEIGHT / 2) * cam.pixel_size; //old
 	rotation_j = new_rotation_x_matrix(angle);
 	rotation = chain_matrices(rotation_i, rotation_j);
 	direction = matrix_multiply_by_vector(rotation, cam.orient.direction);
@@ -103,8 +100,6 @@ static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_ren
 			pixel.i++;
 		while (pixel.i <= max_i && pixel.i < WIDTH)
 		{
-			//if (pixel.i == 325 && pixel.j == 250)
-			//	pixel.color = new_color(255, 255, 255, 255);
 			ft_mlx_put_pixel(data, pixel);//TODO: add writting to ppm(?)
 			pixel.i++;
 		}
