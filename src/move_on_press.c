@@ -133,7 +133,7 @@ void	translate_cam(t_cam *cam, t_vec3 move_vec)
 void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 {
 	if (axis == Y_AXIS)
-		cam->orient.direction = vector_normalize(rotate_y(cam->orient.direction,
+		cam->orient.direction = vector_normalize(rotate_z(cam->orient.direction,
 					angle));
 	else if (axis == X_AXIS)
 		cam->orient.direction = vector_normalize(rotate_x(cam->orient.direction,
@@ -275,13 +275,17 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
     if(obj->obj_type == PL || obj->obj_type == CY)
     {
         if(axis == Y_AXIS)
-            obj->normal.direction = vector_normalize(rotate_y(obj->normal.direction, angle));
+            obj->normal.direction = vector_normalize(rotate_z(obj->normal.direction, angle));
         else
             obj->normal.direction = vector_normalize(rotate_x(obj->normal.direction, angle));
     }
 }
 
-t_vec3	rotate_y(t_vec3 current, float angle)
+/* To look up-down we change Z and Y coordinates, so rotate around 0X axis;
+ * To look left-right we change X and Y coordinates, so rotate around 0Z axis;
+ * Should it be named rotate_z?
+ */
+t_vec3	rotate_z(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
 	float	cosinus;
@@ -289,12 +293,27 @@ t_vec3	rotate_y(t_vec3 current, float angle)
 
 	cosinus = cosf(angle);
 	sinus = sinf(angle);
-	rotated.x = current.x * cosinus + current.z * sinus;
-	rotated.y = current.y;
-	rotated.z = -current.x * sinus + current.z * cosinus;
+	rotated.x = current.x * cosinus + current.y * sinus;
+	rotated.y = -current.x * sinus + current.y * cosinus;
+	rotated.z = current.z;
 	rotated.w = current.w;
 	return (rotated);
 }
+
+//t_vec3	rotate_y(t_vec3 current, float angle)
+//{
+//	t_vec3	rotated;
+//	float	cosinus;
+//	float	sinus;
+
+//	cosinus = cosf(angle);
+//	sinus = sinf(angle);
+//	rotated.x = current.x * cosinus + current.z * sinus;
+//	rotated.y = current.y;
+//	rotated.z = -current.x * sinus + current.z * cosinus;
+//	rotated.w = current.w;
+//	return (rotated);
+//}
 
 t_vec3	rotate_x(t_vec3 current, float angle)
 {

@@ -54,7 +54,8 @@ int	handle_translation(t_data *data);
 int	handle_rotation(t_data *data);
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
 void	rotate_objects(t_olist *node, float angle, t_axis axis);
-t_vec3	rotate_y(t_vec3 current, float angle);
+//t_vec3	rotate_y(t_vec3 current, float angle);//Can comment
+t_vec3	rotate_z(t_vec3 current, float angle);
 t_vec3	rotate_x(t_vec3 current, float angle);
 int	handle_resize(t_data *data);
 int	resize_diameter(t_olist *node, float value);

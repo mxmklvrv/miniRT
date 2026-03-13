@@ -16,7 +16,7 @@ void	setup_scene(t_scene *scene)
  */
 static void	setup_camera_angle(t_cam *cam)
 {
-	cam->pixel_size = 1 * tanf(degrees_to_radians(cam->fov / 2)) * 2
+	cam->pixel_size = 1 * tanf(degrees_to_radians(cam->fov) / 2) * 2
 		/ ft_max(2, WIDTH, HEIGHT);
 	//cam->matrix = ;
 	//t_vec3	opposite_cam;
