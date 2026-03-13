@@ -155,6 +155,8 @@ void	apply_movement(t_data *data)
 		redraw_scene(data);
 }
 
+/* Switched signs for z movement to look accurate
+ */ //anna
 // add translate light
 int	handle_translation(t_data *data)
 {
@@ -164,9 +166,9 @@ int	handle_translation(t_data *data)
 	move = data->move_state;
 	move_vec = new_vector(0, 0, 0);
 	if (move->forward)
-		move_vec.z -= MOVE_SPEED;
+		move_vec.z += MOVE_SPEED;//anna
 	if (move->backward)
-		move_vec.z += MOVE_SPEED;
+		move_vec.z -= MOVE_SPEED;//anna
 	if (move->left)
 		move_vec.x -= MOVE_SPEED;
 	if (move->right)
@@ -284,7 +286,7 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 /* To look up-down we change Z and Y coordinates, so rotate around 0X axis;
  * To look left-right we change X and Y coordinates, so rotate around 0Z axis;
  * Should it be named rotate_z?
- */
+ */ //anna
 t_vec3	rotate_z(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
@@ -315,14 +317,16 @@ t_vec3	rotate_z(t_vec3 current, float angle)
 //	return (rotated);
 //}
 
+/* Changed 'angle' to '-angle' to invert vertical rotation.
+ */ //anna
 t_vec3	rotate_x(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
 	float	cosinus;
 	float	sinus;
 
-	cosinus = cosf(angle);
-	sinus = sinf(angle);
+	cosinus = cosf(-angle);//anna
+	sinus = sinf(-angle);//anna
 	rotated.x = current.x;
 	rotated.y = current.y * cosinus - current.z * sinus;
 	rotated.z = current.y * sinus + current.z * cosinus;
