@@ -20,10 +20,10 @@ int	lighting(t_light light, t_ambient background, t_intersection intersection, t
 	float	reflect_angle;
 	float	shininess;
 
-	color = intersection.shape->color;//color_mix(intersection.shape->color, 1, light.color, light.bright);
+	color = color_mix(intersection.shape->color, light.color, light.bright);
 	point = get_ray_point(ray, get_closest_hit(intersection));
 	light_vector = vector_normalize(vector_substract(light.pos, point));
-	ambient = color_mix(color, 1, background.color, background.amb);
+	ambient = color_mix(color, background.color, background.amb);
 	normal_vector = get_normal(intersection.shape, point);
 	light_angle = vector_dot(light_vector, normal_vector);
 	if (light_angle < 0)
@@ -33,7 +33,7 @@ int	lighting(t_light light, t_ambient background, t_intersection intersection, t
 	}
 	else
 	{
-		diffuse = color_multiply(color, 0.9 * light_angle);
+		diffuse = color_mix(color, light.color, light_angle * light.bright);
 		reflect_vector = vector_reflect(vector_negate(light_vector), normal_vector);
 		reflect_angle = vector_dot(reflect_vector, ray.direction);
 		if (reflect_angle < 0 || is_equalf(reflect_angle, 0))
@@ -41,10 +41,10 @@ int	lighting(t_light light, t_ambient background, t_intersection intersection, t
 		else
 		{
 			shininess = powf(reflect_angle, 200.0);
-			specular = light.bright * 0.9 * shininess;
+			specular = color_multiply(light.color, light_angle * shininess);
 		}
 	}
-	color = color_add(ambient, color_add(diffuse, specular));
+	color = color_add(color_add(ambient, diffuse), specular);
 	return (color);
 }
 
