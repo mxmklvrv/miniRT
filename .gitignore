@@ -62,6 +62,7 @@ minilibx-linux
 # Build directories
 obj/
 build/
+maps/
 
 # extra
 .gitignore
