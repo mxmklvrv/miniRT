@@ -16,8 +16,19 @@ void	setup_scene(t_scene *scene)
  */
 void	setup_camera_angle(t_cam *cam)
 {
+	t_vec3 forward;
+	t_vec3 world_up;
+
 	cam->pixel_size = 1 * tanf(degrees_to_radians(cam->fov) / 2) * 2
 		/ ft_max(2, WIDTH, HEIGHT);
+	forward = vector_normalize(cam->orient.direction);
+	world_up = new_vector(0, 1, 0);
+
+	if (fabsf(vector_dot(forward, world_up)) > 0.999)
+		world_up = new_vector(0, 0, 1);
+	cam->right = vector_normalize(vector_cross(forward, world_up));
+	cam->up = vector_cross(cam->right, forward);
+	cam->orient.direction = forward;
 	//cam->matrix = ;
 	//t_vec3	opposite_cam;
 	//const t_vec3	up_view = new_vector(0, 0, 1);

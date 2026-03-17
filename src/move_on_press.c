@@ -138,6 +138,7 @@ void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 	else if (axis == X_AXIS)
 		cam->orient.direction = vector_normalize(rotate_x(cam->orient.direction,
 					angle));
+	setup_camera_angle(cam);
 }
 
 void	apply_movement(t_data *data)
@@ -187,6 +188,52 @@ int	handle_translation(t_data *data)
 	}
 	return (0);
 }
+
+// int	handle_translation(t_data *data)
+// {
+// 	t_move_state	*move;
+// 	t_vec3			move_vec;
+// 	t_cam			*cam;
+
+// 	move = data->move_state;
+// 	cam = &data->scene->cam;
+// 	move_vec = new_vector(0, 0, 0);
+
+// 	// 🔵 W / S → UP / DOWN (world Y)
+// 	if (move->forward)     // W
+// 		move_vec.y += MOVE_SPEED;
+// 	if (move->backward)    // S
+// 		move_vec.y -= MOVE_SPEED;
+
+// 	// 🔵 Q / E → FORWARD / BACKWARD (camera direction)
+// 	if (move->up)          // Q
+// 		move_vec = vector_add(move_vec,
+// 			vector_multiply(cam->orient.direction, MOVE_SPEED));
+// 	if (move->down)        // E
+// 		move_vec = vector_add(move_vec,
+// 			vector_multiply(cam->orient.direction, -MOVE_SPEED));
+
+// 	// 🔵 A / D → LEFT / RIGHT (camera space)
+// 	if (move->left)
+// 		move_vec = vector_add(move_vec,
+// 			vector_multiply(cam->right, -MOVE_SPEED));
+// 	if (move->right)
+// 		move_vec = vector_add(move_vec,
+// 			vector_multiply(cam->right, MOVE_SPEED));
+
+// 	if (move_vec.x != 0 || move_vec.y != 0 || move_vec.z != 0)
+// 	{
+// 		if (data->control_cam)
+// 			translate_cam(cam, move_vec);
+// 		else if (data->scene->obj_selected)
+// 			translate_object(data->scene->obj_selected, move_vec);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
+
+
+
 int	is_exeption(t_data *data, t_exeption action)
 {
 	if (action == NO_ROT)
@@ -241,31 +288,6 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 		rotate_objects(data->scene->obj_selected, angle, axis);
 }
 
-/*
-void	rotate_objects(t_olist *node, float angle, t_axis axis)
-{
-	if (!node)
-		return ;
-	if (node->shape->obj_type == PL)
-	{
-		if (axis == Y_AXIS)
-			node->shape->normal.direction = vector_normalize(rotate_y(node->shape->normal.direction,
-						angle));
-		else
-			node->shape->normal.direction = vector_normalize(rotate_x(node->shape->normal.direction,
-						angle));
-	}
-	else if (node->shape->obj_type == CY)
-	{
-		if (axis == Y_AXIS)
-			node->shape->normal.direction = vector_normalize(rotate_y(node->shape->normal.direction,
-						angle));
-		else
-			node->shape->normal.direction = vector_normalize(rotate_x(node->shape->normal.direction,
-						angle));
-	}
-}
-*/
 
 void	rotate_objects(t_olist *node, float angle, t_axis axis)
 {
@@ -302,20 +324,6 @@ t_vec3	rotate_z(t_vec3 current, float angle)
 	return (rotated);
 }
 
-//t_vec3	rotate_y(t_vec3 current, float angle)
-//{
-//	t_vec3	rotated;
-//	float	cosinus;
-//	float	sinus;
-
-//	cosinus = cosf(angle);
-//	sinus = sinf(angle);
-//	rotated.x = current.x * cosinus + current.z * sinus;
-//	rotated.y = current.y;
-//	rotated.z = -current.x * sinus + current.z * cosinus;
-//	rotated.w = current.w;
-//	return (rotated);
-//}
 
 /* Changed 'angle' to '-angle' to invert vertical rotation.
  */ //anna
@@ -357,27 +365,6 @@ int	handle_resize(t_data *data)
 	return (0);
 }
 
-// resizing diam of sphere and cy
-/*
-int	resize_diameter(t_olist *node, float value)
-{
-	if (!node)
-		return (0);
-	if (node->shape->obj_type == SP)
-	{
-		node->shape->diameter += value;
-		if (node->shape->diameter < 0.1f)
-			node->shape->diameter = 0.1f;
-	}
-	else if (node->shape->obj_type == CY)//Are the same
-	{
-		node->shape->diameter += value;
-		if (node->shape->diameter < 0.1f)
-			node->shape->diameter = 0.1f;
-	}
-	return (1);
-}
-*/
 
 int	resize_diameter(t_olist *node, float value)
 {
@@ -395,17 +382,6 @@ int	resize_diameter(t_olist *node, float value)
     }
     return (0);
 }
-/*
-int	resize_height(t_olist *node, float value)
-{
-	if (!node) // || node->obj_type != CY
-		return (0);
-	node->shape->height += value;
-	if (node->shape->height < 0.1f)
-		node->shape->height = 0.1f;
-	return (1);
-}
-*/
 
 int	resize_height(t_olist *node, float value)
 {
