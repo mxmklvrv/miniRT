@@ -40,8 +40,8 @@ int	lighting(t_light light, t_ambient background, t_intersection intersection, t
 			specular = 0;
 		else
 		{
-			shininess = powf(reflect_angle, 200.0);
-			specular = color_multiply(light.color, light_angle * shininess);
+			shininess = powf(reflect_angle, 32.0);
+			specular = color_multiply(light.color, 0.9 * shininess);
 		}
 	}
 	color = color_add(color_add(ambient, diffuse), specular);
