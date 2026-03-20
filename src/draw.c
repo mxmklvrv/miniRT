@@ -68,6 +68,7 @@ static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *firs
 // 	return (direction);
 // }
 
+// dir = forward + (right * x) + (up * y)
 static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 {
 	float	x;

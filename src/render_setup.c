@@ -40,6 +40,7 @@ void	setup_camera_angle(t_cam *cam)
     //cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
 }
 */
+// calculates local axes (forward, right, up)
 void setup_camera_angle(t_cam *cam)
 {
     t_vec3 forward;
