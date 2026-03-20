@@ -72,12 +72,12 @@ static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 {
 	float	x;
 	float	y;
-	t_vec3	direction;
+	t_vec3	dir;
 
 	x = (pixel.i - WIDTH / 2.0f) * cam.pixel_size;
 	y = (HEIGHT / 2.0f - pixel.j) * cam.pixel_size;
 
-	direction = vector_add(
+	dir = vector_add(
 		cam.orient.direction,
 		vector_add(
 			vector_multiply(cam.right, x),
@@ -85,7 +85,7 @@ static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 		)
 	);
 
-	return (vector_normalize(direction));
+	return (vector_normalize(dir));
 }
 
 static int	get_pixels_to_render(int render_cycles)
