@@ -129,7 +129,7 @@ void	translate_cam(t_cam *cam, t_vec3 move_vec)
 {
 	cam->orient.origin = vector_add(cam->orient.origin, move_vec);
 }
-
+/*
 void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 {
 	if (axis == Y_AXIS)
@@ -140,6 +140,7 @@ void	rotate_cam(t_cam *cam, float angle, t_axis axis)
 					angle));
 	setup_camera_angle(cam);
 }
+*/
 
 void	apply_movement(t_data *data)
 {
@@ -189,50 +190,6 @@ int	handle_translation(t_data *data)
 	return (0);
 }
 
-// int	handle_translation(t_data *data)
-// {
-// 	t_move_state	*move;
-// 	t_vec3			move_vec;
-// 	t_cam			*cam;
-
-// 	move = data->move_state;
-// 	cam = &data->scene->cam;
-// 	move_vec = new_vector(0, 0, 0);
-
-// 	// 🔵 W / S → UP / DOWN (world Y)
-// 	if (move->forward)     // W
-// 		move_vec.y += MOVE_SPEED;
-// 	if (move->backward)    // S
-// 		move_vec.y -= MOVE_SPEED;
-
-// 	// 🔵 Q / E → FORWARD / BACKWARD (camera direction)
-// 	if (move->up)          // Q
-// 		move_vec = vector_add(move_vec,
-// 			vector_multiply(cam->orient.direction, MOVE_SPEED));
-// 	if (move->down)        // E
-// 		move_vec = vector_add(move_vec,
-// 			vector_multiply(cam->orient.direction, -MOVE_SPEED));
-
-// 	// 🔵 A / D → LEFT / RIGHT (camera space)
-// 	if (move->left)
-// 		move_vec = vector_add(move_vec,
-// 			vector_multiply(cam->right, -MOVE_SPEED));
-// 	if (move->right)
-// 		move_vec = vector_add(move_vec,
-// 			vector_multiply(cam->right, MOVE_SPEED));
-
-// 	if (move_vec.x != 0 || move_vec.y != 0 || move_vec.z != 0)
-// 	{
-// 		if (data->control_cam)
-// 			translate_cam(cam, move_vec);
-// 		else if (data->scene->obj_selected)
-// 			translate_object(data->scene->obj_selected, move_vec);
-// 		return (1);
-// 	}
-// 	return (0);
-// }
-
-
 
 int	is_exeption(t_data *data, t_exeption action)
 {
@@ -280,12 +237,39 @@ int	handle_rotation(t_data *data)
 }
 
 // need to add light
+/*
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 {
 	if (data->control_cam)
 		rotate_cam(&data->scene->cam, angle, axis);
 	else if (data->scene->obj_selected)
 		rotate_objects(data->scene->obj_selected, angle, axis);
+}
+*/
+void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
+{
+	if (data->control_cam)
+	{
+		// 🔥 NEW: yaw/pitch system
+		t_cam *cam = &data->scene->cam;
+
+		if (axis == Y_AXIS)
+			cam->yaw += angle;
+		else if (axis == X_AXIS)
+			cam->pitch += angle;
+
+		// clamp pitch
+		if (cam->pitch > 1.55f)
+			cam->pitch = 1.55f;
+		if (cam->pitch < -1.55f)
+			cam->pitch = -1.55f;
+
+		setup_camera_angle(cam);
+	}
+	else if (data->scene->obj_selected)
+	{
+		rotate_objects(data->scene->obj_selected, angle, axis);
+	}
 }
 
 

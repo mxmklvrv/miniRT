@@ -14,6 +14,7 @@ void	setup_scene(t_scene *scene)
  * Calculates pixel size relative to 3d world depending on camera fov.
  * Distance between camera and 2d screen is assumed to be 1.
  */
+/*
 void	setup_camera_angle(t_cam *cam)
 {
 	t_vec3 forward;
@@ -38,7 +39,32 @@ void	setup_camera_angle(t_cam *cam)
 	//cam->vector_i = vector_cross(opposite_cam,up_view);
 	//cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
 }
+*/
+void	setup_camera_angle(t_cam *cam)
+{
+	t_vec3 forward;
+	t_vec3 right;
+	t_vec3 up;
 
+	cam->pixel_size = tanf(degrees_to_radians(cam->fov) / 2) * 2
+		/ ft_max(2, WIDTH, HEIGHT);
+
+	// 🔥 rebuild direction from yaw + pitch
+	forward.x = cosf(cam->pitch) * sinf(cam->yaw);
+	forward.y = sinf(cam->pitch);
+	forward.z = cosf(cam->pitch) * cosf(cam->yaw);
+	forward.w = 0;
+
+	forward = vector_normalize(forward);
+
+	// build camera basis
+	right = vector_normalize(vector_cross(forward, new_vector(0, 1, 0)));
+	up = vector_cross(right, forward);
+
+	cam->orient.direction = forward;
+	cam->right = right;
+	cam->up = up;
+}
 float	degrees_to_radians(float degrees)
 {
 	return (degrees * M_PI / 180);
