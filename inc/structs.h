@@ -83,6 +83,8 @@ typedef struct s_cam
 	t_matrix		matrix;
 	t_vec3	right; // test
 	t_vec3	up; // test
+    float yaw;
+    float pitch;
 
 }	t_cam;
 
