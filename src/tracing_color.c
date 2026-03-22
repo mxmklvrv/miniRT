@@ -1,7 +1,5 @@
 #include "minirt.h"
 
-static void		find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closest);
-
 int	trace_color(t_ray ray, t_scene *scene)
 {
 	t_olist			*obj_list;
@@ -17,12 +15,11 @@ int	trace_color(t_ray ray, t_scene *scene)
 	}
 	if (closest.count == 0)
 		return (scene->ambient.color);
-	//color = closest.shape->color;
-	color = lighting(scene->light, scene->ambient, closest, ray);
+	color = lighting(scene, closest, ray);
 	return (color);
 }
 
-static void	find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closest)
+void	find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closest)
 {
 	t_intersection	current;
 	float	hit_current;

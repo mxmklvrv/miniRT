@@ -84,9 +84,9 @@ void	setup_scene(t_scene *scene);
 void	set_matrix(t_matrix *old_m, t_matrix new_m);
 float	degrees_to_radians(float degrees);
 int		trace_color(t_ray ray, t_scene *scene);
+void	find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closest);
 float	get_closest_hit(t_intersection intersection);
-int		lighting(t_light light, t_ambient ambient, t_intersection intersection,
-		t_ray ray);
+int		lighting(t_scene *scene, t_intersection intersection, t_ray ray);
 
 /* ===== Vector math ======================================================== */
 t_vec3	new_vector(float x, float y, float z);
