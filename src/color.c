@@ -20,6 +20,13 @@ static void	color_check_value_range(int *value)
 		*value = 255;
 }
 
+//int	set_opacity(int color, int opacity)
+//{
+//	color = color << 8;
+//	color = color >> 8;
+//	return ((opacity << 24) + color);
+//}
+
 int	get_opacity(int color)
 {
 	color = color >> 24;

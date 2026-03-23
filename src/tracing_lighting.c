@@ -3,17 +3,79 @@
 bool	is_in_light(t_scene *scene, t_ray light_ray);
 
 /* Material properties:
- * ambient_lighting = 0.1; from file
- * diffuse_lighting = 0.9; from file
- * specular_lighting = 0.9; default, all have the same
+ * ambient constant = 0.1; from file
+ * diffuse constant = 0.9; default, all have the same
+ * specular constant = 0.9; default, all have the same
  * shininess = 32.0. default, all have the same
+ * Light properties:
+ * intencity - from file;
  */
+//int	lighting(t_scene *scene, t_intersection intersection, t_ray ray)
+//{
+//	int	color;
+//	int	ambient_color;
+//	int	diffuse_color;
+//	int	specular_color;
+//	float	diffuse_light;
+//	float	specular_light;
+//	t_vec3	point;
+//	t_vec3	light_vector;
+//	t_ray	light_ray;
+//	float	light_angle;
+//	t_vec3	normal_vector;
+//	t_vec3	reflect_vector;
+//	float	reflect_angle;
+//	float	shininess;
+
+//	color = 0;
+	
+//	diffuse_light = 0;
+//	specular_light = 0;
+//	point = get_ray_point(ray, get_closest_hit(intersection));
+//	light_vector = vector_normalize(vector_substract(scene->light.pos, point));
+//	light_ray.origin = point;
+//	light_ray.direction = light_vector;
+//	//if (is_in_light(scene, light_ray))
+//	//{
+//		normal_vector = get_normal(intersection.shape, point);
+//		light_angle = vector_dot(light_vector, normal_vector);
+//		if (light_angle >= 0)
+//		{
+//			diffuse_light = scene->light.bright * light_angle;
+//			reflect_vector = vector_reflect(vector_negate(light_vector), normal_vector);
+//			reflect_angle = vector_dot(reflect_vector, vector_negate(ray.direction));
+//			if (reflect_angle >= 0)
+//			{
+//				shininess = powf(reflect_angle, 64.0);//material reflective properties
+//				specular_light = scene->light.bright * shininess;
+//			}
+//		}
+//	//}
+
+//	//Mix object and light color
+//	color = color_mix(intersection.shape->color, scene->light.color,
+//		scene->light.bright * scene->ambient.amb);
+//	//Mix background and object based on light
+//	ambient_color = color_mix(scene->ambient.color, color, scene->ambient.amb);
+//	diffuse_color = color_mix(scene->ambient.color, color, diffuse_light);
+//	specular_color = color_mix(scene->ambient.color, scene->light.color, specular_light);
+//	//color = color_add(color_add(ambient_color, diffuse_color), specular_color);
+
+//	color = color_mix(color, scene->ambient.color, scene->ambient.amb);
+//	color = color_mix(color, scene->light.color, diffuse_light);
+//	//color = color_mix(color, scene->light.color, specular_light);
+//	color = color_add(color, color_multiply(scene->light.color, specular_light));
+//	return (color);
+//}
+
 int	lighting(t_scene *scene, t_intersection intersection, t_ray ray)
 {
 	int	color;
-	float	ambient_lighting;
-	float	diffuse_lighting;
-	float	specular_lighting;
+	int	ambient_color;
+	int	diffuse_color;
+	int	specular_color;
+	float	diffuse_light;
+	float	specular_light;
 	t_vec3	point;
 	t_vec3	light_vector;
 	t_ray	light_ray;
@@ -23,10 +85,10 @@ int	lighting(t_scene *scene, t_intersection intersection, t_ray ray)
 	float	reflect_angle;
 	float	shininess;
 
-	color = color_mix(intersection.shape->color, scene->light.color, scene->light.bright);
-	ambient_lighting = color_mix(color, scene->ambient.color, scene->ambient.amb);
-	diffuse_lighting = 0;
-	specular_lighting = 0;
+	color = 0;
+	
+	diffuse_light = 0;
+	specular_light = 0;
 	point = get_ray_point(ray, get_closest_hit(intersection));
 	light_vector = vector_normalize(vector_substract(scene->light.pos, point));
 	light_ray.origin = point;
@@ -37,18 +99,30 @@ int	lighting(t_scene *scene, t_intersection intersection, t_ray ray)
 		light_angle = vector_dot(light_vector, normal_vector);
 		if (light_angle >= 0)
 		{
-			diffuse_lighting = color_mix(color, scene->light.color, light_angle * scene->light.bright);
-			diffuse_lighting = color_mix(scene->ambient.color, diffuse_lighting, light_angle);
+			diffuse_light = scene->light.bright * light_angle;
 			reflect_vector = vector_reflect(vector_negate(light_vector), normal_vector);
 			reflect_angle = vector_dot(reflect_vector, vector_negate(ray.direction));
 			if (reflect_angle >= 0)
 			{
-				shininess = powf(reflect_angle, 32.0);
-				specular_lighting = color_multiply(scene->light.color, 0.9 * shininess);
+				shininess = powf(reflect_angle, 64.0);//material reflective properties
+				specular_light = scene->light.bright * shininess;
 			}
 		}
 	//}
-	color = color_add(color_add(ambient_lighting, diffuse_lighting), specular_lighting);
+
+	//Mix object and light color
+	color = color_mix(intersection.shape->color, scene->light.color,
+		scene->light.bright * scene->ambient.amb);
+	//Mix background and object based on light
+	ambient_color = color_mix(scene->ambient.color, color, scene->ambient.amb);
+	diffuse_color = color_mix(scene->ambient.color, color, diffuse_light);
+	specular_color = color_mix(scene->ambient.color, scene->light.color, specular_light);
+	//color = color_add(color_add(ambient_color, diffuse_color), specular_color);
+
+	color = color_mix(color, scene->ambient.color, scene->ambient.amb);
+	color = color_mix(color, scene->light.color, diffuse_light);
+	//color = color_mix(color, scene->light.color, specular_light);
+	color = color_add(color, color_multiply(scene->light.color, specular_light));
 	return (color);
 }
 
