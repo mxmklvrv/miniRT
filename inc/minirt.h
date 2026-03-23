@@ -151,5 +151,6 @@ int		color_add(int c1, int c2);
 int		color_substract(int c1, int c2);
 int		color_multiply(int c, float scalar);
 int		color_mix(int c1, int c2, float intencity);
+int		color_mix_light(int c1, int c2);
 
 #endif

@@ -99,3 +99,13 @@ int	color_mix(int c1, int c2, float intencity)
 	return(color_add(color_multiply(c1, 1 - intencity), color_multiply(c2,
 		intencity)));
 }
+
+int	color_mix_light(int c1, int c2)
+{
+	return (new_color(
+		get_opacity(c1) * get_opacity(c2) / 255,
+		get_red(c1) * get_red(c2) / 255,
+		get_green(c1) * get_green(c2) / 255,
+		get_blue(c1) * get_blue(c2) / 255
+	));
+}
