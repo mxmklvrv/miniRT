@@ -47,10 +47,30 @@ static t_intersection hit_sp(t_ray ray, t_shape *sp)
 static t_intersection hit_cy(t_ray ray, t_shape *cy)
 {
     t_intersection intersection;
+    float a;
+    float b;
+    float c; 
+    float discriminant;
 
-    (void)ray;
-    (void)cy;
-    intersection.count = 0;
+    a = ray.direction.x * ray.direction.x + ray.direction.z * ray.direction.z; // is the ray moves towards cylinder side
+    if(fabsf(a) < EPSILON)
+    {
+        intersection.count = 0;
+        intersection.shape = cy;
+        return (intersection);
+    }
+        
+    b = 2 * (ray.origin.x * ray.direction.x + ray.origin.z * ray.direction.z); // is the ray moving towards or away 
+    c = ray.origin.x * ray.origin.x + ray.origin.z * ray.origin.z - 1; // distance from cylinder axis
+    discriminant = b * b - 4 * a * c; // dose it intersect ? 
+    if(discriminant < 0)
+        intersection.count = 0;
+    else 
+    {
+        intersection.count = 2;
+        intersection.val[0] = (-b - sqrtf(discriminant)) / (2 * a);
+        intersection.val[1] = (-b + sqrtf(discriminant)) / (2 * a);
+    }
     intersection.shape = cy;
     return (intersection);
 }
