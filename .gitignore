@@ -57,11 +57,12 @@ dkms.conf
 # miniRT specific
 miniRT
 minilibx-linux
-maps
+
 
 # Build directories
 obj/
 build/
+
 
 # extra
 .gitignore

@@ -5,8 +5,8 @@
 # define EXIT_SUCCESS 0
 # define FAILURE -1
 # define SUCCESS 0
-# define WIDTH 500
-# define HEIGHT 500
+# define WIDTH 700
+# define HEIGHT 700
 
 # define ERR_MSG "Error"
 # define ERR_AC "Usage: ./miniRT file.rt"
@@ -64,7 +64,7 @@
 # define BACKGROUNG 0x000000
 
 #define MOVE_SPEED 0.5f
-#define ROTATE_SPEED 0.1f
+#define ROTATE_SPEED 0.2f
 #define RESIZE_SPEED 0.2f
 
 #define KEY_W 119       // forward

@@ -29,12 +29,12 @@ int	dispatch(char *line, t_scene *scene)
 		line += 2;
 		return (parse_sphere(line, scene));
 	}
-	else if (ft_strncmp(line, "pl", 2) == 0)
+	else if (ft_strncmp(line, "pl ", 2) == 0)
 	{
 		line += 2;
 		return (parse_plane(line, scene));
 	}
-	else if (ft_strncmp(line, "cy", 2) == 0)
+	else if (ft_strncmp(line, "cy ", 2) == 0)
 	{
 		line += 2;
 		return (parse_cylinder(line, scene));

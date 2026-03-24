@@ -49,23 +49,44 @@ static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *firs
 /*
  * Returns normalized vector from camera origin to pixel in 3d coordinates
  */
+// static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
+// {
+// 	t_vec3		direction;
+// 	t_matrix	rotation_i;
+// 	t_matrix	rotation_j;
+// 	t_matrix	rotation;
+// 	float		angle;
+
+// 	angle = -atanf((pixel.i - WIDTH / 2) * cam.pixel_size);
+// 	rotation_i = new_rotation_z_matrix(angle);
+// 	angle = atanf((pixel.j - HEIGHT / 2) * cam.pixel_size);
+// 	rotation_j = new_rotation_x_matrix(-angle);
+// 	rotation = chain_matrices(rotation_i, rotation_j);
+// 	direction = matrix_multiply_by_vector(rotation, cam.orient.direction);
+// 	free_matrix(rotation);
+// 	direction = vector_normalize(direction);
+// 	return (direction);
+// }
+
+// dir = forward + (right * x) + (up * y)
 static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 {
-	t_vec3		direction;
-	t_matrix	rotation_i;
-	t_matrix	rotation_j;
-	t_matrix	rotation;
-	float		angle;
+	float	x;
+	float	y;
+	t_vec3	dir;
 
-	angle = -atanf((pixel.i - WIDTH / 2) * cam.pixel_size);
-	rotation_i = new_rotation_z_matrix(angle);
-	angle = atanf((pixel.j - HEIGHT / 2) * cam.pixel_size);
-	rotation_j = new_rotation_x_matrix(-angle);
-	rotation = chain_matrices(rotation_i, rotation_j);
-	direction = matrix_multiply_by_vector(rotation, cam.orient.direction);
-	free_matrix(rotation);
-	direction = vector_normalize(direction);
-	return (direction);
+	x = (pixel.i - WIDTH / 2.0f) * cam.pixel_size;
+	y = (HEIGHT / 2.0f - pixel.j) * cam.pixel_size;
+
+	dir = vector_add(
+		cam.orient.direction,
+		vector_add(
+			vector_multiply(cam.right, x),
+			vector_multiply(cam.up, y)
+		)
+	);
+
+	return (vector_normalize(dir));
 }
 
 static int	get_pixels_to_render(int render_cycles)

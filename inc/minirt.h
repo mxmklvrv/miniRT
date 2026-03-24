@@ -48,18 +48,20 @@ void	set_resize_keys(int key, t_move_state *move, int value);
 void	select_object(t_data *data);
 void	translate_object(t_olist *node, t_vec3 move_vec);
 void	translate_cam(t_cam *cam, t_vec3 move_vec);
-void	rotate_cam(t_cam *cam, float angle, t_axis axis);
 void	apply_movement(t_data *data);
 int	handle_translation(t_data *data);
+void	cam_move_calculation(t_data *data, t_vec3 *move_vec, t_move_state *move);
+void	obj_move_calculation( t_vec3 *move_vec, t_move_state *move);
+int	is_exeption(t_data *data, t_exeption action);
 int	handle_rotation(t_data *data);
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
 void	rotate_objects(t_olist *node, float angle, t_axis axis);
-//t_vec3	rotate_y(t_vec3 current, float angle);//Can comment
 t_vec3	rotate_z(t_vec3 current, float angle);
 t_vec3	rotate_x(t_vec3 current, float angle);
 int	handle_resize(t_data *data);
 int	resize_diameter(t_olist *node, float value);
 int	resize_height(t_olist *node, float value);
+
 
 /* ===== Hooks on release =================================================== */
 // int	key_press_hook(int key, t_data *data);

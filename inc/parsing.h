@@ -1,8 +1,15 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-int		add_to_list(t_scene *scene, t_shape *shape); // new version
-// int		add_to_list(t_olist **list, void *object, t_otype type, int color);
+
+// test
+
+
+void	print_scene(t_scene *scene);
+int	postpars_validation(t_scene *scene);
+int	add_to_list(t_scene *scene, t_shape *shape); // new version
+
+void	setup_camera_angle(t_cam *cam);
 void	free_list(t_olist *list);
 t_vec3	creat_vec3(float x, float y, float z);
 void	free_array(char **arr);

@@ -9,8 +9,9 @@ t_vec3	get_normal(t_shape *shape, t_vec3 point)
 	if (shape->obj_type == PL)
 		return (shape->normal.direction);
 	else
-		return (point);
+		return (new_vector(0, 1, 0)); // just so we see basic cy aligned y 
 }
+
 
 static t_vec3	normal_at_sp(t_vec3 point, t_shape *sp)
 {
