@@ -14,7 +14,7 @@ int	trace_color(t_ray ray, t_scene *scene)
 		obj_list = obj_list->next;
 	}
 	if (closest.count == 0)
-		return (scene->ambient.color);
+		return (BACKGROUNG);
 	color = lighting(scene, closest, ray);
 	return (color);
 }

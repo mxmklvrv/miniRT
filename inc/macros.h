@@ -61,6 +61,7 @@
 # define ON_DESTROY 17
 
 # define EPSILON 0.001
+# define BACKGROUNG 0x000000
 
 #define MOVE_SPEED 0.5f
 #define ROTATE_SPEED 0.1f
