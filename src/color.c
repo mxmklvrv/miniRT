@@ -100,6 +100,13 @@ int	color_mix(int c1, int c2, float intencity)
 		intencity)));
 }
 
+/* Find the color of surface of color c1 under light og color c2. Black light
+ * negates color of surface; black surface negates color of light; white light
+ * doesn't change color of surface.
+ * @param	int		c1			color 1;
+ * @param	int		c2			color 2;
+ * @returns	int		resulting color.
+ */
 int	color_mix_light(int c1, int c2)
 {
 	return (new_color(

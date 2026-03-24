@@ -76,31 +76,33 @@ int	lighting(t_scene *scene, t_intersection intersection, t_ray ray)
 	t_ray	normal;
 	t_vec3	light_vector;
 	float	light_angle;
+	int		ambient;
 	int		diffuse;
 	int		specular;
 
-	color = color_mix_light(intersection.shape->color, scene->ambient.color);
-	color = color_multiply(color, scene->ambient.amb);
+	ambient = color_multiply(scene->ambient.color, scene->ambient.amb);
+	color = color_mix_light(intersection.shape->color, ambient);
+	//ambient = color_mix_light(intersection.shape->color, scene->ambient.color);
+	//ambient = color_multiply(ambient, scene->ambient.amb);
 	normal.origin = get_ray_point(ray, get_closest_hit(intersection));
 	normal.direction = get_normal(intersection.shape, normal.origin);
+	normal.origin = vector_add(normal.origin, vector_multiply(normal.direction, EPSILON));
+
 
 	diffuse = 0;
 	specular = 0;
 	//Can add while for multiple lights
-	//if (is_in_shadow(scene, new_ray(normal.origin, light_vector)))
-	//	return (color);
 	light_vector = vector_normalize(vector_substract(scene->light.pos, normal.origin));
 	light_angle = vector_dot(light_vector, normal.direction);
-	if (light_angle < 0)
+	if (light_angle < 0 || is_in_shadow(scene, new_ray(normal.origin, light_vector)))
 		return (color);
-	//continue
 	diffuse = color_add(diffuse, get_diffuse_color(scene->light, light_angle));
 	specular = color_add(specular, get_specular_color(scene->light, light_vector, normal.direction, ray));
 	
 
 
 	//Applying all lights to object color
-	color = color_add(color, diffuse);
+	color = color_mix_light(intersection.shape->color, color_add(ambient, diffuse));
 	color = color_add(color, specular);
 	return (color);
 }
