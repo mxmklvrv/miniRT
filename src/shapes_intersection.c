@@ -81,7 +81,7 @@ static t_intersection hit_pl(t_ray ray, t_shape *pl)
     t_intersection intersection;
 
     denominator = vector_dot(ray.direction, pl->normal.direction);
-    if (fabsf(denominator) < EPSILON) // cam and palne (almost or fully) parallel
+    if (fabsf(denominator) < EPSILON) // cam and plane (almost or fully) parallel
         intersection.count = 0;
     else // Find intersection:
     {
