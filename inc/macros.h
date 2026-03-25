@@ -74,6 +74,7 @@
 #define KEY_Q 113       // up
 #define KEY_E 101       // down
 #define KEY_C 99        // cam
+#define KEY_L 108
 #define KEY_TAB 65289   // switch obj
 #define KEY_LEFT 65361  // rotate left
 #define KEY_RIGHT 65363 // rotate right

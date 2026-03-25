@@ -16,7 +16,7 @@
 
 
 // test print functions
-void	print_cam_pos(t_scene *scene);
+void	print_cam_light_pos(t_data *data);
 int		is_exeption(t_data *data, t_exeption action);
 void	print_pos(t_scene *scene);
 void	print_vars(t_scene *scene);
@@ -27,6 +27,7 @@ void	print_color(int color);
 void	print_matrix(t_matrix matrix);
 void	print_intersection(t_intersection intersection);
 void	print_scene(t_scene *scene);
+void	user_manual(void);
 // test
 
 /* ===== Visuals ============================================================ */
@@ -48,6 +49,7 @@ void	set_resize_keys(int key, t_move_state *move, int value);
 void	select_object(t_data *data);
 void	translate_object(t_olist *node, t_vec3 move_vec);
 void	translate_cam(t_cam *cam, t_vec3 move_vec);
+void	translate_light(t_light *light, t_vec3 move_vec);
 void	apply_movement(t_data *data);
 int	handle_translation(t_data *data);
 void	cam_move_calculation(t_data *data, t_vec3 *move_vec, t_move_state *move);

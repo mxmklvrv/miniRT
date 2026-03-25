@@ -15,6 +15,7 @@ void	set_hooks(t_data *data)
 		return ;
 	}
 	data->control_cam = 0;
+	data->control_light = 0;
 	data->scene->obj_selected = data->scene->obj_list;
 	print_pos(data->scene);
 	mlx_hook(data->win, ON_PRESS, 1L << 0, key_press_hook, data);

@@ -102,7 +102,6 @@ typedef struct s_light
 	t_vec3			pos;
 	float			bright;
 	int				color;
-	// struct s_light *next;
 
 }	t_light;
 
@@ -134,6 +133,7 @@ typedef struct s_data
 	t_scene *scene;
 	void	*move_state;
 	int		control_cam;
+	int		control_light;
 }	t_data;
 
 typedef enum e_axis

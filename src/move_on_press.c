@@ -1,6 +1,9 @@
 #include "minirt.h"
 
 static void	update_cy_geo(t_shape *cy);
+static void	switch_to_obj(t_data *data);
+static void	toggle_cam(t_data *data);
+static void	toggle_light(t_data *data);
 
 int	key_press_hook(int key, t_data *data)
 {
@@ -19,7 +22,6 @@ int	key_release_hook(int key, t_data *data)
 	t_move_state	*move;
 
 	move = data->move_state;
-	// set_general_keys(key, data);
 	set_translation_keys(key, move, KEY_OFF);
 	set_rotation_keys(key, move, KEY_OFF);
 	set_resize_keys(key, move, KEY_OFF);
@@ -36,24 +38,46 @@ void	set_general_keys(int key, t_data *data)
 {
 	if (key == KEY_TAB)
 	{
-		if (data->control_cam == 1)
-		{
-			data->control_cam = 0;
-			print_pos(data->scene);
-		}
+		if (data->control_cam || data->control_light)
+			switch_to_obj(data);
 		else
 			select_object(data);
 	}
-	if (key == KEY_C)
-	{
-		data->control_cam = !data->control_cam;
-		if (data->control_cam == 0)
-			print_pos(data->scene);
-		else
-			print_cam_pos(data->scene);
-	}
+	else if (key == KEY_C)
+		toggle_cam(data);
+	else if (key == KEY_L)
+		toggle_light(data);
 	if (key == KEY_ESC)
 		mlx_loop_end(data->mlx);
+}
+
+static void	switch_to_obj(t_data *data)
+{
+	data->control_cam = 0;
+	data->control_light = 0;
+	print_pos(data->scene);
+}
+
+static void	toggle_cam(t_data *data)
+{
+	data->control_cam = !data->control_cam;
+	data->control_light = 0;
+	if (data->control_cam)
+		print_cam_light_pos(data);
+	else
+		print_pos(data->scene);
+}
+
+static void	toggle_light(t_data *data)
+{
+	if (data->scene->qt_light == 0)
+		return ;
+	data->control_light = !data->control_light;
+	data->control_cam = 0;
+	if (data->control_light)
+		print_cam_light_pos(data);
+	else
+		print_pos(data->scene);
 }
 
 void	set_translation_keys(int key, t_move_state *move, int value)
@@ -111,7 +135,6 @@ void	select_object(t_data *data)
 	print_pos(data->scene);
 }
 
-
 void	translate_object(t_olist *node, t_vec3 move_vec)
 {
 	t_shape	*obj;
@@ -130,6 +153,13 @@ void	translate_object(t_olist *node, t_vec3 move_vec)
 void	translate_cam(t_cam *cam, t_vec3 move_vec)
 {
 	cam->orient.origin = vector_add(cam->orient.origin, move_vec);
+}
+
+void	translate_light(t_light *light, t_vec3 move_vec)
+{
+	if (!light)
+		return ;
+	light->pos = vector_add(light->pos, move_vec);
 }
 
 void	apply_movement(t_data *data)
@@ -156,12 +186,16 @@ int	handle_translation(t_data *data)
 	move_vec = new_vector(0, 0, 0);
 	if (data->control_cam)
 		cam_move_calculation(data, &move_vec, move);
+	else if (data->control_light)
+		obj_move_calculation(&move_vec, move);
 	else
 		obj_move_calculation(&move_vec, move);
 	if (move_vec.x != 0 || move_vec.y != 0 || move_vec.z != 0)
 	{
 		if (data->control_cam)
 			translate_cam(&data->scene->cam, move_vec);
+		else if (data->control_light)
+			translate_light(&data->scene->light, move_vec);
 		else if (data->scene->obj_selected)
 			translate_object(data->scene->obj_selected, move_vec);
 		return (1);
@@ -214,6 +248,8 @@ int	is_exeption(t_data *data, t_exeption action)
 	if (!data || !data->scene)
 		return (1);
 	selected = data->scene->obj_selected;
+	if (data->control_light)
+		return (1);
 	if (data->control_cam)
 	{
 		if (action == NO_RES || action == NO_HIGHT_RES)
