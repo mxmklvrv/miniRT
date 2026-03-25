@@ -111,7 +111,7 @@ void	select_object(t_data *data)
 	print_pos(data->scene);
 }
 
-// need to create move bector with new_vec
+
 void	translate_object(t_olist *node, t_vec3 move_vec)
 {
 	t_shape	*obj;
@@ -273,9 +273,7 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 		setup_camera_angle(cam);
 	}
 	else if (data->scene->obj_selected)
-	{
 		rotate_objects(data->scene->obj_selected, angle, axis);
-	}
 }
 
 void	rotate_objects(t_olist *node, float angle, t_axis axis)
