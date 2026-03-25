@@ -58,6 +58,9 @@ typedef struct s_shape
 	t_ray			normal;//pl, cy
 	float			diameter;//sp, cy
 	float			height;//cy
+    t_vec3          axis;
+    float           radius;
+    float           half_h;
 	t_matrix		matrix;
 	int				color;
 }	t_shape;
@@ -71,7 +74,7 @@ typedef struct s_olist
 typedef struct s_intersection
 {
 	int		count;
-	float	val[2];
+	float	val[4]; // max change
 	t_shape	*shape;
 }	t_intersection;
 
@@ -81,8 +84,8 @@ typedef struct s_cam
 	float			fov;
 	float			pixel_size;
 	t_matrix		matrix;
-	t_vec3	right; // test
-	t_vec3	up; // test
+	t_vec3	right;
+	t_vec3	up;
     float yaw;
     float pitch;
 

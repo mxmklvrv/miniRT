@@ -55,7 +55,6 @@ void setup_camera_angle(t_cam *cam)
     forward.w = 0;
 
     forward = vector_normalize(forward);
-
     right = vector_normalize(vector_cross(new_vector(0, 1, 0), forward));
     up = vector_cross(forward, right);
 
@@ -63,6 +62,7 @@ void setup_camera_angle(t_cam *cam)
     cam->right = right;
     cam->up = up;
 }
+
 
 float degrees_to_radians(float degrees)
 {

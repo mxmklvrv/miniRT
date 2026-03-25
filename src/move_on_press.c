@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+static void	update_cy_geo(t_shape *cy);
+
 int	key_press_hook(int key, t_data *data)
 {
 	t_move_state	*move;
@@ -109,7 +111,7 @@ void	select_object(t_data *data)
 	print_pos(data->scene);
 }
 
-// need to create move bector with new_vec
+
 void	translate_object(t_olist *node, t_vec3 move_vec)
 {
 	t_shape	*obj;
@@ -271,9 +273,7 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 		setup_camera_angle(cam);
 	}
 	else if (data->scene->obj_selected)
-	{
 		rotate_objects(data->scene->obj_selected, angle, axis);
-	}
 }
 
 void	rotate_objects(t_olist *node, float angle, t_axis axis)
@@ -283,7 +283,7 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 	if (!node || !node->shape)
 		return ;
 	obj = node->shape;
-	if (obj->obj_type == PL || obj->obj_type == CY)
+	if (obj->obj_type == PL)
 	{
 		if (axis == Y_AXIS)
 			obj->normal.direction = vector_normalize(rotate_z(obj->normal.direction,
@@ -291,6 +291,13 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 		else
 			obj->normal.direction = vector_normalize(rotate_x(obj->normal.direction,
 						angle));
+	}
+	else if (obj->obj_type == CY)
+	{
+		if (axis == Y_AXIS)
+			obj->axis = vector_normalize(rotate_z(obj->axis, angle));
+		else
+			obj->axis = vector_normalize(rotate_x(obj->axis, angle));
 	}
 }
 
@@ -367,6 +374,8 @@ int	resize_diameter(t_olist *node, float value)
 		obj->diameter += value;
 		if (obj->diameter < 0.1f)
 			obj->diameter = 0.1f;
+		if (obj->obj_type == CY)
+			update_cy_geo(obj);
 		return (1);
 	}
 	return (0);
@@ -382,5 +391,14 @@ int	resize_height(t_olist *node, float value)
 	obj->height += value;
 	if (obj->height < 0.1f)
 		obj->height = 0.1f;
+	update_cy_geo(obj);
 	return (1);
+}
+
+static void	update_cy_geo(t_shape *cy)
+{
+	if (!cy || cy->obj_type != CY)
+		return ;
+	cy->radius = cy->diameter / 2.0f;
+	cy->half_h = cy->height / 2.0f;
 }
