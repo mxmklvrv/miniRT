@@ -21,13 +21,6 @@ typedef struct s_vec3
 	float	w;
 }	t_vec3;
 
-typedef struct s_matrix
-{
-	int		row;
-	int		col;
-	float	**ptr;
-}	t_matrix;
-
 // ray has starting point and direction
 // starting point is a point;
 // direction is a vector.
@@ -37,11 +30,12 @@ typedef struct s_ray
 	t_vec3	direction;
 }	t_ray;
 
-typedef struct s_intersection
+typedef struct s_matrix
 {
-	int		count;
-	float	val[2];
-}	t_intersection;
+	int		row;
+	int		col;
+	float	**ptr;
+}	t_matrix;
 
 typedef enum e_otype
 {
@@ -50,37 +44,39 @@ typedef enum e_otype
 	PL
 }	t_otype;
 
-// linked list with objects
-typedef struct s_olist
+/* For shapes material assume:
+ * ambient = 0.1
+ * diffuse = 0.9
+ * specular = 0.9
+ * shininess = 200.0
+ */
+typedef struct s_shape
 {
-	void			*obj;
 	t_otype			obj_type;
 	int				obj_id;
-	int				colour;
+	t_vec3			center;//sp
+	t_ray			normal;//pl, cy
+	float			diameter;//sp, cy
+	float			height;//cy
+    t_vec3          axis;
+    float           radius;
+    float           half_h;
 	t_matrix		matrix;
+	int				color;
+}	t_shape;
+
+typedef struct s_olist
+{
+	t_shape			*shape;
 	struct s_olist	*next;
 }	t_olist;
 
-typedef struct s_sp
+typedef struct s_intersection
 {
-	t_vec3			sp_center;
-	float			diameter;
-	int				colour;
-}	t_sp;
-
-typedef struct s_pl
-{
-	t_ray			normal;
-	int				colour;
-}	t_pl;
-
-typedef struct s_cy
-{
-	t_ray			normal;
-	float			diameter;
-	float			height;
-	int				colour;
-}	t_cy;
+	int		count;
+	float	val[4]; // max change
+	t_shape	*shape;
+}	t_intersection;
 
 typedef struct s_cam
 {
@@ -88,13 +84,18 @@ typedef struct s_cam
 	float			fov;
 	float			pixel_size;
 	t_matrix		matrix;
-}					t_cam;
+	t_vec3	right;
+	t_vec3	up;
+    float yaw;
+    float pitch;
+
+}	t_cam;
 
 typedef struct s_ambient
 {
 	float			amb;
-	int				colour;
-}					t_ambient;
+	int				color;
+}	t_ambient;
 
 typedef struct s_light
 {
@@ -103,7 +104,7 @@ typedef struct s_light
 	int				color;
 	// struct s_light *next;
 
-}					t_light;
+}	t_light;
 
 // main struct
 typedef struct s_scene
@@ -115,6 +116,7 @@ typedef struct s_scene
 	int				qt_ambiant;
 	int				qt_cam;
 	int				qt_light;
+    int             next_obj_id;
 	char			*err_m;
 	t_olist			*obj_selected;
 }					t_scene;
@@ -139,6 +141,13 @@ typedef enum e_axis
 	Y_AXIS,
 	X_AXIS
 }		t_axis;
+
+typedef enum e_exeption
+{
+	NO_ROT,
+	NO_RES,
+	NO_HIGHT_RES
+}	t_exeption;
 
 typedef struct s_move_state
 {

@@ -24,7 +24,7 @@ HDR = $(addprefix $(HDR_DIR)/, \
 	)
 
 PARS_DIR = src/parsing
-PARS_OBJ_DIR = $(PARS_DIR)/obj_parsing
+PARS_OBJ_DIR = $(OBJ_DIR)/obj_parsing
 PARS_SRC = $(addprefix $(PARS_DIR)/, \
 	dispatch.c \
 	input_validation.c \
@@ -45,13 +45,17 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	visuals.c \
 	hooks.c \
 	draw.c \
-	shapes.c \
+	shapes_intersection.c \
+	shapes_normal.c \
 	vector.c \
 	color.c \
 	matrix.c \
 	ray.c \
 	print.c \
 	move_on_press.c \
+	render_setup.c \
+	tracing_color.c \
+	tracing_lighting.c \
 	)
 
 

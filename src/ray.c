@@ -17,19 +17,29 @@ t_ray	ray_transform(t_ray r, t_matrix m)
 {
 	t_ray		res;
 
+	if (!m.ptr)
+		return (r);
 	res.origin = matrix_multiply_by_vector(m, r.origin);
 	res.direction = matrix_multiply_by_vector(m, r.direction);
 	return (res);
 }
 
-t_ray	ray_transform_inverse(t_ray r, t_matrix m)
+t_vec3	get_ray_point(t_ray ray, float scalar)
 {
-	t_ray		res;
-	t_matrix	inverse;
-
-	inverse = new_inverse_matrix(m);
-	res.origin = matrix_multiply_by_vector(inverse, r.origin);
-	res.direction = matrix_multiply_by_vector(inverse, r.direction);
-	free_matrix(inverse);
-	return (res);
+	return(vector_add(ray.origin, vector_multiply(ray.direction, scalar)));
 }
+
+
+//t_ray	ray_transform_inverse(t_ray r, t_matrix m)
+//{
+//	t_ray		res;
+//	t_matrix	inverse;
+
+//	if (!m.ptr)
+//		return (r);
+//	inverse = new_inverse_matrix(m);
+//	res.origin = matrix_multiply_by_vector(inverse, r.origin);
+//	res.direction = matrix_multiply_by_vector(inverse, r.direction);
+//	free_matrix(inverse);
+//	return (res);
+//}

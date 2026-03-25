@@ -1,11 +1,25 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-int		add_to_list(t_olist **list, void *object, t_otype type, int colour);
+
+// test
+
+
+void	print_scene(t_scene *scene);
+int	postpars_validation(t_scene *scene);
+int	add_to_list(t_scene *scene, t_shape *shape); // new version
+
+void	setup_camera_angle(t_cam *cam);
 void	free_list(t_olist *list);
 t_vec3	creat_vec3(float x, float y, float z);
 void	free_array(char **arr);
-void	error(char *msg, char *line);
+int		parse_fatal(t_scene *scene, int fd);
+int		parse_error(t_scene *scene, char *msg, char **res, t_shape *shape);
+int		error_return(char *msg, char *line);
+void 	error_msg(char *msg, char *line);
+int 	parse_line(char *line, t_scene *scene);
+
+
 int		count_elements(char *line);
 int		is_valid_int(char *line);
 int		is_valid_float(char *line);
@@ -20,8 +34,11 @@ int		parse_vector(char *str, t_vec3 *vector, float min, float max);
 int		parse_int(char *str, int min, int max, int *res);
 int		parse_float(char *str, float min, float max, float *res);
 int		parse_sphere(char *line, t_scene *scene);
+int		init_sphere(t_shape *shape, char **res, t_scene *scene);
 int		parse_plane(char *line, t_scene *scene);
+int		init_plane(t_shape *shape, char **res, t_scene *scene);
 int		parse_cylinder(char *line, t_scene *scene);
+int		init_cylinder(t_shape *shape, char **res, t_scene *scene);
 int		parse_ambient(char *line, t_scene *scene);
 int		parse_light(char *line, t_scene *scene);
 int		parse_cam(char *line, t_scene *scene);

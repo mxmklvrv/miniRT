@@ -14,8 +14,19 @@
 # include <fcntl.h>
 # include <stdbool.h>
 
-// test
+
+// test print functions
+void	print_cam_pos(t_scene *scene);
+int		is_exeption(t_data *data, t_exeption action);
 void	print_pos(t_scene *scene);
+void	print_vars(t_scene *scene);
+void	print_list(t_scene *scene);
+void	print_vector(t_vec3	vector);
+void	print_ray(t_ray	ray);
+void	print_color(int color);
+void	print_matrix(t_matrix matrix);
+void	print_intersection(t_intersection intersection);
+void	print_scene(t_scene *scene);
 // test
 
 /* ===== Visuals ============================================================ */
@@ -24,7 +35,7 @@ bool	set_visuals(t_data *data);
 void	free_visuals(t_data *data);
 void	ft_mlx_put_pixel(t_data *data, t_pixel pixel);
 void	set_hooks(t_data *data);
-void	redraw_scene(t_data *data, t_scene *scene);
+void	redraw_scene(t_data *data);
 
 /* ===== Hooks ============================================================== */
 int	key_press_hook(int key, t_data *data);
@@ -34,29 +45,32 @@ void	set_general_keys(int key, t_data *data);
 void	set_translation_keys(int key, t_move_state *move, int value);
 void	set_rotation_keys(int key, t_move_state *move, int value);
 void	set_resize_keys(int key, t_move_state *move, int value);
-void	select_object(t_scene *scene);
+void	select_object(t_data *data);
 void	translate_object(t_olist *node, t_vec3 move_vec);
 void	translate_cam(t_cam *cam, t_vec3 move_vec);
-void	rotate_cam(t_cam *cam, float angle, t_axis axis);
 void	apply_movement(t_data *data);
 int	handle_translation(t_data *data);
+void	cam_move_calculation(t_data *data, t_vec3 *move_vec, t_move_state *move);
+void	obj_move_calculation( t_vec3 *move_vec, t_move_state *move);
+int	is_exeption(t_data *data, t_exeption action);
 int	handle_rotation(t_data *data);
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
 void	rotate_objects(t_olist *node, float angle, t_axis axis);
-t_vec3	rotate_y(t_vec3 current, float angle);
+t_vec3	rotate_z(t_vec3 current, float angle);
 t_vec3	rotate_x(t_vec3 current, float angle);
 int	handle_resize(t_data *data);
 int	resize_diameter(t_olist *node, float value);
 int	resize_height(t_olist *node, float value);
 
-/* ===== Hooks on release ============================================================== */
+
+/* ===== Hooks on release =================================================== */
 // int	key_press_hook(int key, t_data *data);
 // int	key_release_hook(int key, t_data *data);
 // int	handle_translation(int key, t_data *data);
 // int	handle_rotation(int key, t_data *data);
 // int	handle_resize(int key, t_data *data);
 // void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
-// void	select_object(t_scene *scene);
+// void	select_object(t_data *data);
 // void	translate_object(t_olist *node, t_vec3 move_vec);
 // void	rotate_objects(t_olist *node, float angle, t_axis axis);
 // void	rotate_cam(t_cam *cam, float angle, t_axis axis);
@@ -67,14 +81,14 @@ int	resize_height(t_olist *node, float value);
 // t_vec3	rotate_x(t_vec3 current, float angle);
 
 /* ===== Render ============================================================= */
-void	draw_scene(t_data *data, t_scene *scene);
+void	draw_scene(t_data *data);
 void	setup_scene(t_scene *scene);
-void	setup_camera_angle(t_cam *cam);
-void	setup_object_matrix(t_olist *obj_list);
-t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam);
-int		trace_color(t_ray ray, t_scene *scene);
-bool	is_closest(t_intersection intersection, int *closest);
 void	set_matrix(t_matrix *old_m, t_matrix new_m);
+float	degrees_to_radians(float degrees);
+int		trace_color(t_ray ray, t_scene *scene);
+void	find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closest);
+float	get_closest_hit(t_intersection intersection);
+int		lighting(t_scene *scene, t_intersection intersection, t_ray ray);
 
 /* ===== Vector math ======================================================== */
 t_vec3	new_vector(float x, float y, float z);
@@ -90,7 +104,7 @@ float	vector_magnitude(t_vec3 v);
 t_vec3	vector_normalize(t_vec3 v);
 float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
-float	degrees_to_radians(float degrees);
+t_vec3	vector_reflect(t_vec3 v, t_vec3 normal);
 
 /* ===== Matrix math ======================================================== */
 t_matrix	new_matrix(int row, int col);
@@ -98,6 +112,7 @@ t_matrix	new_identity_matrix(int	row);
 t_matrix	new_submatrix(t_matrix m, int target_row, int target_col);
 t_matrix	new_inverse_matrix(t_matrix m);
 t_matrix	new_translation_matrix(float x, float y, float z);
+t_matrix	new_translation_matrix_vec3(t_vec3 v);
 t_matrix	new_scaling_matrix(float x, float y, float z);
 t_matrix	new_rotation_x_matrix(float radians);
 t_matrix	new_rotation_y_matrix(float radians);
@@ -114,16 +129,19 @@ float		matrix_find_minor(t_matrix m, int row, int col);
 float		matrix_find_cofactor(t_matrix m, int row, int col);
 bool	    matrix_is_invertible(t_matrix m, float *determinant);
 
+
+//t_matrix	new_rotation_matrix(t_vec3 v);
+t_matrix	chain_matrices(t_matrix scaling, t_matrix rotation);
+
+/* ===== Shapes math ======================================================== */
+t_intersection	get_intersection(t_ray ray, t_shape *shape);
+t_vec3			get_normal(t_shape *shape, t_vec3 point);
+
 /* ===== Rays =============================================================== */
 t_ray	new_ray(t_vec3 origin, t_vec3 direction);
 t_ray	ray_transform(t_ray r, t_matrix m);
-t_ray	ray_transform_inverse(t_ray r, t_matrix m);
-
-/* ===== Shapes math ======================================================== */
-t_intersection	hit_sp(t_ray cam, t_sp *sp);
-t_intersection	hit_cy(t_ray cam, t_cy *cy);
-t_intersection	hit_pl(t_ray cam, t_pl *pl);
-float	degrees_to_radians(float degrees);
+t_vec3	get_ray_point(t_ray ray, float scalar);
+//t_ray	ray_transform_inverse(t_ray r, t_matrix m);
 
 /* ===== Color ============================================================== */
 int		new_color(int opacity, int red, int green, int blue);
@@ -134,17 +152,7 @@ int		get_blue(int color);
 int		color_add(int c1, int c2);
 int		color_substract(int c1, int c2);
 int		color_multiply(int c, float scalar);
-int		color_mix(int c1, int c2);
-
-
-
-// test functions
-void	print_vars(t_scene *scene);
-void	print_list(t_scene *scene);
-void	print_vector(t_vec3	vector);
-void	print_ray(t_ray	ray);
-void	print_color(int color);
-void	print_matrix(t_matrix matrix);
-void	print_intersection(t_intersection intersection);
+int		color_mix(int c1, int c2, float intencity);
+int		color_mix_light(int c1, int c2);
 
 #endif

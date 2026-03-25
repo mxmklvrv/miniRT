@@ -20,6 +20,13 @@ static void	color_check_value_range(int *value)
 		*value = 255;
 }
 
+//int	set_opacity(int color, int opacity)
+//{
+//	color = color << 8;
+//	color = color >> 8;
+//	return ((opacity << 24) + color);
+//}
+
 int	get_opacity(int color)
 {
 	color = color >> 24;
@@ -77,8 +84,35 @@ int	color_multiply(int c, float scalar)
 		get_blue(c) * scalar
 	));
 }
-
-int	color_mix(int c1, int c2)
+/* Find the color of mix of 2 colors.
+ * @param	int		c1			color 1;
+ * @param	int		c2			color 2;
+ * @param	float	intencity	intencity of color 2;
+ * @returns	int		resulting color.
+ */
+int	color_mix(int c1, int c2, float intencity)
 {
-	return(color_add(color_multiply(c1, 0.5), color_multiply(c2, 0.5)));
+	if (intencity < 0)
+		intencity = 0;
+	if (intencity > 1)
+		intencity = 1;
+	return(color_add(color_multiply(c1, 1 - intencity), color_multiply(c2,
+		intencity)));
+}
+
+/* Find the color of surface of color c1 under light og color c2. Black light
+ * negates color of surface; black surface negates color of light; white light
+ * doesn't change color of surface.
+ * @param	int		c1			color 1;
+ * @param	int		c2			color 2;
+ * @returns	int		resulting color.
+ */
+int	color_mix_light(int c1, int c2)
+{
+	return (new_color(
+		get_opacity(c1) * get_opacity(c2) / 255,
+		get_red(c1) * get_red(c2) / 255,
+		get_green(c1) * get_green(c2) / 255,
+		get_blue(c1) * get_blue(c2) / 255
+	));
 }

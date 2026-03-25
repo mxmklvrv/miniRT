@@ -1,32 +1,40 @@
 #include "minirt.h"
 
+int	parse_error(t_scene *scene, char *msg, char **res, t_shape *shape)
+{
+	if (msg)
+		error_msg(msg, scene->err_m);
+	if (res)
+		free_array(res);
+	if (shape)
+		free(shape);
+	return (1);
+}
+int	parse_fatal(t_scene *scene, int fd)
+{
+	if (fd >= 0)
+		close(fd);
+	free_scene(scene);
+	return (1);
+}
+
+int	error_return(char *msg, char *line)
+{
+	error_msg(msg, line);
+    return (1);
+}
+void error_msg(char *msg, char *line)
+{
+    ft_putendl_fd(ERR_MSG, 2);
+	ft_putendl_fd(msg, 2);
+	if (line != NULL)
+		ft_printf("Problem in line: %s\n", line);
+}
+
 void	free_scene(t_scene *scene)
 {
 	free_list(scene->obj_list);
-}
-
-int	add_to_list(t_olist **list, void *object, t_otype type, int colour)
-{
-	t_olist	*new;
-	t_olist	*temp;
-
-	new = malloc(sizeof(t_olist));
-	if (!new)
-		return (1);
-	new->obj_type = type;
-	new->obj = object;
-	new->colour = colour;
-	new->next = NULL;
-	if (*list == NULL)
-		*list = new;
-	else
-	{
-		temp = *list;
-		while (temp->next)
-			temp = temp->next;
-		temp->next = new;
-	}
-	return (0);
+	scene->obj_list = NULL;
 }
 
 void	free_list(t_olist *list)
@@ -38,12 +46,37 @@ void	free_list(t_olist *list)
 	while (list)
 	{
 		temp = list->next;
-		if (list->obj)
-			free(list->obj);//Add free sphere matrix
+		if (list->shape)
+		{
+			free_matrix(list->shape->matrix);
+			free(list->shape);
+		}
 		free(list);
 		list = temp;
 	}
-	list = NULL;
+}
+
+int	add_to_list(t_scene *scene, t_shape *shape)
+{
+	t_olist	*new;
+	t_olist	*temp;
+
+	new = malloc(sizeof(t_olist));
+	if (!new)
+		return (1);
+    shape->obj_id = scene->next_obj_id++;
+	new->shape = shape;
+	new->next = NULL;
+	if (scene->obj_list == NULL)
+		scene->obj_list = new;
+	else
+	{
+		temp = scene->obj_list;
+		while (temp->next)
+			temp = temp->next;
+		temp->next = new;
+	}
+	return (0);
 }
 
 t_vec3	creat_vec3(float x, float y, float z)
@@ -66,14 +99,6 @@ void	free_array(char **arr)
 	while (arr[i])
 		free(arr[i++]);
 	free(arr);
-}
-
-void	error(char *msg, char *line)
-{
-	ft_putendl_fd(ERR_MSG, 2);
-	ft_putendl_fd(msg, 2);
-	if (line != NULL)
-		ft_printf("Problem in line: %s\n", line);
 }
 
 // checks how many elements in the string
@@ -258,7 +283,7 @@ int	parse_rgb(char *str, int *color)
 		return (1);
 	rgb = ft_split(str, ',');
 	if (!rgb)
-		return (error(ERR_ALLOC, NULL), 1);
+		return (error_return(ERR_ALLOC, NULL));
 	if (!rgb[0] || !rgb[1] || !rgb[2] || rgb[3])
 		return (free_array(rgb), 1);
 	r = 0;
@@ -283,7 +308,7 @@ int	parse_vector(char *str, t_vec3 *vector, float min, float max)
 		return (1);
 	res = ft_split(str, ',');
 	if (!res)
-		return (error(ERR_ALLOC, NULL), 1);
+		return (error_return(ERR_ALLOC, NULL));
 	if (!res[0] || !res[1] || !res[2] || res[3])
 		return (free_array(res), 1);
 	x = 0;
@@ -321,3 +346,44 @@ int	parse_float(char *str, float min, float max, float *res)
 		return (1);
 	return (0);
 }
+
+// int	add_to_list(t_olist **list, void *object, t_otype type, int color)
+// {
+// 	t_olist	*new;
+// 	t_olist	*temp;
+
+// 	new = malloc(sizeof(t_olist));
+// 	if (!new)
+// 		return (1);
+// 	new->obj_type = type;
+// 	new->obj = object;
+// 	new->color = color;
+// 	new->next = NULL;
+// 	if (*list == NULL)
+// 		*list = new;
+// 	else
+// 	{
+// 		temp = *list;
+// 		while (temp->next)
+// 			temp = temp->next;
+// 		temp->next = new;
+// 	}
+// 	return (0);
+// }
+
+// void	free_list(t_olist *list)
+// {
+// 	t_olist	*temp;
+
+// 	if (!list)
+// 		return ;
+// 	while (list)
+// 	{
+// 		temp = list->next;
+// 		if (list->obj)
+// 			free(list->obj);//Add free sphere matrix
+// 		free(list);
+// 		list = temp;
+// 	}
+// 	list = NULL;
+// }

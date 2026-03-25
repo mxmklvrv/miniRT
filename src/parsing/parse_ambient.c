@@ -4,25 +4,24 @@ int	parse_ambient(char *line, t_scene *scene)
 {
 	char	**res;
 	float	ratio;
-	int		colour;
+	int		color;
 
 	if (scene->qt_ambiant > 1)
-		return (error("Only 1 Ambient is allowed", scene->err_m), 1);
+		return (error_return(ERR_AMB_QTY, scene->err_m));
 	if (count_elements(line) != 2)
-		return (error("Wrong Ambient specs", scene->err_m), 1);
+		return (error_return(ERR_AMB_SPEC, scene->err_m));
 	res = ft_split(line, ' ');
 	if (!res)
-		return (error(ERR_ALLOC, NULL), 1);
+		return (error_return(ERR_ALLOC, NULL));
 	ratio = 0.0f;
-	colour = 0;
+	color = 0;
 	if (parse_float(res[0], 0.0f, 1.0f, &ratio) == 1)
-		return (error("Invalid Ambient ratio", scene->err_m), free_array(res),
-			1);
-	if (parse_rgb(res[1], &colour) == 1)
-		return (error("Invalid Ambient colour", scene->err_m), free_array(res),
-			1);
+		return (parse_error(scene,ERR_AMB_RATI, res, NULL));
+	if (parse_rgb(res[1], &color) == 1)
+		return (parse_error(scene, ERR_AMB_COLR, res, NULL));
 	scene->ambient.amb = ratio;
-	scene->ambient.colour = colour;
+	scene->ambient.color = color;
 	free_array(res);
 	return (0);
 }
+

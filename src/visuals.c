@@ -8,8 +8,8 @@ bool	visuals_loop(t_scene *scene)
 		return (false);
 	data.scene = scene; // added by max
 	set_hooks(&data);
-	draw_scene(&data, scene); // show scene here
-	mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
+	draw_scene(&data); // show scene here
+	//mlx_put_image_to_window(data.mlx, data.win, data.img, 0, 0);
 	mlx_loop(data.mlx);
 	free_visuals(&data);
 	return (true);
@@ -44,6 +44,8 @@ void	free_visuals(t_data *data)
 		mlx_destroy_image(data->mlx, data->img);
 	if (data->win)
 		mlx_destroy_window(data->mlx, data->win);
+	if (data->move_state)
+		free(data->move_state);
 	mlx_destroy_display(data->mlx);
 	free(data->mlx);
 }
