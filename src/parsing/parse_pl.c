@@ -17,7 +17,7 @@ int	parse_plane(char *line, t_scene *scene)
 		return (parse_error(scene, NULL, res, shape));
 	if (add_to_list(scene, shape) == 1)
 		return (parse_error(scene, ERR_PL_LIST, res, shape));
-    free_array(res);
+	free_array(res);
 	return (0);
 }
 
@@ -26,10 +26,10 @@ int init_plane(t_shape *shape, char **res, t_scene *scene)
 	shape->obj_type = PL;
 	if (parse_vector(res[0], &shape->normal.origin, -100.0f, 100.0f) == 1)
 		return (error_return(ERR_PL_POINT, scene->err_m));
-    shape->normal.origin.w = 1;
+	shape->normal.origin.w = 1;
 	if (parse_vector(res[1], &shape->normal.direction, -1.0f, 1.0f) == 1)
 		return (error_return(ERR_PL_NORM, scene->err_m));
-    shape->normal.direction.w = 0;
+	shape->normal.direction.w = 0;
 	if (parse_rgb(res[2], &shape->color) == 1)
 		return (error_return(ERR_PL_COLR, scene->err_m));
 	return (0);

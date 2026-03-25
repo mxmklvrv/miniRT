@@ -6,8 +6,8 @@ void setup_camera_angle(t_cam *cam);
 
 void setup_scene(t_scene *scene)
 {
-    setup_camera_angle(&scene->cam);
-    // setup_objects(scene->obj_list);
+	setup_camera_angle(&scene->cam);
+	// setup_objects(scene->obj_list);
 }
 
 /*
@@ -17,56 +17,56 @@ void setup_scene(t_scene *scene)
 /*
 void	setup_camera_angle(t_cam *cam)
 {
-    t_vec3 forward;
-    t_vec3 world_up;
+	t_vec3 forward;
+	t_vec3 world_up;
 
-    cam->pixel_size = 1 * tanf(degrees_to_radians(cam->fov) / 2) * 2
-        / ft_max(2, WIDTH, HEIGHT);
-    forward = vector_normalize(cam->orient.direction);
-    world_up = new_vector(0, 1, 0);
+	cam->pixel_size = 1 * tanf(degrees_to_radians(cam->fov) / 2) * 2
+		/ ft_max(2, WIDTH, HEIGHT);
+	forward = vector_normalize(cam->orient.direction);
+	world_up = new_vector(0, 1, 0);
 
-    if (fabsf(vector_dot(forward, world_up)) > 0.999)
-        world_up = new_vector(0, 0, 1);
-    cam->right = vector_normalize(vector_cross(forward, world_up));
-    cam->up = vector_cross(cam->right, forward);
-    cam->orient.direction = forward;
-    //cam->matrix = ;
-    //t_vec3	opposite_cam;
-    //const t_vec3	up_view = new_vector(0, 0, 1);
+	if (fabsf(vector_dot(forward, world_up)) > 0.999)
+		world_up = new_vector(0, 0, 1);
+	cam->right = vector_normalize(vector_cross(forward, world_up));
+	cam->up = vector_cross(cam->right, forward);
+	cam->orient.direction = forward;
+	//cam->matrix = ;
+	//t_vec3	opposite_cam;
+	//const t_vec3	up_view = new_vector(0, 0, 1);
 
-    //cam->orient.direction = vector_normalize(cam->orient.direction);
-    //opposite_cam = vector_multiply(cam->orient.direction, -1);
-    //cam->vector_i = vector_cross(opposite_cam,up_view);
-    //cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
+	//cam->orient.direction = vector_normalize(cam->orient.direction);
+	//opposite_cam = vector_multiply(cam->orient.direction, -1);
+	//cam->vector_i = vector_cross(opposite_cam,up_view);
+	//cam->vector_j = vector_cross(opposite_cam, cam->vector_i);
 }
 */
 // calculates local axes (forward, right, up)
 void setup_camera_angle(t_cam *cam)
 {
-    t_vec3 forward;
-    t_vec3 right;
-    t_vec3 up;
+	t_vec3 forward;
+	t_vec3 right;
+	t_vec3 up;
 
-    cam->pixel_size = tanf(degrees_to_radians(cam->fov) / 2) * 2 / ft_max(2, WIDTH, HEIGHT);
+	cam->pixel_size = tanf(degrees_to_radians(cam->fov) / 2) * 2 / ft_max(2, WIDTH, HEIGHT);
 
-    forward.x = cosf(cam->pitch) * sinf(cam->yaw);
-    forward.y = sinf(cam->pitch);
-    forward.z = cosf(cam->pitch) * cosf(cam->yaw);
-    forward.w = 0;
+	forward.x = cosf(cam->pitch) * sinf(cam->yaw);
+	forward.y = sinf(cam->pitch);
+	forward.z = cosf(cam->pitch) * cosf(cam->yaw);
+	forward.w = 0;
 
-    forward = vector_normalize(forward);
-    right = vector_normalize(vector_cross(new_vector(0, 1, 0), forward));
-    up = vector_cross(forward, right);
+	forward = vector_normalize(forward);
+	right = vector_normalize(vector_cross(new_vector(0, 1, 0), forward));
+	up = vector_cross(forward, right);
 
-    cam->orient.direction = forward;
-    cam->right = right;
-    cam->up = up;
+	cam->orient.direction = forward;
+	cam->right = right;
+	cam->up = up;
 }
 
 
 float degrees_to_radians(float degrees)
 {
-    return (degrees * M_PI / 180);
+	return (degrees * M_PI / 180);
 }
 
 // static void	setup_objects(t_olist *obj_list)
@@ -104,6 +104,6 @@ float degrees_to_radians(float degrees)
 
 void set_matrix(t_matrix *old_m, t_matrix new_m)
 {
-    free_matrix(*old_m);
-    *old_m = new_m;
+	free_matrix(*old_m);
+	*old_m = new_m;
 }

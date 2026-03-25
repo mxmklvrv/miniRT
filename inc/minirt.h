@@ -127,7 +127,7 @@ void		matrix_transpose(t_matrix m);
 float		matrix_find_determinant(t_matrix m);
 float		matrix_find_minor(t_matrix m, int row, int col);
 float		matrix_find_cofactor(t_matrix m, int row, int col);
-bool	    matrix_is_invertible(t_matrix m, float *determinant);
+bool		matrix_is_invertible(t_matrix m, float *determinant);
 
 
 //t_matrix	new_rotation_matrix(t_vec3 v);
