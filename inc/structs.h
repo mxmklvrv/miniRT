@@ -74,7 +74,7 @@ typedef struct s_olist
 typedef struct s_intersection
 {
 	int		count;
-	float	val[4]; // max change 
+	float	val[4]; // max change
 	t_shape	*shape;
 }	t_intersection;
 
@@ -84,8 +84,8 @@ typedef struct s_cam
 	float			fov;
 	float			pixel_size;
 	t_matrix		matrix;
-	t_vec3	right; // test
-	t_vec3	up; // test
+	t_vec3	right;
+	t_vec3	up;
     float yaw;
     float pitch;
 
