@@ -56,12 +56,8 @@ typedef struct s_shape
 	int				obj_id;
 	t_vec3			center;//sp
 	t_ray			normal;//pl, cy
-	float			diameter;//sp, cy
-	float			height;//cy
-	t_vec3		  axis;
-	float		   radius;
-	float		   half_h;
-	t_matrix		matrix;
+	float			radius;//sp, cy
+	float			half_height;//cy
 	int				color;
 }	t_shape;
 
@@ -116,7 +112,7 @@ typedef struct s_scene
 	int				qt_ambiant;
 	int				qt_cam;
 	int				qt_light;
-	int			 next_obj_id;
+	int				next_obj_id;
 	char			*err_m;
 	t_olist			*obj_selected;
 }					t_scene;

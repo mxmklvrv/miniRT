@@ -191,7 +191,7 @@ void	print_scene(t_scene *scene)
 		{
 			printf("Sphere center: %.2f %.2f %.2f\n",
 				s->center.x, s->center.y, s->center.z);
-			printf("Diameter: %.2f\n", s->diameter);
+			printf("Diameter: %.2f\n", s->radius * 2.0f);
 		}
 
 		if (s->obj_type == PL)
@@ -219,8 +219,8 @@ void	print_scene(t_scene *scene)
 				s->normal.direction.y,
 				s->normal.direction.z);
 
-			printf("Diameter: %.2f\n", s->diameter);
-			printf("Height: %.2f\n", s->height);
+			printf("Diameter: %.2f\n", s->radius * 2.0f);
+			printf("Height: %.2f\n", s->half_height * 2.0f);
 		}
 
 		printf("Color: %d\n", s->color);

@@ -83,8 +83,7 @@ int	resize_height(t_olist *node, float value);
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data);
 void	setup_scene(t_scene *scene);
-void	set_matrix(t_matrix *old_m, t_matrix new_m);
-float	degrees_to_radians(float degrees);
+void	setup_camera_angle(t_cam *cam);
 int		trace_color(t_ray ray, t_scene *scene);
 void	find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closest);
 float	get_closest_hit(t_intersection intersection);
@@ -121,16 +120,12 @@ t_matrix	new_shearing_matrix(t_vec3 x, t_vec3 y, t_vec3 z);
 t_matrix	new_matrix_multiply(t_matrix m1, t_matrix m2);
 void		free_matrix(t_matrix matrix);
 bool		matrix_is_equal(t_matrix m1, t_matrix m2);
-bool		matrix_has_equal_dimensions(t_matrix m1, t_matrix m2);
 t_vec3		matrix_multiply_by_vector(t_matrix m, t_vec3 v);
 void		matrix_transpose(t_matrix m);
 float		matrix_find_determinant(t_matrix m);
 float		matrix_find_minor(t_matrix m, int row, int col);
 float		matrix_find_cofactor(t_matrix m, int row, int col);
 bool		matrix_is_invertible(t_matrix m, float *determinant);
-
-
-//t_matrix	new_rotation_matrix(t_vec3 v);
 t_matrix	chain_matrices(t_matrix scaling, t_matrix rotation);
 
 /* ===== Shapes math ======================================================== */

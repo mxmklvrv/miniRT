@@ -88,7 +88,6 @@ t_vec3	vector_divide(t_vec3 v, float scalar)
 {
 	if (is_point(v))
 		ft_putendl_fd("Error: dividing a point", STDERR_FILENO);
-	//if (is_equalf(scalar, 0))
 	if (scalar == 0)
 	{
 		ft_putendl_fd("Error: dividing by zero", STDERR_FILENO);

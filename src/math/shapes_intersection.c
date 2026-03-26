@@ -27,15 +27,6 @@ typedef struct s_disk
 	float radius;
 } t_disk;
 
-static void init_cy_data(t_ray ray, t_shape *cy, t_cy_geom *data);
-static void set_cy_quad(t_ray ray, t_shape *cy, t_cy_geom *data, t_quad *side);
-static void append_cy_side_hit(t_shape *cy,t_cy_geom *data, t_intersection *it, float t);
-static void add_cy_side_hits(t_shape *cy, t_quad *side, t_cy_geom *data, t_intersection *it);
-static void add_cy_caps(t_ray ray, t_shape *cy, t_intersection *it);
-static void add_cap_hit(t_ray ray, float t, t_disk disk, t_intersection *it);
-
-
-
 
 
 t_intersection get_intersection(t_ray ray, t_shape *shape)
@@ -54,19 +45,19 @@ t_intersection get_intersection(t_ray ray, t_shape *shape)
 
 static void hit_sp(t_ray ray, t_shape *sp, t_intersection *intersection)
 {
-	t_vec3			vector_to_sphere;
-	t_quad			quad;
-	float			sqrt_discriminant;
+	t_vec3	vector_to_sphere;
+	t_quad	quad;
+	float	sqrt_discriminant;
 
 	intersection->shape = sp;
 	vector_to_sphere = vector_substract(ray.origin, sp->center);
 	quad.a = vector_dot(ray.direction, ray.direction);
 	quad.b = 2 * vector_dot(ray.direction, vector_to_sphere);
-	quad.c = vector_dot(vector_to_sphere, vector_to_sphere) - sp->diameter * sp->diameter / 4.0f;
+	quad.c = vector_dot(vector_to_sphere, vector_to_sphere) - sp->radius * sp->radius;
 	quad.discriminant = quad.b * quad.b - 4.0f * quad.a * quad.c;
 	if (quad.discriminant < 0.0f || fabsf(quad.a) < EPSILON)
 		return ;
-	else // Find intersection:
+	else
 	{
 		sqrt_discriminant = sqrtf(quad.discriminant);
 		intersection->count = 2;
@@ -77,13 +68,13 @@ static void hit_sp(t_ray ray, t_shape *sp, t_intersection *intersection)
 
 static void hit_pl(t_ray ray, t_shape *pl, t_intersection *intersection)
 {
-	float			denominator;
+	float	denominator;
 
 	intersection->shape = pl;
 	denominator = vector_dot(ray.direction, pl->normal.direction);
-	if (fabsf(denominator) < EPSILON) // cam and plane (almost or fully) parallel
+	if (fabsf(denominator) < EPSILON)
 		return ;
-	else // Find intersection:
+	else
 	{
 		intersection->count = 1;
 		intersection->val[0] = vector_dot(vector_substract(pl->normal.origin, ray.origin), pl->normal.direction) / denominator;
@@ -94,6 +85,26 @@ static void hit_pl(t_ray ray, t_shape *pl, t_intersection *intersection)
 
 
 
+
+static void init_cy_data(t_ray ray, t_shape *cy, t_cy_geom *data);
+static void set_cy_quad(t_ray ray, t_shape *cy, t_cy_geom *data, t_quad *side);
+static void append_cy_side_hit(t_shape *cy,t_cy_geom *data, t_intersection *it, float t);
+static void add_cy_side_hits(t_shape *cy, t_quad *side, t_cy_geom *data, t_intersection *it);
+static void add_cy_caps(t_ray ray, t_shape *cy, t_intersection *it);
+static void add_cap_hit(t_ray ray, float t, t_disk disk, t_intersection *it);
+
+static void hit_cy(t_ray ray, t_shape *cy, t_intersection *intersection)
+{
+	t_cy_geom data;
+	t_quad side;
+
+	intersection->shape = cy;
+
+	init_cy_data(ray, cy, &data);
+	set_cy_quad(ray, cy, &data, &side);
+	add_cy_side_hits(cy, &side, &data, intersection);
+	add_cy_caps(ray, cy, intersection);
+}
 
 static void add_cap_hit(t_ray ray, float t, t_disk disk, t_intersection *it)
 {
@@ -116,25 +127,25 @@ static void add_cap_hit(t_ray ray, float t, t_disk disk, t_intersection *it)
 static void init_cy_data(t_ray ray, t_shape *cy, t_cy_geom *data)
 {
 	data->origin_to_ray = vector_substract(ray.origin, cy->normal.origin);
-	data->ray_axis = vector_dot(ray.direction, cy->axis);
-	data->oc_axis = vector_dot(data->origin_to_ray, cy->axis);
+	data->ray_axis = vector_dot(ray.direction, cy->normal.direction);
+	data->oc_axis = vector_dot(data->origin_to_ray, cy->normal.direction);
 }
 
 // Build quadratic equation for intersection with infinite cylinder side
 static void set_cy_quad(t_ray ray, t_shape *cy, t_cy_geom *data, t_quad *side)
 {
 	side->ray_perp = vector_substract(ray.direction,
-									  vector_multiply(cy->axis, data->ray_axis));
+									  vector_multiply(cy->normal.direction, data->ray_axis));
 
 	side->oc_perp = vector_substract(data->origin_to_ray,
-									 vector_multiply(cy->axis, data->oc_axis));
+									 vector_multiply(cy->normal.direction, data->oc_axis));
 
-	//side->a = vector_dot(side->ray_perp, side->ray_perp);
-	//side->b = 2.0f * vector_dot(side->ray_perp, side->oc_perp);
-	//side->c = vector_dot(side->oc_perp, side->oc_perp) - cy->radius * cy->radius;
-	side->a = ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y;
-	side->b = 2.0f * ray.origin.x * ray.direction.x + 2.0f * ray.origin.y * ray.direction.y;
-	side->c = ray.origin.x * ray.origin.x + ray.origin.y * ray.origin.y - 1.0f ;
+	side->a = vector_dot(side->ray_perp, side->ray_perp);
+	side->b = 2.0f * vector_dot(side->ray_perp, side->oc_perp);
+	side->c = vector_dot(side->oc_perp, side->oc_perp) - cy->radius * cy->radius;
+	//side->a = ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y;
+	//side->b = 2.0f * ray.origin.x * ray.direction.x + 2.0f * ray.origin.y * ray.direction.y;
+	//side->c = ray.origin.x * ray.origin.x + ray.origin.y * ray.origin.y - 1.0f ;
 
 	side->discriminant = side->b * side->b - 4.0f * side->a * side->c;
 }
@@ -145,7 +156,7 @@ static void append_cy_side_hit(t_shape *cy,t_cy_geom *data, t_intersection *it, 
 	float h;
 
 	h = data->oc_axis + t * data->ray_axis;
-	if (t > EPSILON && h >= -cy->half_h && h <= cy->half_h && it->count < 4)
+	if (t > EPSILON && h >= -cy->half_height && h <= cy->half_height && it->count < 4)
 		it->val[it->count++] = t;
 }
 
@@ -173,35 +184,22 @@ static void add_cy_caps(t_ray ray, t_shape *cy, t_intersection *it)
 	float t;
 	t_disk disk;
 
-	denom = vector_dot(ray.direction, cy->axis);
+	denom = vector_dot(ray.direction, cy->normal.direction);
 	if (fabsf(denom) <= EPSILON)
 		return;
 	disk.radius = cy->radius;
 	// bottom cap
 	disk.center = vector_add(cy->normal.origin,
-			vector_multiply(cy->axis, -cy->half_h));
+			vector_multiply(cy->normal.direction, -cy->half_height));
 	t = vector_dot(vector_substract(disk.center, ray.origin),
-			cy->axis) / denom;
+			cy->normal.direction) / denom;
 	add_cap_hit(ray, t, disk, it);
 
 	// top cap
 	disk.center = vector_add(cy->normal.origin,
-			vector_multiply(cy->axis, cy->half_h));
+			vector_multiply(cy->normal.direction, cy->half_height));
 	t = vector_dot(vector_substract(disk.center, ray.origin),
-			cy->axis) / denom;
+			cy->normal.direction) / denom;
 	add_cap_hit(ray, t, disk, it);
-}
-
-static void hit_cy(t_ray ray, t_shape *cy, t_intersection *intersection)
-{
-	t_cy_geom data;
-	t_quad side;
-
-	intersection->shape = cy;
-
-	init_cy_data(ray, cy, &data);
-	set_cy_quad(ray, cy, &data, &side);
-	add_cy_side_hits(cy, &side, &data, intersection);
-	add_cy_caps(ray, cy, intersection);
 }
 

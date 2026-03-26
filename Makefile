@@ -1,31 +1,22 @@
-NAME = miniRT
+NAME := miniRT
 
-CC = cc -g
+CC := cc -g
 
-CFLAGS = -Wall -Wextra -Werror
-HEADERS = $(addprefix -I, $(LIBFT_DIR)/inc $(MLX_DIR) $(HDR_DIR) /usr/include) -O3
-LINKDIR = $(addprefix -L, $(LIBFT_DIR) $(MLX_DIR) /usr/lib)
-LINKFLAGS = $(addprefix -l, ft mlx_Linux) -lXext -lX11 -lm -lz
+CFLAGS := -Wall -Wextra -Werror
+HEADERS = $(addprefix -I, $(LIBFT_DIR)/inc $(MLX_DIR) $(HDR_DIR) usr/include) -O3
+LINKDIR = $(addprefix -L, $(LIBFT_DIR) $(MLX_DIR) usr/lib)
+LINKFLAGS := $(addprefix -l, ft mlx_Linux) -lXext -lX11 -lm -lz
 
-# ------------  LIBFT  ------------------------------------------------------- #
-LIBFT_DIR = src/libs/libft
-LIBFT = $(LIBFT_DIR)/libft.a
-
-# ------------  MLX  --------------------------------------------------------- #
-MLX_DIR = src/libs/minilibx-linux
-MLX = $(MLX_DIR)/libmlx_Linux.a
-
-HDR_DIR = inc
-HDR = $(addprefix $(HDR_DIR)/, \
+HDR_DIR := inc
+HDR := \
 	minirt.h \
 	structs.h \
 	macros.h \
 	parsing.h \
-	)
 
-PARS_DIR = src/parsing
-PARS_OBJ_DIR = $(OBJ_DIR)/obj_parsing
-PARS_SRC = $(addprefix $(PARS_DIR)/, \
+SRC_DIR := src
+
+PARS_SRC := \
 	dispatch.c \
 	input_validation.c \
 	parse_ambient.c \
@@ -35,38 +26,54 @@ PARS_SRC = $(addprefix $(PARS_DIR)/, \
 	parse_pl.c \
 	parse_sp.c \
 	read_file.c \
-	utils.c \
-	)
-PARS_OBJ = $(PARS_SRC:$(PARS_DIR)/%.c=$(PARS_OBJ_DIR)/%.o)
+	utils.c
 
-SRC_DIR = src
-SRC = $(addprefix $(SRC_DIR)/, \
-	main.c \
-	visuals.c \
-	hooks.c \
-	draw.c \
-	shapes_intersection.c \
-	shapes_normal.c \
-	vector.c \
-	color.c \
+MATH_SRC := \
+	color_get_value.c \
+	color_new.c \
+	color_operations.c \
 	matrix.c \
 	ray.c \
-	print.c \
+	shapes_intersection.c \
+	shapes_normal.c \
+	vector.c
+
+COMMON_SRC := \
+	draw.c \
+	hooks.c \
+	main.c \
 	move_on_press.c \
+	print.c \
 	render_setup.c \
 	tracing_color.c \
 	tracing_lighting.c \
+	visuals.c
+
+SRC := $(PARS_SRC) $(MATH_SRC) $(COMMON_SRC)
+
+OBJ_DIR := obj
+OBJ := $(SRC:%.c=$(OBJ_DIR)/%.o)
+
+# ------------  VPATH  ------------------------------------------------------- #
+VPATH := $(addprefix $(SRC_DIR), \
+	: \
+	/math: \
+	/parsing \
 	)
 
+LIBS_DIR := $(SRC_DIR)/libs
+# ------------  LIBFT  ------------------------------------------------------- #
+LIBFT_DIR := $(LIBS_DIR)/libft
+LIBFT := $(LIBFT_DIR)/libft.a
 
-OBJ_DIR = obj
-OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o) \
-	$(PARS_OBJ)
+# ------------  MLX  --------------------------------------------------------- #
+MLX_DIR := $(LIBS_DIR)/minilibx-linux
+MLX := $(MLX_DIR)/libmlx_Linux.a
 
 # ------------  RULES  ------------------------------------------------------- #
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT) $(MLX)
+$(NAME): $(OBJ_DIR) $(OBJ) $(LIBFT) $(MLX)
 	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LINKDIR) $(LINKFLAGS)
 
 $(LIBFT):
@@ -75,15 +82,15 @@ $(LIBFT):
 $(MLX):
 	make -C $(MLX_DIR)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HDR)
+$(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
-$(PARS_OBJ_DIR)/%.o: $(PARS_DIR)/%.c $(HDR)
-	mkdir -p $(PARS_OBJ_DIR)
+
+$(OBJ_DIR)/%.o: %.c
+	@echo "Headers: $(HEADERS)"
 	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
 
 clean:
-	rm -rf $(OBJ_DIR) $(PARS_OBJ_DIR)
+	rm -rf $(OBJ_DIR)
 	make clean -C $(LIBFT_DIR)
 
 fclean: clean
@@ -93,5 +100,5 @@ fclean: clean
 re: fclean all
 
 # ------------  EXTRA  ------------------------------------------------------- #
-.SECONDARY: $(OBJ_DIR) $(OBJ) $(PARS_OBJ_DIR)
+.SECONDARY: $(OBJ_DIR) $(OBJ)
 .PHONY: all re clean fclean

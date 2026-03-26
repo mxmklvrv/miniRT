@@ -12,31 +12,31 @@
 
 #include "libft.h"
 
-static int	putchar_loop(int fd, int c, int n);
+static int	putchar_loop(int c, int n);
 
-int	print_char(int fd, int c, t_flags flags)
+int	print_char(int c, t_flags flags)
 {
 	int	char_count;
 	int	space_count;
 
 	if (!flags.minus)
-		space_count = putchar_loop(fd, (int) ' ', flags.width - 1);
-	char_count = write(fd, &c, 1);
+		space_count = putchar_loop((int) ' ', flags.width - 1);
+	char_count = write(STDOUT_FILENO, &c, 1);
 	if (flags.minus)
-		space_count = putchar_loop(fd, (int) ' ', flags.width - 1);
+		space_count = putchar_loop((int) ' ', flags.width - 1);
 	if (char_count == -1 || space_count == -1)
 		return (-1);
 	return (char_count + space_count);
 }
 
-static int	putchar_loop(int fd, int c, int width)
+static int	putchar_loop(int c, int width)
 {
 	int	i;
 
 	i = 0;
 	while (i < width)
 	{
-		if (write(fd, &c, 1) == -1)
+		if (write(STDOUT_FILENO, &c, 1) == -1)
 			return (-1);
 		i++;
 	}

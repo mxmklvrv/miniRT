@@ -12,11 +12,11 @@
 
 #include "libft.h"
 
-static int	print_content(int fd, const char *format, va_list args, int *i);
+static int	print_content(const char *format, va_list args, int *i);
 static char	*get_str(t_flags flags, va_list args);
 static char	*format_str(char *str, t_flags flags);
 
-int	ft_printf(int fd, const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
 	int		print_count;
 	int		result;
@@ -31,7 +31,7 @@ int	ft_printf(int fd, const char *format, ...)
 	while (format[i] != '\0')
 	{
 		if (format[i] == '%')
-			result = print_content(fd, &format[i + 1], args, &i);
+			result = print_content(&format[i + 1], args, &i);
 		else
 			result = ft_putchar_fd(format[i], 1);
 		if (result == -1)
@@ -43,7 +43,7 @@ int	ft_printf(int fd, const char *format, ...)
 	return (print_count);
 }
 
-static int	print_content(int fd, const char *format, va_list args, int *i)
+static int	print_content(const char *format, va_list args, int *i)
 {
 	int		print_count;
 	t_flags	flags;
@@ -56,12 +56,12 @@ static int	print_content(int fd, const char *format, va_list args, int *i)
 		return (write(1, "%", 1));
 	check_flags(&flags);
 	if (flags.type == 'c')
-		return (print_char(fd, va_arg(args, int), flags));
+		return (print_char(va_arg(args, int), flags));
 	str = get_str(flags, args);
 	if (str == NULL)
 		str = print_null(flags.type);
 	str = format_str(str, flags);
-	print_count = ft_putstr_fd(str, fd);
+	print_count = ft_putstr_fd(str, STDOUT_FILENO);
 	free(str);
 	str = NULL;
 	if (!flags.is_valid)

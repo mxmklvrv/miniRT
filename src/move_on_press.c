@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static void	update_cy_geo(t_shape *cy);
+//static void	update_cy_geo(t_shape *cy);
 
 int	key_press_hook(int key, t_data *data)
 {
@@ -283,29 +283,15 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 	if (!node || !node->shape)
 		return ;
 	obj = node->shape;
-	if (obj->obj_type == PL)
+	if (obj->obj_type == PL || obj->obj_type == CY)
 	{
 		if (axis == Y_AXIS)
-			obj->normal.direction = vector_normalize(rotate_z(obj->normal.direction,
-						angle));
+			obj->normal.direction = vector_normalize(rotate_z(obj->normal.direction, angle));
 		else
-			obj->normal.direction = vector_normalize(rotate_x(obj->normal.direction,
-						angle));
-	}
-	else if (obj->obj_type == CY)
-	{
-		if (axis == Y_AXIS)
-			obj->axis = vector_normalize(rotate_z(obj->axis, angle));
-		else
-			obj->axis = vector_normalize(rotate_x(obj->axis, angle));
+			obj->normal.direction = vector_normalize(rotate_x(obj->normal.direction, angle));
 	}
 }
 
-/* To look up-down we change Z and Y coordinates, so rotate around 0X axis;
- * To look left-right we change X and Y coordinates, so rotate around 0Z axis;
- * Should it be named rotate_z?
- */
-// anna
 t_vec3	rotate_z(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
@@ -321,17 +307,14 @@ t_vec3	rotate_z(t_vec3 current, float angle)
 	return (rotated);
 }
 
-/* Changed 'angle' to '-angle' to invert vertical rotation.
- */
-// anna
 t_vec3	rotate_x(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
 	float	cosinus;
 	float	sinus;
 
-	cosinus = cosf(-angle); // anna
-	sinus = sinf(-angle);   // anna
+	cosinus = cosf(-angle);
+	sinus = sinf(-angle);
 	rotated.x = current.x;
 	rotated.y = current.y * cosinus - current.z * sinus;
 	rotated.z = current.y * sinus + current.z * cosinus;
@@ -371,11 +354,11 @@ int	resize_diameter(t_olist *node, float value)
 	obj = node->shape;
 	if (obj->obj_type == SP || obj->obj_type == CY)
 	{
-		obj->diameter += value;
-		if (obj->diameter < 0.1f)
-			obj->diameter = 0.1f;
-		if (obj->obj_type == CY)
-			update_cy_geo(obj);
+		obj->radius += value;
+		if (obj->radius < 0.1f)
+			obj->radius = 0.1f;
+		//if (obj->obj_type == CY)
+		//	update_cy_geo(obj);
 		return (1);
 	}
 	return (0);
@@ -388,17 +371,17 @@ int	resize_height(t_olist *node, float value)
 	if (!node || !node->shape)
 		return (0);
 	obj = node->shape;
-	obj->height += value;
-	if (obj->height < 0.1f)
-		obj->height = 0.1f;
-	update_cy_geo(obj);
+	obj->half_height += value;
+	if (obj->half_height < 0.1f)
+		obj->half_height = 0.1f;
+	//update_cy_geo(obj);
 	return (1);
 }
 
-static void	update_cy_geo(t_shape *cy)
-{
-	if (!cy || cy->obj_type != CY)
-		return ;
-	cy->radius = cy->diameter / 2.0f;
-	cy->half_h = cy->height / 2.0f;
-}
+//static void	update_cy_geo(t_shape *cy)
+//{
+//	if (!cy || cy->obj_type != CY)
+//		return ;
+//	cy->radius = cy->radius / 2.0f;
+//	cy->half_height = cy->half_height / 2.0f;
+//}

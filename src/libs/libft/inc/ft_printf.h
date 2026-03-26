@@ -38,11 +38,11 @@ typedef struct s_flags
 	int		precision;
 }	t_flags;
 
-int		ft_printf(int fd, const char *format, ...);
+int		ft_printf(const char *format, ...);
 bool	flags_are_valid(const char *format, int *format_i);
 void	fill_flags(t_flags *flags, const char *format);
 void	check_flags(t_flags *flags);
-int		print_char(int fd, int c, t_flags flags);
+int		print_char(int c, t_flags flags);
 char	*print_ptr(unsigned long ptr);
 char	*print_null(char type);
 char	*format_precision(char *str, int precision, char type);

@@ -62,6 +62,7 @@ char	*ft_itoa_base(unsigned long n, char *base);
 int		ft_max(int arg_count, ...);
 int		ft_min(int arg_count, ...);
 void	ft_swap(int *a, int *b);
+void	ft_swapf(float *a, float *b);
 int		ft_abs(int num);
 
 // ------------  PRINT  ----------------------------------------------------- //

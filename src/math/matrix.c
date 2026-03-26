@@ -145,13 +145,6 @@ t_matrix	new_scaling_matrix(float x, float y, float z)
 	return (res);
 }
 
-//t_matrix	new_rotation_matrix(t_vec3 v)
-//{
-//	v = vector_normalize(v);
-
-
-//}
-
 t_matrix	new_rotation_x_matrix(float radians)
 {
 	t_matrix	res;
@@ -230,7 +223,7 @@ bool	matrix_is_equal(t_matrix m1, t_matrix m2)
 	int	i;
 	int	j;
 
-	if (!matrix_has_equal_dimensions(m1, m2))
+	if (m1.col != m2.col || m1.row != m2.row)
 	{
 		ft_putendl_fd("Error: matricces are not comparable", STDERR_FILENO);
 		return (false);
@@ -248,11 +241,6 @@ bool	matrix_is_equal(t_matrix m1, t_matrix m2)
 		j++;
 	}
 	return (true);
-}
-
-bool	matrix_has_equal_dimensions(t_matrix m1, t_matrix m2)
-{
-	return (m1.col == m2.col && m1.row == m2.row);
 }
 
 t_matrix	new_matrix_multiply(t_matrix m1, t_matrix m2)
