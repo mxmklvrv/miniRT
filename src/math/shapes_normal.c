@@ -43,6 +43,7 @@ static t_vec3 normal_at_cy(t_vec3 point, t_shape *cy)
 	//	return (vector_negate(cy->axis));
 
 	//return (vector_normalize(radial));
+
 	t_vec3	half_axis;
 	t_vec3	cap_center;
 	float	axis_proj;
