@@ -1,35 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strrchr.c                                       :+:      :+:    :+:   */
+/*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/19 16:46:29 by akolupae          #+#    #+#             */
-/*   Updated: 2025/04/19 17:06:44 by akolupae         ###   ########.fr       */
+/*   Created: 2025/04/15 11:13:25 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/15 14:51:51 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-char	*ft_strrchr(const char *s, int c)
+int	ft_isprint(int c)
 {
-	int	i;
-	int	last;
-
-	if (s == NULL)
-		return (NULL);
-	i = 0;
-	last = -1;
-	while (s[i] != '\0')
+	if ((unsigned char) c >= ' ' && (unsigned char) c <= '~')
 	{
-		if (s[i] == (char) c)
-			last = i;
-		i++;
+		return (1);
 	}
-	if (s[i] == (char) c)
-		last = i;
-	if (last >= 0)
-		return ((char *)&s[last]);
-	return (NULL);
+	return (0);
 }

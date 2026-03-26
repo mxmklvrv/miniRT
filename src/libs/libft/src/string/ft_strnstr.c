@@ -1,43 +1,36 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   ft_strnstr.c									   :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: rmamzer <rmamzer@student.hive.fi>		  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/04/21 10:32:36 by rmamzer		   #+#	#+#			 */
-/*   Updated: 2025/04/28 20:27:49 by rmamzer		  ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/19 18:17:36 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/30 15:39:02 by akolupae         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-//locates the first occurrence of  little in the  big, where not more than len
-// characters are searched. If little is an empty string, big is returned;
-// if little occurs nowhere in big, NULL is returned. otherwise a pointer
-//to the first character of the first occurrence of little is returned.
 char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
-	const unsigned char	*to_find;
-	const unsigned char	*str;
-	size_t				i;
-	size_t				j;
+	size_t	i;
+	size_t	j;
 
-	to_find = (const unsigned char *)little;
-	str = (const unsigned char *)big;
+	if (*little == '\0')
+		return ((char *) big);
 	i = 0;
-	if (!*to_find)
-		return ((char *)str);
-	while (str[i])
+	while (big[i] != '\0' && i < len)
 	{
-		j = 0;
-		while (str[i + j] == to_find[j] && i + j < len)
+		if (big[i] == little[0])
 		{
-			if (to_find[j + 1] == '\0')
+			j = 0;
+			while (big[i + j] == little[j] && i + j < len)
 			{
-				return ((char *)&str[i]);
+				if (little[j + 1] == '\0')
+					return ((char *) &big[i]);
+				j++;
 			}
-			j++;
 		}
 		i++;
 	}

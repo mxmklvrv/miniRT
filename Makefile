@@ -3,7 +3,7 @@ NAME = miniRT
 CC = cc -g
 
 CFLAGS = -Wall -Wextra -Werror
-HEADERS = $(addprefix -I, $(LIBFT_DIR) $(MLX_DIR) $(HDR_DIR) /usr/include) -O3
+HEADERS = $(addprefix -I, $(LIBFT_DIR)/inc $(MLX_DIR) $(HDR_DIR) /usr/include) -O3
 LINKDIR = $(addprefix -L, $(LIBFT_DIR) $(MLX_DIR) /usr/lib)
 LINKFLAGS = $(addprefix -l, ft mlx_Linux) -lXext -lX11 -lm -lz
 

@@ -1,29 +1,25 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   ft_striteri.c									  :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: rmamzer <rmamzer@student.hive.fi>		  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/04/23 18:11:53 by rmamzer		   #+#	#+#			 */
-/*   Updated: 2025/04/29 13:32:14 by rmamzer		  ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/24 16:56:12 by akolupae          #+#    #+#             */
+/*   Updated: 2025/05/30 14:00:16 by akolupae         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
-// Applies the function ’f’ to each character of the
-// string passed as argument, passing its index as
-// the first argument. Each character is passed by
-// address to ’f’ so it can be modified if necessary.
 #include "libft.h"
 
 void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {
-	size_t	i;
+	unsigned int	i;
 
-	if (!s || !f)
+	if (s == NULL)
 		return ;
 	i = 0;
-	while (s[i])
+	while (s[i] != '\0')
 	{
 		f(i, &s[i]);
 		i++;

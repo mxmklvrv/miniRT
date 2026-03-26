@@ -1,32 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strmapi.c                                       :+:      :+:    :+:   */
+/*   ft_atoi_base.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/24 16:29:57 by akolupae          #+#    #+#             */
-/*   Updated: 2025/05/01 14:18:32 by akolupae         ###   ########.fr       */
+/*   Created: 2025/04/21 15:28:30 by akolupae          #+#    #+#             */
+/*   Updated: 2025/08/18 21:26:45 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
-{
-	unsigned int	i;
-	char			*result;
-	size_t			len;
+static int	get_base_value(char c, const char *base);
 
-	len = ft_strlen(s);
-	result = (char *) ft_calloc(len + 1, sizeof(char));
-	if (result == NULL)
-		return (NULL);
+int	ft_atoi_base(const char *nptr, const char *base)
+{
+	int			i;
+	long int	result;
+	int			len;
+
 	i = 0;
-	while (i < len)
+	result = 0;
+	len = ft_strlen(base);
+	if (len == 0)
+		return (0);
+	while (ft_strchr(base, nptr[i]))
 	{
-		result[i] = f(i, s[i]);
+		result = result * len + get_base_value(nptr[i], base);
+		if (result > INT_MAX)
+			return (0);
 		i++;
 	}
 	return (result);
+}
+
+static int	get_base_value(char c, const char *base)
+{
+	int	i;
+
+	i = 0;
+	while (base[i] != c)
+		i++;
+	return (i);
 }

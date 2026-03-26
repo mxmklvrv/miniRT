@@ -1,34 +1,29 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   ft_strjoin.c									   :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: rmamzer <rmamzer@student.hive.fi>		  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/04/21 15:03:02 by rmamzer		   #+#	#+#			 */
-/*   Updated: 2025/04/29 12:57:16 by rmamzer		  ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/22 12:02:18 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/22 12:11:16 by akolupae         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-//Allocates memory (using malloc(3)) and returns a new string, which is the
-//result of concatenating ’s1’ and ’s2’.
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*joinedstr;
-	size_t	str1_l;
-	size_t	str2_l;
+	size_t	len1;
+	size_t	len2;
+	char	*s_join;
 
-	str1_l = ft_strlen(s1);
-	str2_l = ft_strlen(s2);
-	if (!s1 && !s2)
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	s_join = ft_calloc(len1 + len2 + 1, sizeof(char));
+	if (s_join == NULL || s1 == NULL || s2 == NULL)
 		return (NULL);
-	joinedstr = malloc(str1_l + str2_l + 1);
-	if (!joinedstr)
-		return (NULL);
-	ft_memcpy(joinedstr, s1, str1_l);
-	ft_memcpy(joinedstr + str1_l, s2, str2_l);
-	joinedstr[str1_l + str2_l] = '\0';
-	return (joinedstr);
+	ft_strlcpy(s_join, s1, len1 + 1);
+	ft_strlcat(s_join, s2, len1 + len2 + 1);
+	return (s_join);
 }

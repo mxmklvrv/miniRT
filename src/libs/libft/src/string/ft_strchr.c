@@ -1,33 +1,31 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   ft_strchr.c										:+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: rmamzer <rmamzer@student.hive.fi>		  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/04/20 11:33:08 by rmamzer		   #+#	#+#			 */
-/*   Updated: 2025/04/28 19:07:01 by rmamzer		  ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/19 16:46:29 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/19 17:06:26 by akolupae         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-//returns a pointer to the first occurrence of the character c in the string s.
-//The terminating null byte is considered part of the string,
 char	*ft_strchr(const char *s, int c)
 {
-	unsigned char		chr;
-	unsigned const char	*str;
+	int	i;
 
-	chr = (unsigned char)c;
-	str = (unsigned const char *)s;
-	while (*str)
+	if (s == NULL)
+		return (NULL);
+	i = 0;
+	while (s[i] != '\0')
 	{
-		if (*str == chr)
-			return ((char *)str);
-		str++;
+		if (s[i] == (char) c)
+			return ((char *)&s[i]);
+		i++;
 	}
-	if (*str == chr)
-		return ((char *)str);
+	if (s[i] == (char) c)
+		return ((char *)&s[i]);
 	return (NULL);
 }

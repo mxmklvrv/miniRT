@@ -1,27 +1,26 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   ft_strlen.c										:+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: rmamzer <rmamzer@student.hive.fi>		  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/04/16 18:59:54 by rmamzer		   #+#	#+#			 */
-/*   Updated: 2025/07/24 17:41:59 by rmamzer		  ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/16 16:56:55 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/19 14:04:25 by akolupae         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-// The  strlen() function calculates the length of the string pointed to by s,
-// excluding the terminat‐ing null byte ('\0').
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(const char *s)
 {
-	size_t	i;
+	size_t	len;
 
-	i = 0;
-	while (str[i])
+	len = 0;
+	if (s != NULL)
 	{
-		i++;
+		while (s[len] != '\0')
+			len++;
 	}
-	return (i);
+	return (len);
 }

@@ -1,36 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/17 15:49:34 by akolupae          #+#    #+#             */
-/*   Updated: 2025/04/30 16:01:55 by akolupae         ###   ########.fr       */
+/*   Created: 2025/04/14 16:41:28 by akolupae          #+#    #+#             */
+/*   Updated: 2025/04/18 13:06:01 by akolupae         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
+int	ft_isalnum(int c)
 {
-	size_t	i;
-	size_t	dst_len;
-	size_t	src_len;
-
-	dst_len = ft_strlen(dst);
-	src_len = ft_strlen(src);
-	if (size <= dst_len)
-		return (src_len + size);
-	if (src != NULL && dst != NULL)
+	if ((ft_isdigit((unsigned char) c) != 0)
+		|| (ft_isalpha((unsigned char)c) != 0))
 	{
-		i = 0;
-		while (src[i] != '\0' && dst_len + i < size - 1)
-		{
-			dst[dst_len + i] = src[i];
-			i++;
-		}
-		dst[dst_len + i] = '\0';
+		return (1);
 	}
-	return (dst_len + src_len);
+	return (0);
 }
