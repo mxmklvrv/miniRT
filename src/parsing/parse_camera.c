@@ -7,9 +7,9 @@ int	parse_cam(char *line, t_scene *scene)
 	float	fov;
 
 	if (scene->qt_cam > 1)
-		return (error_return(ERR_CAM_QTY, scene->err_m));
+		return (error_return(ERR_CAM_QTY, scene->error_line));
 	if (count_elements(line) != 3)
-		return (error_return(ERR_CAM_SPEC, scene->err_m));
+		return (error_return(ERR_CAM_SPEC, scene->error_line));
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error_return(ERR_ALLOC, NULL));

@@ -28,7 +28,7 @@ void	init_scene(t_scene *scene)
 	scene->qt_cam = 0;
 	scene->qt_light = 0;
     scene->next_obj_id = 1;
-	scene->err_m = NULL;
+	scene->error_line = NULL;
 	scene->obj_list = NULL;
 	scene->obj_selected = NULL;
 }

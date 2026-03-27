@@ -7,9 +7,9 @@ int	parse_ambient(char *line, t_scene *scene)
 	int		color;
 
 	if (scene->qt_ambiant > 1)
-		return (error_return(ERR_AMB_QTY, scene->err_m));
+		return (error_return(ERR_AMB_QTY, scene->error_line));
 	if (count_elements(line) != 2)
-		return (error_return(ERR_AMB_SPEC, scene->err_m));
+		return (error_return(ERR_AMB_SPEC, scene->error_line));
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error_return(ERR_ALLOC, NULL));

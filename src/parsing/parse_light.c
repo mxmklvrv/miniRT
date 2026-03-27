@@ -9,7 +9,7 @@ int	parse_light(char *line, t_scene *scene)
 	if (scene->qt_light > 1)
 		return (error_return(ERR_LIGT_QTY, NULL));
 	if (count_elements(line) != 3)
-		return (error_return(ERR_LIGT_SPEC, scene->err_m));
+		return (error_return(ERR_LIGT_SPEC, scene->error_line));
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error_return(ERR_ALLOC, NULL));
