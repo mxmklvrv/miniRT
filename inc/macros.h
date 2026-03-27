@@ -64,7 +64,7 @@
 # define BACKGROUNG 0x000000
 
 #define MOVE_SPEED 0.5f
-#define ROTATE_SPEED 0.2f
+#define ROTATE_SPEED 0.1f
 #define RESIZE_SPEED 0.2f
 
 #define KEY_W 119       // forward

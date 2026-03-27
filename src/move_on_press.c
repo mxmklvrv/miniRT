@@ -267,7 +267,6 @@ int	is_exeption(t_data *data, t_exeption action)
 	return (0);
 }
 
-// light cannot be rotated
 int	handle_rotation(t_data *data)
 {
 	t_move_state	*move;
@@ -301,7 +300,6 @@ void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 			cam->yaw += angle;
 		else if (axis == X_AXIS)
 			cam->pitch += angle;
-		// prevents flip on pitch
 		if (cam->pitch > 1.55f)
 			cam->pitch = 1.55f;
 		if (cam->pitch < -1.55f)
