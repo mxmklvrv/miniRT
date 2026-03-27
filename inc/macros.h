@@ -14,6 +14,7 @@
 # define ERR_ALLOC "Memory allocation failed"
 # define ERR_WRONG_CHAR "Unknown char detected in .rt"
 # define ERR_OPEN "Failed open file for reading"
+# define ERR_NO_OBJ "There is nothing to render"
 
 # define ERR_PL_SPEC "Invalid specs for plane"
 # define ERR_PL_LIST "Failed adding plane to the list"
@@ -36,10 +37,12 @@
 # define ERR_CY_COLR "Invalid cylinder color"
 
 # define ERR_CAM_QTY "Only 1 camera is alowed"
+# define ERR_CAM_NOCAM "There is no camera"
 # define ERR_CAM_SPEC "Invalid specs for camera"
 # define ERR_CAM_VIEW "Invalid camera view point"
 # define ERR_CAM_ORIT "Invalid camera orientation"
 # define ERR_CAM_FOV "Invalid camera FOV"
+
 
 # define ERR_AMB_QTY "Only 1 Ambient is allowed"
 # define ERR_AMB_SPEC "Invalid Ambient specs"

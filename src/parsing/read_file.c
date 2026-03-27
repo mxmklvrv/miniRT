@@ -45,7 +45,7 @@ int	parse_line(char *line, t_scene *scene)
 int	postpars_validation(t_scene *scene)
 {
 	if (scene->qt_cam != 1)
-		return (error_return("No camera", NULL));
+		return (error_return(ERR_CAM_NOCAM, NULL));
 	if (scene->qt_light == 0)
 	{
 		scene->light.pos = new_point(0, 0, 0);
@@ -58,6 +58,6 @@ int	postpars_validation(t_scene *scene)
 		scene->ambient.amb = 0;
 	}
 	if (!scene->obj_list)
-		return (error_return("There is nothing to render", NULL));
+		return (error_return(ERR_NO_OBJ, NULL));
 	return (0);
 }
