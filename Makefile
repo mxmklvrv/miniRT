@@ -16,6 +16,18 @@ HDR := \
 
 SRC_DIR := src
 
+SRC = \
+	draw.c \
+	hooks.c \
+	main.c \
+	move_on_press.c \
+	print.c \
+	render_setup.c \
+	tracing_color.c \
+	tracing_lighting.c \
+	visuals.c
+
+PARS_DIR := parsing
 PARS_SRC := \
 	dispatch.c \
 	input_validation.c \
@@ -28,37 +40,26 @@ PARS_SRC := \
 	read_file.c \
 	utils.c
 
+MATH_DIR := math
 MATH_SRC := \
 	color_get_value.c \
 	color_new.c \
 	color_operations.c \
-	matrix.c \
 	ray.c \
 	shapes_intersection.c \
 	shapes_normal.c \
 	vector.c
 
-COMMON_SRC := \
-	draw.c \
-	hooks.c \
-	main.c \
-	move_on_press.c \
-	print.c \
-	render_setup.c \
-	tracing_color.c \
-	tracing_lighting.c \
-	visuals.c
-
-SRC := $(PARS_SRC) $(MATH_SRC) $(COMMON_SRC)
+SRC += $(PARS_SRC) $(MATH_SRC)
 
 OBJ_DIR := obj
 OBJ := $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 # ------------  VPATH  ------------------------------------------------------- #
-VPATH := $(addprefix $(SRC_DIR), \
-	: \
-	/math: \
-	/parsing \
+VPATH := $(addprefix $(SRC_DIR)/, \
+	.: \
+	$(PARS_DIR): \
+	$(MATH_DIR) \
 	)
 
 LIBS_DIR := $(SRC_DIR)/libs
@@ -86,7 +87,6 @@ $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)/%.o: %.c
-	@echo "Headers: $(HEADERS)"
 	$(CC) $(CFLAGS) $(HEADERS) -o $@ -c $<
 
 clean:

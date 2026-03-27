@@ -22,7 +22,6 @@ void	draw_scene(t_data *data)
 			break ;
 		pixels_to_render /= 2;
 	}
-	//printf("Finished\n");
 }
 
 static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *first_cycle)
@@ -73,12 +72,11 @@ static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 {
 	float	x;
 	float	y;
-	t_vec3	dir;
+	t_vec3	direction;
 
 	x = (pixel.i - WIDTH / 2.0f) * cam.pixel_size;
 	y = (HEIGHT / 2.0f - pixel.j) * cam.pixel_size;
-
-	dir = vector_add(
+	direction = vector_add(
 		cam.orient.direction,
 		vector_add(
 			vector_multiply(cam.right, x),
@@ -86,7 +84,7 @@ static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 		)
 	);
 
-	return (vector_normalize(dir));
+	return (vector_normalize(direction));
 }
 
 static int	get_pixels_to_render(int render_cycles)

@@ -105,38 +105,13 @@ float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_reflect(t_vec3 v, t_vec3 normal);
 
-/* ===== Matrix math ======================================================== */
-t_matrix	new_matrix(int row, int col);
-t_matrix	new_identity_matrix(int	row);
-t_matrix	new_submatrix(t_matrix m, int target_row, int target_col);
-t_matrix	new_inverse_matrix(t_matrix m);
-t_matrix	new_translation_matrix(float x, float y, float z);
-t_matrix	new_translation_matrix_vec3(t_vec3 v);
-t_matrix	new_scaling_matrix(float x, float y, float z);
-t_matrix	new_rotation_x_matrix(float radians);
-t_matrix	new_rotation_y_matrix(float radians);
-t_matrix	new_rotation_z_matrix(float radians);
-t_matrix	new_shearing_matrix(t_vec3 x, t_vec3 y, t_vec3 z);
-t_matrix	new_matrix_multiply(t_matrix m1, t_matrix m2);
-void		free_matrix(t_matrix matrix);
-bool		matrix_is_equal(t_matrix m1, t_matrix m2);
-t_vec3		matrix_multiply_by_vector(t_matrix m, t_vec3 v);
-void		matrix_transpose(t_matrix m);
-float		matrix_find_determinant(t_matrix m);
-float		matrix_find_minor(t_matrix m, int row, int col);
-float		matrix_find_cofactor(t_matrix m, int row, int col);
-bool		matrix_is_invertible(t_matrix m, float *determinant);
-t_matrix	chain_matrices(t_matrix scaling, t_matrix rotation);
-
 /* ===== Shapes math ======================================================== */
 t_intersection	get_intersection(t_ray ray, t_shape *shape);
 t_vec3			get_normal(t_shape *shape, t_vec3 point);
 
 /* ===== Rays =============================================================== */
 t_ray	new_ray(t_vec3 origin, t_vec3 direction);
-t_ray	ray_transform(t_ray r, t_matrix m);
 t_vec3	get_ray_point(t_ray ray, float scalar);
-//t_ray	ray_transform_inverse(t_ray r, t_matrix m);
 
 /* ===== Color ============================================================== */
 int		new_color(int opacity, int red, int green, int blue);

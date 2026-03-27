@@ -3,8 +3,10 @@
 void			setup_camera_angle(t_cam *cam);
 static float	degrees_to_radians(float degrees);
 static void		setup_objects(t_olist *obj_list);
-// static void	setup_object_matrix(t_shape *shape);
 
+/* Setup camera angle and normalize object vectors before rendering.
+ * @param	t_scene	*scene	pointer to t_scene scene.
+ */
 void setup_scene(t_scene *scene)
 {
 	setup_camera_angle(&scene->cam);
@@ -15,6 +17,7 @@ void setup_scene(t_scene *scene)
  * Calculates pixel size relative to 3d world depending on camera fov.
  * Distance between camera and 2d screen is assumed to be 1.
  */
+
 /*
 void	setup_camera_angle(t_cam *cam)
 {
@@ -64,11 +67,9 @@ void setup_camera_angle(t_cam *cam)
 	cam->up = up;
 }
 
-static float degrees_to_radians(float degrees)
-{
-	return (degrees * M_PI / 180);
-}
-
+/* Normalizes vectors of objects if they have vectors (plane and cylinder).
+ * @param	t_olist	*obj_list	pointer to t_olist of objects.
+ */
  static void	setup_objects(t_olist *obj_list)
 {
 	t_olist	*obj;
@@ -83,3 +84,11 @@ static float degrees_to_radians(float degrees)
 	}
  }
 
+ /* Converts degrees to radians.
+ * @param	float	degrees	degrees of angle;
+ * @returns	float	angle in radians.
+ */
+static float degrees_to_radians(float degrees)
+{
+	return (degrees * M_PI / 180);
+}
