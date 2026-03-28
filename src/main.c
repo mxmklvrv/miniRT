@@ -13,6 +13,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	}
     user_manual();
+	// print_scene(&scene);
 	if (!visuals_loop(&scene))
 	{
 		free_scene(&scene);

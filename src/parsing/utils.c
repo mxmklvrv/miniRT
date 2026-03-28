@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+static int	ft_atoi_and_overflow(const char *nptr, int *overflow);
+
 int	parse_error(t_scene *scene, char *msg, char **res, t_shape *shape)
 {
 	if (msg)
@@ -325,12 +327,14 @@ int	parse_vector(char *str, t_vec3 *vector, float min, float max)
 int	parse_int(char *str, int min, int max, int *res)
 {
 	int	temp;
+	int	overflow;
 
+	overflow = 0;
 	temp = 0;
 	if (!str || is_valid_int(str) == 1)
 		return (1);
-	temp = ft_atoi(str);
-	if (temp < min || temp > max)
+	temp = ft_atoi_and_overflow(str, &overflow);
+	if (temp < min || temp > max || overflow == 1)
 		return (1);
 	*res = temp;
 	return (0);
@@ -345,4 +349,31 @@ int	parse_float(char *str, float min, float max, float *res)
 	if (*res < min || *res > max)
 		return (1);
 	return (0);
+}
+static int	ft_atoi_and_overflow(const char *nptr, int *overflow)
+{
+	int		i;
+	long	num;
+	long	neg;
+
+	i = 0;
+	num = 0;
+	neg = 1;
+	while ((nptr[i] >= 9 && nptr[i] <= 13) || nptr[i] == 32)
+		i++;
+	if (nptr[i] == '-' || nptr[i] == '+')
+	{
+		if (nptr[i] == '-')
+			neg *= -1;
+		i++;
+	}
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		num = num * 10 + (nptr[i] - '0');
+		if ((num > INT_MAX && neg == 1) || (num > (long)INT_MAX + 1 && neg ==
+				-1))
+			*overflow = 1;
+		i++;
+	}
+	return ((int)num * neg);
 }

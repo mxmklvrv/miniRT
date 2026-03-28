@@ -173,7 +173,7 @@ void	print_scene(t_scene *scene)
 	printf("\nLight:\n");
 	printf("  pos: %.2f %.2f %.2f\n", scene->light.pos.x, scene->light.pos.y,
 		scene->light.pos.z);
-	printf("  brightness: %.2f\n", scene->light.bright);
+	printf("  brightness: %f\n", scene->light.bright);
 	printf("\nObjects:\n");
 	tmp = scene->obj_list;
 	while (tmp)
