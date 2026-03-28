@@ -27,7 +27,7 @@ int	init_sphere(t_shape *shape, char **res, t_scene *scene)
 	if (parse_vector(res[0], &shape->center, -100.0f, 100.0f))
 		return (error_return(ERR_SP_CNTR, scene->error_line));
 	shape->center.w = 1;
-	if (parse_float(res[1], 0.0f, 100.0f, &shape->diameter))
+	if (parse_float(res[1], 0.0f, 100.0f, &shape->diameter) || shape->diameter <= 0.0f)
 		return (error_return(ERR_SP_DIAM, scene->error_line));
 	if (parse_rgb(res[2], &shape->color))
 		return (error_return(ERR_SP_COLR, scene->error_line));

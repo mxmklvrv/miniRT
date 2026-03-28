@@ -28,7 +28,7 @@ int		is_valid_comas(const char *line);
 int		ft_rgbtoint(int transp, int red, int green, int blue);
 int		ft_atof(const char *line, float *res);
 void	get_whole_part(const char *line, int *i, float *temp, int *overflow);
-void	get_fraction_part(const char *line, int *i, float *temp, int *overflow);
+void	get_fraction_part(const char *line, int *i, float *temp);
 int		parse_rgb(char *str, int *color);
 int		parse_vector(char *str, t_vec3 *vector, float min, float max);
 int		parse_int(char *str, int min, int max, int *res);

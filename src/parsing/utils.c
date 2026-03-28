@@ -237,7 +237,7 @@ int	ft_atof(const char *line, float *res)
 		i++;
 	}
 	get_whole_part(line, &i, &temp, &overflow);
-	get_fraction_part(line, &i, &temp, &overflow);
+	get_fraction_part(line, &i, &temp);
 	*res = temp * sign;
 	return (overflow);
 }
@@ -246,18 +246,19 @@ int	ft_atof(const char *line, float *res)
 // modifies passed params
 void	get_whole_part(const char *line, int *i, float *temp, int *overflow)
 {
+	(void)overflow;
 	while (ft_isdigit(line[*i]))
 	{
 		*temp = *temp * 10 + (line[*i] - '0');
-		if (*temp > __FLT_MAX__) // for now, need to define by myself mb
-			*overflow = 1;
+		// if (*temp > __FLT_MAX__) // for now, need to define by myself mb
+		// 	*overflow = 1;
 		(*i)++;
 	}
 }
 // part of ft_atof function.
 // gets the fractional part of float num (after '.')
 // modifies passed params
-void	get_fraction_part(const char *line, int *i, float *temp, int *overflow)
+void	get_fraction_part(const char *line, int *i, float *temp)
 {
 	float	fraction;
 
@@ -268,8 +269,6 @@ void	get_fraction_part(const char *line, int *i, float *temp, int *overflow)
 	{
 		*temp += (line[*i] - '0') * fraction;
 		fraction *= 0.1f;
-		if (*temp > __FLT_MAX__) // for now, need to define by myself mb
-			*overflow = 1;
 		(*i)++;
 	}
 }

@@ -27,3 +27,5 @@ int	parse_light(char *line, t_scene *scene)
 	free_array(res);
 	return (0);
 }
+
+

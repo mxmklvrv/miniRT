@@ -30,9 +30,11 @@ int	init_cylinder(t_shape *shape, char **res, t_scene *scene)
 	if (parse_vector(res[1], &shape->normal.direction, -1.0f, 1.0f) == 1)
 		return (error_return(ERR_CY_AXIS, scene->error_line));
 	shape->normal.direction.w = 0;
-	if (parse_float(res[2], 0.0f, 100.0f, &shape->diameter) == 1)
+	if (parse_float(res[2], 0.0f, 100.0f, &shape->diameter) == 1
+		|| shape->diameter <= 0.0f)
 		return (error_return(ERR_CY_DIAM, scene->error_line));
-	if (parse_float(res[3], 0.0f, 100.0f, &shape->height) == 1)
+	if (parse_float(res[3], 0.0f, 100.0f, &shape->height) == 1
+		|| shape->height <= 0.0f)
 		return (error_return(ERR_CY_HGHT, scene->error_line));
 	if (parse_rgb(res[4], &shape->color) == 1)
 		return (error_return(ERR_CY_COLR, scene->error_line));
