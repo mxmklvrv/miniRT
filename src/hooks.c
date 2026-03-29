@@ -20,3 +20,25 @@ void	redraw_scene(t_data *data)
 	draw_scene(data);
 	// mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 }
+
+
+
+/*^
+int	handle_resize(int width, int height, t_data *data)
+{
+    // Window was resized to new dimensions
+    // You could update your render resolution here if needed
+    // Then trigger a redraw
+    redraw_scene(data);
+    return (0);
+}
+
+void	set_hooks(t_data *data)
+{
+    print_pos(data->scene);
+    mlx_hook(data->win, ON_PRESS, 1L << 0, key_press_hook, data);
+    mlx_hook(data->win, ON_RELEASE, 1L << 1, key_release_hook, data);
+    mlx_hook(data->win, ON_DESTROY, 0, mlx_loop_end, data->mlx);
+    mlx_hook(data->win, 22, 0, handle_resize, data);  // 22 = ConfigureNotify (resize event)
+    mlx_loop_hook(data->mlx, render_hook, data);
+}*/
