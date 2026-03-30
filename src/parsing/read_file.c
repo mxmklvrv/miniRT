@@ -1,5 +1,9 @@
 #include "minirt.h"
 
+static int	parse_line(char *line, t_scene *scene);
+static int	postpars_validation(t_scene *scene);
+
+
 int	parse_input_file(char *file, t_scene *scene)
 {
 	int		fd;
@@ -25,7 +29,7 @@ int	parse_input_file(char *file, t_scene *scene)
 	return (0);
 }
 
-int	parse_line(char *line, t_scene *scene)
+static int	parse_line(char *line, t_scene *scene)
 {
 	char	*trimmed;
 
@@ -42,7 +46,7 @@ int	parse_line(char *line, t_scene *scene)
 	return (0);
 }
 
-int	postpars_validation(t_scene *scene)
+static int	postpars_validation(t_scene *scene)
 {
 	if (scene->qt_cam != 1)
 		return (error_return(ERR_CAM_NOCAM, NULL));

@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+static int	init_plane(t_shape *shape, char **res, t_scene *scene);
+
 int	parse_plane(char *line, t_scene *scene)
 {
 	char	**res;
@@ -21,7 +23,7 @@ int	parse_plane(char *line, t_scene *scene)
 	return (0);
 }
 
-int init_plane(t_shape *shape, char **res, t_scene *scene)
+static int	init_plane(t_shape *shape, char **res, t_scene *scene)
 {
 	shape->obj_type = PL;
 	if (parse_vector(res[0], &shape->normal.origin, -100.0f, 100.0f) == 1)

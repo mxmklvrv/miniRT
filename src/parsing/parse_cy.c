@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+static int	init_cylinder(t_shape *shape, char **res, t_scene *scene);
+
 int	parse_cylinder(char *line, t_scene *scene)
 {
 	char	**res;
@@ -21,7 +23,7 @@ int	parse_cylinder(char *line, t_scene *scene)
 	return (0);
 }
 
-int	init_cylinder(t_shape *shape, char **res, t_scene *scene)
+static int	init_cylinder(t_shape *shape, char **res, t_scene *scene)
 {
 	shape->obj_type = CY;
 	if (parse_vector(res[0], &shape->normal.origin, -100.0f, 100.0f) == 1)
