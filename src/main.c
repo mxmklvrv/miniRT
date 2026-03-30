@@ -1,5 +1,7 @@
 #include "minirt.h"
 
+static void	init_scene(t_scene *scene);
+
 int	main(int argc, char **argv)
 {
 	t_scene	scene;
@@ -23,7 +25,7 @@ int	main(int argc, char **argv)
 	return (EXIT_SUCCESS);
 }
 
-void	init_scene(t_scene *scene)
+static void	init_scene(t_scene *scene)
 {
 	scene->qt_ambiant = 0;
 	scene->qt_cam = 0;
