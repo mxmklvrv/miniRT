@@ -20,3 +20,32 @@ void redraw_scene(t_data *data)
     draw_scene(data);
     // mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 }
+
+int	key_press_hook(int key, t_data *data)
+{
+	t_move_state	*move;
+
+	move = data->move_state;
+	set_general_keys(key, data);
+	set_translation_keys(key, move, KEY_ON);
+	set_rotation_keys(key, move, KEY_ON);
+	set_resize_keys(key, move, KEY_ON);
+	return (0);
+}
+
+int	key_release_hook(int key, t_data *data)
+{
+	t_move_state	*move;
+
+	move = data->move_state;
+	set_translation_keys(key, move, KEY_OFF);
+	set_rotation_keys(key, move, KEY_OFF);
+	set_resize_keys(key, move, KEY_OFF);
+	return (0);
+}
+
+int	render_hook(t_data *data)
+{
+	apply_movement(data);
+	return (0);
+}

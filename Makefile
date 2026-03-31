@@ -35,6 +35,11 @@ PARS_SRC = $(addprefix $(PARS_DIR)/, \
 	parse_pl.c \
 	parse_sp.c \
 	read_file.c \
+	utils_ascii.c \
+	utils_digits.c \
+	utils_error.c \
+	utils_free.c \
+	utils_list.c \
 	utils.c \
 	)
 PARS_OBJ = $(PARS_SRC:$(PARS_DIR)/%.c=$(PARS_OBJ_DIR)/%.o)
@@ -56,6 +61,12 @@ SRC = $(addprefix $(SRC_DIR)/, \
 	render_setup.c \
 	tracing_color.c \
 	tracing_lighting.c \
+	move_utils.c \
+	resize.c \
+	rotation.c \
+	set_keys.c \
+	switch_modes.c \
+	translation.c \
 	)
 
 

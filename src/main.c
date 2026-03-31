@@ -34,7 +34,7 @@ static void	init_scene(t_scene *scene)
 	scene->error_line = NULL;
 	scene->obj_list = NULL;
 	scene->obj_selected = NULL;
-    scene->light_list = NULL; // added new 
-    scene->light_selected = NULL; // added new 
+    // scene->light_list = NULL; // added new
+    // scene->light_selected = NULL; // added new
 }
 

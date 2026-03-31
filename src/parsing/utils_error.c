@@ -10,18 +10,18 @@ int	parse_error(t_scene *scene, char *msg, char **res, t_shape *shape)
 		free(shape);
 	return (1);
 }
-// new for multiple lights
-int	parse_error(t_scene *scene, char *msg, char **res, void *ptr)
-{
-	if (msg)
-		error_msg(msg, scene->error_line);
-	if (res)
-		free_array(res);
-	if (ptr)
-		free(ptr);
-	return (1);
-}
-// new up 
+// // new for multiple lights
+// int	parse_error(t_scene *scene, char *msg, char **res, void *ptr)
+// {
+// 	if (msg)
+// 		error_msg(msg, scene->error_line);
+// 	if (res)
+// 		free_array(res);
+// 	if (ptr)
+// 		free(ptr);
+// 	return (1);
+// }
+// // new up
 
 int	parse_fatal(t_scene *scene, int fd)
 {

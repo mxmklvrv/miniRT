@@ -13,6 +13,7 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <stdbool.h>
+# include <float.h>
 
 
 // test print functions
@@ -63,24 +64,12 @@ t_vec3	rotate_x(t_vec3 current, float angle);
 int	handle_resize(t_data *data);
 int	resize_diameter(t_olist *node, float value);
 int	resize_height(t_olist *node, float value);
+void	update_cy_geo(t_shape *cy);
+void	switch_to_obj(t_data *data);
+void	toggle_cam(t_data *data);
+void	toggle_light(t_data *data);
 
 
-/* ===== Hooks on release =================================================== */
-// int	key_press_hook(int key, t_data *data);
-// int	key_release_hook(int key, t_data *data);
-// int	handle_translation(int key, t_data *data);
-// int	handle_rotation(int key, t_data *data);
-// int	handle_resize(int key, t_data *data);
-// void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
-// void	select_object(t_data *data);
-// void	translate_object(t_olist *node, t_vec3 move_vec);
-// void	rotate_objects(t_olist *node, float angle, t_axis axis);
-// void	rotate_cam(t_cam *cam, float angle, t_axis axis);
-// void	translate_cam(t_cam *cam, t_vec3 move_vec);
-// int	resize_diameter(t_olist *node, float value);
-// int	resize_height(t_olist *node, float value);
-// t_vec3	rotate_y(t_vec3 current, float angle);
-// t_vec3	rotate_x(t_vec3 current, float angle);
 
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data);
