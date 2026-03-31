@@ -1,6 +1,5 @@
 #include "minirt.h"
 
-
 void	switch_to_obj(t_data *data)
 {
 	data->control_cam = 0;
@@ -29,8 +28,6 @@ void	toggle_light(t_data *data)
 	else
 		print_pos(data->scene);
 }
-
-
 
 /**
  * If there is next obj - select it
