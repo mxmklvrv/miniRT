@@ -20,7 +20,6 @@ SRC = \
 	draw.c \
 	hooks.c \
 	main.c \
-	move_on_press.c \
 	print.c \
 	render_setup.c \
 	tracing_color.c \
@@ -38,7 +37,12 @@ PARS_SRC := \
 	parse_pl.c \
 	parse_sp.c \
 	read_file.c \
-	utils.c
+	utils_ascii.c\
+	utils_digits.c \
+	utils_error.c \
+	utils_free.c \
+	utils_list.c \
+	utils
 
 MATH_DIR := math
 MATH_SRC := \
@@ -53,7 +57,17 @@ MATH_SRC := \
 	vector_special.c \
 	vector.c
 
-SRC += $(PARS_SRC) $(MATH_SRC)
+MOVE_DIR := movement
+MOVE_SRC := \
+	move_utils.c \
+	move.c \
+	resize.c \
+	rotation.c \
+	set_keys.c \
+	switch_modes.c \
+	translation.c
+
+SRC += $(PARS_SRC) $(MATH_SRC) $(MOVE_SRC)
 
 OBJ_DIR := obj
 OBJ := $(SRC:%.c=$(OBJ_DIR)/%.o)
@@ -63,6 +77,7 @@ VPATH := $(addprefix $(SRC_DIR)/, \
 	.: \
 	$(PARS_DIR): \
 	$(MATH_DIR) \
+	$(MOVE_DIR) \
 	)
 
 LIBS_DIR := $(SRC_DIR)/libs

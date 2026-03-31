@@ -13,10 +13,11 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <stdbool.h>
+# include <float.h>
 
 
 // test print functions
-void	print_cam_pos(t_scene *scene);
+void	print_cam_light_pos(t_data *data);
 int		is_exeption(t_data *data, t_exeption action);
 void	print_pos(t_scene *scene);
 void	print_vars(t_scene *scene);
@@ -26,6 +27,7 @@ void	print_ray(t_ray	ray);
 void	print_color(int color);
 void	print_intersection(t_intersection intersection);
 void	print_scene(t_scene *scene);
+void	user_manual(void);
 // test
 
 /* ===== Visuals ============================================================ */
@@ -40,44 +42,33 @@ void	redraw_scene(t_data *data);
 int	key_press_hook(int key, t_data *data);
 int	key_release_hook(int key, t_data *data);
 int	render_hook(t_data *data);
+
+/* ===== MOVEMENT ============================================================= */
+void	cam_move_calculation(t_data *data, t_vec3 *move_vec, t_move_state *move);
+void	obj_light_move_calculation(t_vec3 *move_vec, t_move_state *move);
+t_vec3	rotate_z(t_vec3 current, float angle);
+t_vec3	rotate_x(t_vec3 current, float angle);
+int	is_exeption(t_data *data, t_exeption action);
+void	apply_movement(t_data *data);
+void	update_cy_geo(t_shape *cy); // DELETE PROBABLY
+int	handle_resize(t_data *data);
+int	resize_diameter(t_olist *node, float value);
+int	resize_height(t_olist *node, float value);
+int	handle_rotation(t_data *data);
+void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
+void	rotate_objects(t_olist *node, float angle, t_axis axis);
 void	set_general_keys(int key, t_data *data);
 void	set_translation_keys(int key, t_move_state *move, int value);
 void	set_rotation_keys(int key, t_move_state *move, int value);
 void	set_resize_keys(int key, t_move_state *move, int value);
+void	switch_to_obj(t_data *data);
+void	toggle_cam(t_data *data);
+void	toggle_light(t_data *data);
 void	select_object(t_data *data);
+int	handle_translation(t_data *data);
 void	translate_object(t_olist *node, t_vec3 move_vec);
 void	translate_cam(t_cam *cam, t_vec3 move_vec);
-void	apply_movement(t_data *data);
-int	handle_translation(t_data *data);
-void	cam_move_calculation(t_data *data, t_vec3 *move_vec, t_move_state *move);
-void	obj_move_calculation( t_vec3 *move_vec, t_move_state *move);
-int	is_exeption(t_data *data, t_exeption action);
-int	handle_rotation(t_data *data);
-void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
-void	rotate_objects(t_olist *node, float angle, t_axis axis);
-t_vec3	rotate_z(t_vec3 current, float angle);
-t_vec3	rotate_x(t_vec3 current, float angle);
-int	handle_resize(t_data *data);
-int	resize_diameter(t_olist *node, float value);
-int	resize_height(t_olist *node, float value);
-
-
-/* ===== Hooks on release =================================================== */
-// int	key_press_hook(int key, t_data *data);
-// int	key_release_hook(int key, t_data *data);
-// int	handle_translation(int key, t_data *data);
-// int	handle_rotation(int key, t_data *data);
-// int	handle_resize(int key, t_data *data);
-// void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
-// void	select_object(t_data *data);
-// void	translate_object(t_olist *node, t_vec3 move_vec);
-// void	rotate_objects(t_olist *node, float angle, t_axis axis);
-// void	rotate_cam(t_cam *cam, float angle, t_axis axis);
-// void	translate_cam(t_cam *cam, t_vec3 move_vec);
-// int	resize_diameter(t_olist *node, float value);
-// int	resize_height(t_olist *node, float value);
-// t_vec3	rotate_y(t_vec3 current, float angle);
-// t_vec3	rotate_x(t_vec3 current, float angle);
+void	translate_light(t_light *light, t_vec3 move_vec);
 
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data);

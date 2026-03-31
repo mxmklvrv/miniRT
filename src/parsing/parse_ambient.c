@@ -7,16 +7,16 @@ int	parse_ambient(char *line, t_scene *scene)
 	int		color;
 
 	if (scene->qt_ambiant > 1)
-		return (error_return(ERR_AMB_QTY, scene->err_m));
+		return (error_return(ERR_AMB_QTY, scene->error_line));
 	if (count_elements(line) != 2)
-		return (error_return(ERR_AMB_SPEC, scene->err_m));
+		return (error_return(ERR_AMB_SPEC, scene->error_line));
 	res = ft_split(line, ' ');
 	if (!res)
 		return (error_return(ERR_ALLOC, NULL));
 	ratio = 0.0f;
 	color = 0;
 	if (parse_float(res[0], 0.0f, 1.0f, &ratio) == 1)
-		return (parse_error(scene,ERR_AMB_RATI, res, NULL));
+		return (parse_error(scene, ERR_AMB_RATI, res, NULL));
 	if (parse_rgb(res[1], &color) == 1)
 		return (parse_error(scene, ERR_AMB_COLR, res, NULL));
 	scene->ambient.amb = ratio;
@@ -24,4 +24,3 @@ int	parse_ambient(char *line, t_scene *scene)
 	free_array(res);
 	return (0);
 }
-
