@@ -24,7 +24,6 @@ void	print_list(t_scene *scene);
 void	print_vector(t_vec3	vector);
 void	print_ray(t_ray	ray);
 void	print_color(int color);
-void	print_matrix(t_matrix matrix);
 void	print_intersection(t_intersection intersection);
 void	print_scene(t_scene *scene);
 // test
@@ -93,7 +92,7 @@ int		lighting(t_scene *scene, t_intersection intersection, t_ray ray);
 t_vec3	new_vector(float x, float y, float z);
 t_vec3	new_point(float x, float y, float z);
 bool	is_point(t_vec3 v);
-bool	is_equalf(float f1, float f2);
+bool	vector_is_zero(t_vec3 v);
 t_vec3	vector_negate(t_vec3 v);
 t_vec3	vector_add(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_substract(t_vec3 v1, t_vec3 v2);
@@ -124,5 +123,10 @@ int		color_substract(int c1, int c2);
 int		color_multiply(int c, float scalar);
 int		color_mix(int c1, int c2, float intencity);
 int		color_mix_light(int c1, int c2);
+
+/* ===== Utils ============================================================== */
+float	degrees_to_radians(float degrees);
+bool	is_equalf(float f1, float f2);
+void	solve_quadratic_equasion(t_quad quad, t_intersection *intersection);
 
 #endif

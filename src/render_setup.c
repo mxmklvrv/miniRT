@@ -1,7 +1,6 @@
 #include "minirt.h"
 
 void			setup_camera_angle(t_cam *cam);
-static float	degrees_to_radians(float degrees);
 static void		setup_objects(t_olist *obj_list);
 
 /* Setup camera angle and normalize object vectors before rendering.
@@ -83,12 +82,3 @@ void setup_camera_angle(t_cam *cam)
 		obj = obj->next;
 	}
  }
-
- /* Converts degrees to radians.
- * @param	float	degrees	degrees of angle;
- * @returns	float	angle in radians.
- */
-static float degrees_to_radians(float degrees)
-{
-	return (degrees * M_PI / 180);
-}

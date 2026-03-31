@@ -14,6 +14,7 @@
 # define ERR_ALLOC "Memory allocation failed"
 # define ERR_WRONG_CHAR "Unknown char detected in .rt"
 # define ERR_OPEN "Failed open file for reading"
+# define ERR_VEC_ZERO "Vector has length of 0"
 
 # define ERR_PL_SPEC "Invalid specs for plane"
 # define ERR_PL_LIST "Failed adding plane to the list"

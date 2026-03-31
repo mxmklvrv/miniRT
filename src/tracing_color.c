@@ -25,7 +25,6 @@ void	find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closes
 	float	hit_current;
 	float	hit_closest;
 
-	//ray = ray_transform(ray, shape->matrix);
 	current = get_intersection(ray, shape);
 	if (current.count == 0)
 		return ;

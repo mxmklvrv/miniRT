@@ -43,11 +43,14 @@ PARS_SRC := \
 MATH_DIR := math
 MATH_SRC := \
 	color_get_value.c \
-	color_new.c \
 	color_operations.c \
+	color.c \
 	ray.c \
 	shapes_intersection.c \
 	shapes_normal.c \
+	math_utils.c \
+	vector_operations.c \
+	vector_special.c \
 	vector.c
 
 SRC += $(PARS_SRC) $(MATH_SRC)

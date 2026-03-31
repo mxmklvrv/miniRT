@@ -24,12 +24,12 @@ int	parse_cylinder(char *line, t_scene *scene)
 int	init_cylinder(t_shape *shape, char **res, t_scene *scene)
 {
 	shape->obj_type = CY;
+	shape->normal.origin.w = 1;
 	if (parse_vector(res[0], &shape->normal.origin, -100.0f, 100.0f) == 1)
 		return (error_return(ERR_CY_CNTR, scene->err_m));
-	shape->normal.origin.w = 1;
+	shape->normal.direction.w = 0;
 	if (parse_vector(res[1], &shape->normal.direction, -1.0f, 1.0f) == 1)
 		return (error_return(ERR_CY_AXIS, scene->err_m));
-	shape->normal.direction.w = 0;
 	if (parse_float(res[2], 0.0f, 100.0f, &shape->radius) == 1)
 		return (error_return(ERR_CY_DIAM, scene->err_m));
 	if (parse_float(res[3], 0.0f, 100.0f, &shape->half_height) == 1)

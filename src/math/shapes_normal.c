@@ -52,11 +52,11 @@ static t_vec3 normal_at_cy(t_vec3 point, t_shape *cy)
 	half_axis = vector_multiply(cy->normal.direction, cy->half_height);
 	cap_center = vector_add(cy->normal.origin, half_axis);
 	if (vector_magnitude(vector_substract(point, cap_center))
-		<= cy->radius)
+		< cy->radius)
 		return (cy->normal.direction);
 	cap_center = vector_substract(cy->normal.origin, half_axis);
 	if (vector_magnitude(vector_substract(point, cap_center))
-		<= cy->radius)
+		< cy->radius)
 		return (vector_negate(cy->normal.direction));
 	axis_proj = vector_dot(vector_substract(point, cy->normal.origin),
 		cy->normal.direction);

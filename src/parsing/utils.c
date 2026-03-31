@@ -310,10 +310,15 @@ int	parse_vector(char *str, t_vec3 *vector, float min, float max)
 	y = 0;
 	z = 0;
 	if (parse_float(res[0], min, max, &x) == 1 || parse_float(res[1], min, max,
-			&y) == 1 || parse_float(res[2], min, max, &z) == 1)
+		&y) == 1 || parse_float(res[2], min, max, &z) == 1)
 		return (free_array(res), 1);
-	*vector = creat_vec3(x, y, z);
+	if (is_point(*vector))
+		*vector = new_point(x, y, z);
+	else
+		*vector = new_vector(x, y, z);
 	free_array(res);
+	if (vector_is_zero(*vector))
+		return (error_return(ERR_VEC_ZERO, NULL));
 	return (0);
 }
 
@@ -325,6 +330,7 @@ int	parse_int(char *str, int min, int max, int *res)
 	if (!str || is_valid_int(str) == 1)
 		return (1);
 	temp = ft_atoi(str);
+	printf("Atoi: %s = %d\n", str, temp);
 	if (temp < min || temp > max)
 		return (1);
 	*res = temp;

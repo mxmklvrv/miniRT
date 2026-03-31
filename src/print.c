@@ -59,9 +59,7 @@ void	print_pos(t_scene *scene)
 		printf("No object selected\n");
 		return ;
 	}
-
 	obj = scene->obj_selected->shape;
-
 	if (obj->obj_type == SP)
 		printf("Controlling Sphere: x=%.2f y=%.2f z=%.2f\n",
 			obj->center.x, obj->center.y, obj->center.z);
@@ -111,26 +109,6 @@ void	print_color(int color)
 {
 	printf("\nColor: %i\nop: %i\nr: %i\ng: %i\nb: %i\n",
 		color, get_opacity(color), get_red(color), get_green(color), get_blue(color));
-}
-
-void	print_matrix(t_matrix matrix)
-{
-	int	i = 0;
-	int	j = 0;
-
-	j = 0;
-	while (matrix.ptr && j < matrix.row)
-	{
-		i = 0;
-		while (matrix.ptr[j] && i < matrix.col)
-		{
-			printf("| %f ", matrix.ptr[j][i]);
-			i++;
-		}
-		printf("|\n");
-		j++;
-	}
-	printf("%ix%i\n", j, i);
 }
 
 void	print_intersection(t_intersection intersection)
