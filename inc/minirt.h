@@ -25,7 +25,6 @@ void	print_list(t_scene *scene);
 void	print_vector(t_vec3	vector);
 void	print_ray(t_ray	ray);
 void	print_color(int color);
-void	print_matrix(t_matrix matrix);
 void	print_intersection(t_intersection intersection);
 void	print_scene(t_scene *scene);
 void	user_manual(void);
@@ -74,8 +73,7 @@ void	toggle_light(t_data *data);
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data);
 void	setup_scene(t_scene *scene);
-void	set_matrix(t_matrix *old_m, t_matrix new_m);
-float	degrees_to_radians(float degrees);
+void	setup_camera_angle(t_cam *cam);
 int		trace_color(t_ray ray, t_scene *scene);
 void	find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closest);
 float	get_closest_hit(t_intersection intersection);
@@ -85,7 +83,7 @@ int		lighting(t_scene *scene, t_intersection intersection, t_ray ray);
 t_vec3	new_vector(float x, float y, float z);
 t_vec3	new_point(float x, float y, float z);
 bool	is_point(t_vec3 v);
-bool	is_equalf(float f1, float f2);
+bool	vector_is_zero(t_vec3 v);
 t_vec3	vector_negate(t_vec3 v);
 t_vec3	vector_add(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_substract(t_vec3 v1, t_vec3 v2);
@@ -97,42 +95,13 @@ float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_reflect(t_vec3 v, t_vec3 normal);
 
-/* ===== Matrix math ======================================================== */
-t_matrix	new_matrix(int row, int col);
-t_matrix	new_identity_matrix(int	row);
-t_matrix	new_submatrix(t_matrix m, int target_row, int target_col);
-t_matrix	new_inverse_matrix(t_matrix m);
-t_matrix	new_translation_matrix(float x, float y, float z);
-t_matrix	new_translation_matrix_vec3(t_vec3 v);
-t_matrix	new_scaling_matrix(float x, float y, float z);
-t_matrix	new_rotation_x_matrix(float radians);
-t_matrix	new_rotation_y_matrix(float radians);
-t_matrix	new_rotation_z_matrix(float radians);
-t_matrix	new_shearing_matrix(t_vec3 x, t_vec3 y, t_vec3 z);
-t_matrix	new_matrix_multiply(t_matrix m1, t_matrix m2);
-void		free_matrix(t_matrix matrix);
-bool		matrix_is_equal(t_matrix m1, t_matrix m2);
-bool		matrix_has_equal_dimensions(t_matrix m1, t_matrix m2);
-t_vec3		matrix_multiply_by_vector(t_matrix m, t_vec3 v);
-void		matrix_transpose(t_matrix m);
-float		matrix_find_determinant(t_matrix m);
-float		matrix_find_minor(t_matrix m, int row, int col);
-float		matrix_find_cofactor(t_matrix m, int row, int col);
-bool	    matrix_is_invertible(t_matrix m, float *determinant);
-
-
-//t_matrix	new_rotation_matrix(t_vec3 v);
-t_matrix	chain_matrices(t_matrix scaling, t_matrix rotation);
-
 /* ===== Shapes math ======================================================== */
 t_intersection	get_intersection(t_ray ray, t_shape *shape);
 t_vec3			get_normal(t_shape *shape, t_vec3 point);
 
 /* ===== Rays =============================================================== */
 t_ray	new_ray(t_vec3 origin, t_vec3 direction);
-t_ray	ray_transform(t_ray r, t_matrix m);
 t_vec3	get_ray_point(t_ray ray, float scalar);
-//t_ray	ray_transform_inverse(t_ray r, t_matrix m);
 
 /* ===== Color ============================================================== */
 int		new_color(int opacity, int red, int green, int blue);
@@ -145,5 +114,10 @@ int		color_substract(int c1, int c2);
 int		color_multiply(int c, float scalar);
 int		color_mix(int c1, int c2, float intencity);
 int		color_mix_light(int c1, int c2);
+
+/* ===== Utils ============================================================== */
+float	degrees_to_radians(float degrees);
+bool	is_equalf(float f1, float f2);
+void	solve_quadratic_equasion(t_quad quad, t_intersection *intersection);
 
 #endif

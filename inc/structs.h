@@ -8,11 +8,10 @@ typedef struct s_pixel
 	int		color;
 }	t_pixel;
 
-// Tuple - a vector or a point
-// w = 0 for vector;
-// w = 1 for point;
-// Needed for matrix math.
-// Can be used for colors.
+/* Tuple - a vector or a point
+ * w = 0 for vector;
+ * w = 1 for point;
+ */
 typedef struct s_vec3
 {
 	float	x;
@@ -21,21 +20,24 @@ typedef struct s_vec3
 	float	w;
 }	t_vec3;
 
-// ray has starting point and direction
-// starting point is a point;
-// direction is a vector.
+/* Ray has starting point and direction.
+ * starting point is a point;
+ * direction is a vector.
+*/
 typedef struct s_ray
 {
 	t_vec3	origin;
 	t_vec3	direction;
 }	t_ray;
 
-typedef struct s_matrix
+typedef struct s_quad
 {
-	int		row;
-	int		col;
-	float	**ptr;
-}	t_matrix;
+	t_vec3	vec_to_obj;
+	float	a;
+	float	b;
+	float	c;
+	float	discriminant;
+} t_quad;
 
 typedef enum e_otype
 {
@@ -44,27 +46,26 @@ typedef enum e_otype
 	PL
 }	t_otype;
 
-/* For shapes material assume:
- * ambient = 0.1
- * diffuse = 0.9
- * specular = 0.9
- * shininess = 200.0
+/* Struct for all shapes.
+ * Shape-specific parameters:
+ * center - SP
+ * normal - PL, CY
+ * radius - SP, CY
+ * half_height - CY
  */
 typedef struct s_shape
 {
 	t_otype			obj_type;
 	int				obj_id;
-	t_vec3			center;//sp
-	t_ray			normal;//pl, cy
-	float			diameter;//sp, cy
-	float			height;//cy
-    t_vec3          axis;
-    float           radius;
-    float           half_h;
-	t_matrix		matrix;
+	t_vec3			center;
+	t_ray			normal;
+	float			radius;
+	float			half_height;
 	int				color;
 }	t_shape;
 
+/* List of shapes.
+ */
 typedef struct s_olist
 {
 	t_shape			*shape;
@@ -77,24 +78,28 @@ typedef struct s_olist
 //     struct  s_llist *next;
 // } t_llist;
 
+/* Struct for intersections.
+ * Expected intersection count for shapes:
+ * PL - 1;
+ * SP - 2;
+ * CY - 4.
+ */
 typedef struct s_intersection
 {
 	int		count;
-	float	val[4]; // max change
+	float	val[4];
 	t_shape	*shape;
 }	t_intersection;
 
 typedef struct s_cam
 {
-	t_ray			orient;
-	float			fov;
-	float			pixel_size;
-	t_matrix		matrix;
+	t_ray	orient;
+	float	fov;
+	float	pixel_size;
 	t_vec3	right;
 	t_vec3	up;
-    float yaw;
-    float pitch;
-
+	float	yaw;
+	float	pitch;
 }	t_cam;
 
 typedef struct s_ambient

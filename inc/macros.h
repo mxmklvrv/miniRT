@@ -15,6 +15,7 @@
 # define ERR_WRONG_CHAR "Unknown char detected in .rt"
 # define ERR_OPEN "Failed open file for reading"
 # define ERR_NO_OBJ "There is nothing to render"
+# define ERR_VEC_ZERO "Vector has length of 0"
 
 # define ERR_PL_SPEC "Invalid specs for plane"
 # define ERR_PL_LIST "Failed adding plane to the list"
@@ -81,13 +82,13 @@
 #define KEY_TAB 65289   // switch obj
 #define KEY_LEFT 65361  // rotate left
 #define KEY_RIGHT 65363 // rotate right
-#define KEY_UP 65362    // rotate up
+#define KEY_UP 65362	// rotate up
 #define KEY_DOWN 65364  // rotate down
-#define KEY_PLUS 61     // resize up
-#define KEY_MINUS 45    // resize down
+#define KEY_PLUS 61	 // resize up
+#define KEY_MINUS 45	// resize down
 #define KEY_ESC 65307   // esc
-#define KEY_H 104       // height up
-#define KEY_J 106       // height down
+#define KEY_H 104	   // height up
+#define KEY_J 106	   // height down
 
 // to pass as value pressed or no
 #define KEY_ON 1

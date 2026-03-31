@@ -5,12 +5,16 @@ static int	get_diffuse_color(t_light light, float light_angle);
 static int	get_specular_color(t_light light, t_vec3 light_vector, t_vec3 normal_vector, t_ray ray);
 
 /* Material properties:
- * ambient constant = 0.1; from file
- * diffuse constant = 0.9; default, all have the same
- * specular constant = 0.9; default, all have the same
- * shininess = 32.0. default, all have the same
+ * ambient constant; - we don't have
+ * diffuse constant; - we don't have
+ * specular constant; - we don't have
+ * shininess (2.0, 4.0, 8.0, 16.0, 32.0... 200.0); the bigger the shininess -
+ * the smaller and more defined is specular dot.
+ * 
  * Light properties:
- * intencity - from file;
+ * intencity; - from file
+ * amb - intencity of ambient light;
+ * bright - intencity of dot light.
  */
 int	lighting(t_scene *scene, t_intersection intersection, t_ray ray)
 {
@@ -30,7 +34,7 @@ int	lighting(t_scene *scene, t_intersection intersection, t_ray ray)
 	normal.direction = get_normal(intersection.shape, normal.origin);
 	normal.origin = vector_add(normal.origin, vector_multiply(normal.direction, EPSILON));
 
-
+	
 	diffuse = 0;
 	specular = 0;
 	//Can add while for multiple lights
@@ -86,7 +90,7 @@ static bool	is_in_shadow(t_scene *scene, t_ray normal_ray, float *distance)
 		find_closest_intersection(normal_ray, obj_list->shape, &closest);
 		obj_list = obj_list->next;
 	}
-	if (closest.count > 0 && get_closest_hit(closest) < *distance)
+	if (closest.count > 0 && get_closest_hit(closest) < *distance - EPSILON)
 		return (true);
 	return (false);
 }

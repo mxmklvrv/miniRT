@@ -120,28 +120,6 @@ void	print_color(int color)
 		get_opacity(color), get_red(color), get_green(color), get_blue(color));
 }
 
-void	print_matrix(t_matrix matrix)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	j = 0;
-	while (matrix.ptr && j < matrix.row)
-	{
-		i = 0;
-		while (matrix.ptr[j] && i < matrix.col)
-		{
-			printf("| %f ", matrix.ptr[j][i]);
-			i++;
-		}
-		printf("|\n");
-		j++;
-	}
-	printf("%ix%i\n", j, i);
-}
-
 void	print_intersection(t_intersection intersection)
 {
 	int	i;
@@ -183,9 +161,9 @@ void	print_scene(t_scene *scene)
 		printf("Type: %d\n", s->obj_type);
 		if (s->obj_type == SP)
 		{
-			printf("Sphere center: %.2f %.2f %.2f\n", s->center.x, s->center.y,
-				s->center.z);
-			printf("Diameter: %.2f\n", s->diameter);
+			printf("Sphere center: %.2f %.2f %.2f\n",
+				s->center.x, s->center.y, s->center.z);
+			printf("Diameter: %.2f\n", s->radius * 2.0f);
 		}
 		if (s->obj_type == PL)
 		{
@@ -196,12 +174,18 @@ void	print_scene(t_scene *scene)
 		}
 		if (s->obj_type == CY)
 		{
-			printf("Cylinder center: %.2f %.2f %.2f\n", s->normal.origin.x,
-				s->normal.origin.y, s->normal.origin.z);
-			printf("Axis: %.2f %.2f %.2f\n", s->normal.direction.x,
-				s->normal.direction.y, s->normal.direction.z);
-			printf("Diameter: %.2f\n", s->diameter);
-			printf("Height: %.2f\n", s->height);
+			printf("Cylinder center: %.2f %.2f %.2f\n",
+				s->normal.origin.x,
+				s->normal.origin.y,
+				s->normal.origin.z);
+
+			printf("Axis: %.2f %.2f %.2f\n",
+				s->normal.direction.x,
+				s->normal.direction.y,
+				s->normal.direction.z);
+
+			printf("Diameter: %.2f\n", s->radius * 2.0f);
+			printf("Height: %.2f\n", s->half_height * 2.0f);
 		}
 		printf("Color: %d\n", s->color);
 		tmp = tmp->next;
