@@ -15,7 +15,7 @@ void	free_array(char **arr)
 void	free_scene(t_scene *scene)
 {
 	free_list(scene->obj_list);
-    // free_lights(scene->light_list); // new for lights;
+	// free_lights(scene->light_list); // new for lights;
 	scene->obj_list = NULL;
 	// scene->light_list = NULL;
 }

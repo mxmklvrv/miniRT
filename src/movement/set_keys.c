@@ -22,8 +22,8 @@ void	set_general_keys(int key, t_data *data)
 {
 	if (key == KEY_TAB)
 	{
-        if (data->control_light)
-            select_light(data->scene);
+		if (data->control_light)
+			select_light(data->scene);
 		else if (data->control_cam)
 			switch_to_obj(data);
 		else

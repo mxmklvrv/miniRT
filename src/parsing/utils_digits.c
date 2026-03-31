@@ -83,5 +83,3 @@ static int	ft_rgbtoint(int transp, int red, int green, int blue)
 {
 	return (transp << 24 | red << 16 | green << 8 | blue);
 }
-
-

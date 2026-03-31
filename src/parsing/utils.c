@@ -102,4 +102,3 @@ int	is_valid_comas(const char *line)
 		return (1);
 	return (0);
 }
-

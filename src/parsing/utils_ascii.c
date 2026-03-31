@@ -1,6 +1,7 @@
 #include "minirt.h"
 
-static void	get_whole_part(const char *line, int *i, float *temp, int *overflow);
+static void	get_whole_part(const char *line, int *i, float *temp,
+				int *overflow);
 static void	get_fraction_part(const char *line, int *i, float *temp);
 
 int	ft_atoi_and_overflow(const char *nptr, int *overflow)
@@ -49,22 +50,21 @@ int	ft_atof(const char *line, float *res)
 		i++;
 	}
 	get_whole_part(line, &i, &temp, &overflow);
-    if (!overflow)
-    {
-        get_fraction_part(line, &i, &temp);
-        *res = temp * sign;
-    }
+	if (!overflow)
+	{
+		get_fraction_part(line, &i, &temp);
+		*res = temp * sign;
+	}
 	return (overflow);
 }
 
 static void	get_whole_part(const char *line, int *i, float *temp, int *overflow)
 {
-	
 	while (ft_isdigit(line[*i]))
 	{
 		*temp = *temp * 10 + (line[*i] - '0');
 		if (*temp > FLT_MAX)
-		    *overflow = 1;
+			*overflow = 1;
 		(*i)++;
 	}
 }

@@ -3,7 +3,6 @@
 static int	parse_line(char *line, t_scene *scene);
 static int	postpars_validation(t_scene *scene);
 
-
 int	parse_input_file(char *file, t_scene *scene)
 {
 	int		fd;

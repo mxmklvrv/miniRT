@@ -1,6 +1,5 @@
 #include "minirt.h"
 
-
 int	handle_translation(t_data *data)
 {
 	t_move_state	*move;

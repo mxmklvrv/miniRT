@@ -49,7 +49,7 @@ int	add_to_list(t_scene *scene, t_shape *shape)
 
 static void	dirty_thoughts(t_scene *scene, t_shape *shape)
 {
-	if(scene->next_obj_id == INT_MAX - 1 || scene->next_obj_id == INT_MAX )
+	if (scene->next_obj_id == INT_MAX - 1 || scene->next_obj_id == INT_MAX)
 		shape->obj_id = 42;
 	else
 		shape->obj_id = scene->next_obj_id++;
