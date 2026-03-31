@@ -35,8 +35,6 @@ int	resize_diameter(t_olist *node, float value)
 		obj->radius += value;
 		if (obj->radius < 0.1f)
 			obj->radius = 0.1f;
-		if (obj->obj_type == CY)
-			update_cy_geo(obj);
 		return (1);
 	}
 	return (0);
@@ -52,6 +50,5 @@ int	resize_height(t_olist *node, float value)
 	obj->half_height += value;
 	if (obj->half_height < 0.1f)
 		obj->half_height = 0.1f;
-	update_cy_geo(obj);
 	return (1);
 }

@@ -32,9 +32,6 @@ int	parse_float(char *str, float min, float max, float *res)
 int	parse_vector(char *str, t_vec3 *vector, float min, float max)
 {
 	char	**res;
-	float	x;
-	float	y;
-	float	z;
 
 	if (!str || is_valid_comas(str) == 1)
 		return (1);
@@ -43,14 +40,12 @@ int	parse_vector(char *str, t_vec3 *vector, float min, float max)
 		return (error_return(ERR_ALLOC, NULL));
 	if (!res[0] || !res[1] || !res[2] || res[3])
 		return (free_array(res), 1);
-	x = 0;
-	y = 0;
-	z = 0;
-	if (parse_float(res[0], min, max, &x) == 1 || parse_float(res[1], min, max,
-			&y) == 1 || parse_float(res[2], min, max, &z) == 1)
+	if (parse_float(res[0], min, max, &vector->x) == 1 || parse_float(res[1], min, max,
+			&vector->y) == 1 || parse_float(res[2], min, max, &vector->z) == 1)
 		return (free_array(res), 1);
-	*vector = new_vector(x, y, z);
 	free_array(res);
+	if (vector_is_zero(*vector))
+		return (error_return(ERR_VEC_ZERO, NULL));
 	return (0);
 }
 

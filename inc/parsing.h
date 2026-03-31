@@ -23,6 +23,7 @@ int	parse_vector(char *str, t_vec3 *vector, float min, float max);
 int	parse_rgb(char *str, int *color);
 
 int	parse_error(t_scene *scene, char *msg, char **res, t_shape *shape);
+int	parse_error_l(t_scene *scene, char *msg, char **res, t_light *light);
 int	parse_fatal(t_scene *scene, int fd);
 int	error_return(char *msg, char *line);
 void error_msg(char *msg, char *line);
@@ -32,6 +33,7 @@ void	free_scene(t_scene *scene);
 void	free_list(t_olist *list);
 
 int	add_to_list(t_scene *scene, t_shape *shape);
+int add_light_to_list(t_scene *scene, t_light *light);
 
 int	count_elements(char *line);
 int	is_valid_int(char *line);

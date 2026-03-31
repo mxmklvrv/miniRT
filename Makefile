@@ -42,7 +42,7 @@ PARS_SRC := \
 	utils_error.c \
 	utils_free.c \
 	utils_list.c \
-	utils
+	utils.c
 
 MATH_DIR := math
 MATH_SRC := \

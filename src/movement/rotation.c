@@ -62,8 +62,10 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 	else if (obj->obj_type == CY)
 	{
 		if (axis == Y_AXIS)
-			obj->axis = vector_normalize(rotate_z(obj->axis, angle));
+			obj->normal.direction = vector_normalize(
+				rotate_z(obj->normal.direction, angle));
 		else
-			obj->axis = vector_normalize(rotate_x(obj->axis, angle));
+			obj->normal.direction = vector_normalize(
+				rotate_x(obj->normal.direction, angle));
 	}
 }

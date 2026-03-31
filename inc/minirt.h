@@ -50,7 +50,6 @@ t_vec3	rotate_z(t_vec3 current, float angle);
 t_vec3	rotate_x(t_vec3 current, float angle);
 int	is_exeption(t_data *data, t_exeption action);
 void	apply_movement(t_data *data);
-void	update_cy_geo(t_shape *cy); // DELETE PROBABLY
 int	handle_resize(t_data *data);
 int	resize_diameter(t_olist *node, float value);
 int	resize_height(t_olist *node, float value);

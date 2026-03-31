@@ -62,11 +62,3 @@ void	apply_movement(t_data *data)
 		redraw_scene(data);
 }
 
-
-void	update_cy_geo(t_shape *cy)
-{
-	if (!cy || cy->obj_type != CY)
-		return ;
-	cy->radius = cy->diameter / 2.0f;
-	cy->half_h = cy->height / 2.0f;
-}

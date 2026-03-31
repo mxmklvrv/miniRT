@@ -72,12 +72,6 @@ typedef struct s_olist
 	struct s_olist	*next;
 }	t_olist;
 
-// typedef struct s_llist // added new
-// {
-//     t_light *light;
-//     struct  s_llist *next;
-// } t_llist;
-
 /* Struct for intersections.
  * Expected intersection count for shapes:
  * PL - 1;
@@ -113,16 +107,29 @@ typedef struct s_light
 	t_vec3			pos;
 	float			bright;
 	int				color;
-
 }	t_light;
+
+typedef struct s_llist
+{
+	t_light			*light;
+	struct s_llist	*next;
+}	t_llist;
+
+typedef struct s_lighting
+{
+	int		ambient;
+	int		diffuse;
+	int		specular;
+	t_ray	normal;
+}	t_lighting;
 
 // main struct
 typedef struct s_scene
 {
 	t_olist			*obj_list;
-    // t_llist         *light_list; // added new
+    t_llist         *light_list;// bonus
 	t_ambient		ambient;
-	t_light			light;
+	//t_light			light;
 	t_cam			cam;
 	int				qt_ambiant;
 	int				qt_cam;
@@ -130,7 +137,7 @@ typedef struct s_scene
     int             next_obj_id;
 	char			*error_line;
 	t_olist			*obj_selected;
-    // t_llist         *light_selected; // added new
+    t_llist         *light_selected;// bonus
 }					t_scene;
 
 typedef struct s_data
