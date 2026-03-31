@@ -41,7 +41,7 @@ int	lighting(t_scene *scene, t_intersection intersection, t_ray ray)
 	current_light = scene->light;
 	light_vector = vector_normalize(vector_substract(current_light.pos, normal.origin));
 	light_angle = vector_dot(light_vector, normal.direction);
-	if (light_angle < 0 || is_in_shadow(scene, new_ray(normal.origin, light_vector), &distance))
+	if (is_in_shadow(scene, new_ray(normal.origin, light_vector), &distance))
 		return (color);
 	if (distance < 1)
 		distance = 1;
@@ -94,4 +94,3 @@ static bool	is_in_shadow(t_scene *scene, t_ray normal_ray, float *distance)
 		return (true);
 	return (false);
 }
-

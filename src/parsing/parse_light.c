@@ -23,7 +23,7 @@ int	parse_light(char *line, t_scene *scene)
 	if (parse_rgb(res[2], &color) == 1) // this is for bonus
 		return (parse_error(scene, ERR_LIGT_COLOR, res, NULL));
 	scene->light.bright = bright;
-	scene->light.color = 0; // this is for bonus
+	scene->light.color = new_color(255, 255, 255, 255); // this is for bonus
 	free_array(res);
 	return (0);
 }

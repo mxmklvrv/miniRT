@@ -231,7 +231,6 @@ int	is_exeption(t_data *data, t_exeption action)
 	return (0);
 }
 
-// light cannot be rotated
 int	handle_rotation(t_data *data)
 {
 	t_move_state	*move;
