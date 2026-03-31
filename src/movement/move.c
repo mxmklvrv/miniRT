@@ -1,7 +1,5 @@
 #include "minirt.h"
 
-
-
 /*
 // new functions for multiple lights down
 void    select_light(t_scene *scene)

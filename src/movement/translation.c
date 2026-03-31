@@ -10,10 +10,10 @@ int	handle_translation(t_data *data)
 	move_vec = new_vector(0, 0, 0);
 	if (data->control_cam)
 		cam_move_calculation(data, &move_vec, move);
-	else if (data->control_light)
-		obj_move_calculation(&move_vec, move);
+	// else if (data->control_light)
+	// 	obj_light_move_calculation(&move_vec, move);
 	else
-		obj_move_calculation(&move_vec, move);
+		obj_light_move_calculation(&move_vec, move);
 	if (move_vec.x != 0 || move_vec.y != 0 || move_vec.z != 0)
 	{
 		if (data->control_cam)

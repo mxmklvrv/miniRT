@@ -32,9 +32,9 @@ int	resize_diameter(t_olist *node, float value)
 	obj = node->shape;
 	if (obj->obj_type == SP || obj->obj_type == CY)
 	{
-		obj->diameter += value;
-		if (obj->diameter < 0.1f)
-			obj->diameter = 0.1f;
+		obj->radius += value;
+		if (obj->radius < 0.1f)
+			obj->radius = 0.1f;
 		if (obj->obj_type == CY)
 			update_cy_geo(obj);
 		return (1);
@@ -49,9 +49,9 @@ int	resize_height(t_olist *node, float value)
 	if (!node || !node->shape)
 		return (0);
 	obj = node->shape;
-	obj->height += value;
-	if (obj->height < 0.1f)
-		obj->height = 0.1f;
+	obj->half_height += value;
+	if (obj->half_height < 0.1f)
+		obj->half_height = 0.1f;
 	update_cy_geo(obj);
 	return (1);
 }

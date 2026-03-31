@@ -23,7 +23,7 @@ void	cam_move_calculation(t_data *data, t_vec3 *move_vec, t_move_state *move)
 					-MOVE_SPEED));
 }
 
-void	obj_move_calculation(t_vec3 *move_vec, t_move_state *move)
+void	obj_light_move_calculation(t_vec3 *move_vec, t_move_state *move)
 {
 	if (move->forward)
 		move_vec->z += MOVE_SPEED;
