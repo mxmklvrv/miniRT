@@ -67,3 +67,4 @@ build/
 # extra
 .gitignore
 *.pdf
+extra/
