@@ -27,7 +27,7 @@ static int	init_cylinder(t_shape *shape, char **res, t_scene *scene)
 {
 	shape->obj_type = CY;
 	shape->normal.origin.w = 1;
-	if (parse_vector(res[0], &shape->normal.origin, -100.0f, 100.0f) == 1)
+	if (parse_vector(res[0], &shape->normal.origin, MIN_RANGE, MAX_RANGE) == 1)
 		return (error_return(ERR_CY_CNTR, scene->error_line));
 	shape->normal.direction.w = 0;
 	if (parse_vector(res[1], &shape->normal.direction, -1.0f, 1.0f) == 1)

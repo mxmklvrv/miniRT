@@ -14,7 +14,7 @@ int	parse_cam(char *line, t_scene *scene)
 	if (!res)
 		return (error_return(ERR_ALLOC, NULL));
 	scene->cam.orient.origin.w = 1;
-	if (parse_vector(res[0], &scene->cam.orient.origin, -100.0f, 100.0f) == 1)
+	if (parse_vector(res[0], &scene->cam.orient.origin, MIN_RANGE, MAX_RANGE) == 1)
 		return (parse_error(scene, ERR_CAM_VIEW, res, NULL));
 	scene->cam.orient.direction.w = 0;
 	if (parse_vector(res[1], &scene->cam.orient.direction, -1.0f, 1.0f) == 1)

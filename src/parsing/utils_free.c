@@ -15,7 +15,7 @@ void	free_array(char **arr)
 void	free_scene(t_scene *scene)
 {
 	free_list(scene->obj_list);
-	free_lights(scene->light_list); // new for lights;
+	free_lights(scene->light_list);
 	scene->obj_list = NULL;
 	scene->light_list = NULL;
 }
@@ -36,19 +36,18 @@ void	free_list(t_olist *list)
 	}
 }
 
-// // new for multiple lights
- void free_lights(t_llist *list)
- {
-     t_llist *temp;
+void	free_lights(t_llist *list)
+{
+	t_llist	*temp;
 
-     if (!list)
-         return ;
-     while(list)
-     {
-         temp = list->next;
-         if(list->light)
-             free(list->light);
-         free(list);
-         list = temp;
-     }
- }
+	if (!list)
+		return ;
+	while (list)
+	{
+		temp = list->next;
+		if (list->light)
+			free(list->light);
+		free(list);
+		list = temp;
+	}
+}

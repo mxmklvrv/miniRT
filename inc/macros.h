@@ -90,8 +90,11 @@
 #define KEY_H 104	   // height up
 #define KEY_J 106	   // height down
 
-// to pass as value pressed or no
+
 #define KEY_ON 1
 #define KEY_OFF 0
+
+#define MIN_RANGE -1000.0f
+#define MAX_RANGE 1000.0f
 
 #endif

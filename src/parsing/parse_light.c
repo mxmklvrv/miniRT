@@ -52,9 +52,9 @@ int	parse_light(char *line, t_scene *scene) // new (need to check parse err)
 	return (0);
 }
 
-static int init_light(t_light *light, char **res, t_scene *scene) // new
+static int init_light(t_light *light, char **res, t_scene *scene)
 {
-	if(parse_vector(res[0], &light->pos, -100.0f, 100.0f))
+	if(parse_vector(res[0], &light->pos, MIN_RANGE, MAX_RANGE))
 		return (error_return(ERR_LIGT_POS, scene->error_line));
 	light->pos.w = 1;
 	if(parse_float(res[1], 0.0f, 1.0f, &light->bright))
@@ -63,4 +63,3 @@ static int init_light(t_light *light, char **res, t_scene *scene) // new
 		return (error_return(ERR_LIGT_COLOR, scene->error_line));
 	return (0);
 }
-// new functions up
