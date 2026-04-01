@@ -51,9 +51,9 @@ static int	postpars_validation(t_scene *scene)
 		return (error_return(ERR_CAM_NOCAM, NULL));
 	if (scene->qt_light == 0)
 	{
-		scene->light.pos = new_point(0, 0, 0);
-		scene->light.color = 0;
-		scene->light.bright = 0;
+		//scene->light.pos = new_point(0, 0, 0);
+		//scene->light.color = 0;
+		//scene->light.bright = 0;
 	}
 	if (scene->qt_ambiant == 0)
 	{

@@ -53,6 +53,7 @@ static bool	set_controls(t_data *data, t_scene *scene)
 	data->control_light = 0;
 	data->scene->obj_selected = data->scene->obj_list;
 	// add here light
+	data->scene->light_selected = data->scene->light_list;
 	return (true);
 }
 

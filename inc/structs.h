@@ -107,6 +107,7 @@ typedef struct s_light
 	t_vec3			pos;
 	float			bright;
 	int				color;
+	int				light_id;
 }	t_light;
 
 typedef struct s_llist
@@ -135,6 +136,7 @@ typedef struct s_scene
 	int				qt_cam;
 	int				qt_light;
     int             next_obj_id;
+	int             next_light_id;
 	char			*error_line;
 	t_olist			*obj_selected;
     t_llist         *light_selected;// bonus

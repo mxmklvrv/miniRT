@@ -34,6 +34,7 @@ int add_light_to_list(t_scene *scene, t_light *light) // new
 	if(!new)
 		return (1);
 	new->light = light;
+	new->light->light_id = scene->next_light_id++;
 	new->next = NULL;
 	if(scene->light_list == NULL)
 		scene->light_list = new;

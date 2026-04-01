@@ -16,6 +16,12 @@
 # include <float.h>
 
 
+void translate_light(t_llist *node, t_vec3 move_vec); // new for multiple lights;
+void    select_light(t_data *data);
+void free_lights(t_llist *list);
+
+
+
 // test print functions
 void	print_cam_light_pos(t_data *data);
 int		is_exeption(t_data *data, t_exeption action);
@@ -67,7 +73,7 @@ void	select_object(t_data *data);
 int	handle_translation(t_data *data);
 void	translate_object(t_olist *node, t_vec3 move_vec);
 void	translate_cam(t_cam *cam, t_vec3 move_vec);
-void	translate_light(t_light *light, t_vec3 move_vec);
+//void	translate_light(t_light *light, t_vec3 move_vec);
 
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data);

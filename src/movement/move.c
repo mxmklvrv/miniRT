@@ -1,15 +1,16 @@
 #include "minirt.h"
 
-/*
+
 // new functions for multiple lights down
-void    select_light(t_scene *scene)
+void    select_light(t_data *data)
 {
-    if(!scene->light_selected)
-        scene->light_selected = scene->light_list;
-    else if (scene->light_selected->next)
-        scene->light_selected = scene->light_selected->next;
-    else
-        scene->light_selected = scene->light_list;
+	if(!data->scene->light_selected)
+		data->scene->light_selected = data->scene->light_list;
+	else if (data->scene->light_selected->next)
+		data->scene->light_selected = data->scene->light_selected->next;
+	else
+		data->scene->light_selected = data->scene->light_list;
+	print_cam_light_pos(data);
 }
 
 void translate_light(t_llist *node, t_vec3 move_vec) // new for multiple lights
@@ -28,10 +29,8 @@ int	handle_translation(t_data *data)
 	move_vec = new_vector(0, 0, 0);
 	if (data->control_cam)
 		cam_move_calculation(data, &move_vec, move);
-	else if (data->control_light)
-		obj_move_calculation(&move_vec, move);
 	else
-		obj_move_calculation(&move_vec, move);
+		obj_light_move_calculation(&move_vec, move);
 	if (move_vec.x != 0 || move_vec.y != 0 || move_vec.z != 0)
 	{
 		if (data->control_cam)
@@ -44,8 +43,7 @@ int	handle_translation(t_data *data)
 	}
 	return (0);
 }
-*/
-// new functions up
+
 
 void	apply_movement(t_data *data)
 {

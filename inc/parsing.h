@@ -22,8 +22,8 @@ int	parse_float(char *str, float min, float max, float *res);
 int	parse_vector(char *str, t_vec3 *vector, float min, float max);
 int	parse_rgb(char *str, int *color);
 
-int	parse_error(t_scene *scene, char *msg, char **res, t_shape *shape);
-int	parse_error_l(t_scene *scene, char *msg, char **res, t_light *light);
+int	parse_error(t_scene *scene, char *msg, char **res, void *ptr);
+//int	parse_error_l(t_scene *scene, char *msg, char **res, t_light *light);
 int	parse_fatal(t_scene *scene, int fd);
 int	error_return(char *msg, char *line);
 void error_msg(char *msg, char *line);

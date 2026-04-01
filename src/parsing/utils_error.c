@@ -1,27 +1,27 @@
 #include "minirt.h"
 
-int	parse_error(t_scene *scene, char *msg, char **res, t_shape *shape)
+int	parse_error(t_scene *scene, char *msg, char **res, void *ptr)
 {
 	if (msg)
 		error_msg(msg, scene->error_line);
 	if (res)
 		free_array(res);
-	if (shape)
-		free(shape);
+	if (ptr)
+		free(ptr);
 	return (1);
 }
 
 // // new for multiple lights
- int	parse_error_l(t_scene *scene, char *msg, char **res, t_light *light)
- {
- 	if (msg)
- 		error_msg(msg, scene->error_line);
- 	if (res)
- 		free_array(res);
- 	if (light)
- 		free(light);
- 	return (1);
- }
+// int	parse_error_l(t_scene *scene, char *msg, char **res, t_light *light)
+// {
+// 	if (msg)
+// 		error_msg(msg, scene->error_line);
+// 	if (res)
+// 		free_array(res);
+// 	if (light)
+// 		free(light);
+// 	return (1);
+// }
 // // new up
 
 int	parse_fatal(t_scene *scene, int fd)

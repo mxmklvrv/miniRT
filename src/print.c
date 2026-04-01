@@ -41,13 +41,13 @@ void	print_vars(t_scene *scene)
 	printf("---------------------------------------------------\n");
 	printf("Light Parsing\n");
 	printf("x, y, z coordinates of the light point: ");
-	printf("%f ", scene->light.pos.x);
-	printf("%f ", scene->light.pos.y);
-	printf("%f \n", scene->light.pos.z);
+	printf("%f ", scene->light_list->light->pos.x);
+	printf("%f ", scene->light_list->light->pos.y);
+	printf("%f \n", scene->light_list->light->pos.z);
 	printf("the light brightness ratio in the range [0.0,1.0]: ");
-	printf("%f \n", scene->light.bright);
+	printf("%f \n", scene->light_list->light->bright);
 	printf("(BONUS) R, G, B colors in the range [0-255]: ");
-	printf("%d\n\n", scene->light.color);
+	printf("%d\n\n", scene->light_list->light->color);
 }
 
 void	print_pos(t_scene *scene)
@@ -90,9 +90,9 @@ void	print_cam_light_pos(t_data *data)
 	}
 	if (data->control_light == 1)
 	{
-		printf("Controlling Light, origin: x=%.2f y=%.2f z=%.2f\n",
-			data->scene->light.pos.x, data->scene->light.pos.y,
-			data->scene->light.pos.z);
+		printf("Controlling Light Nº%d, origin: x=%.2f y=%.2f z=%.2f\n", data->scene->light_selected->light->light_id,
+			data->scene->light_list->light->pos.x, data->scene->light_list->light->pos.y,
+			data->scene->light_list->light->pos.z);
 	}
 }
 
@@ -149,9 +149,9 @@ void	print_scene(t_scene *scene)
 		scene->cam.orient.direction.y, scene->cam.orient.direction.z);
 	printf("  fov: %.2f\n", scene->cam.fov);
 	printf("\nLight:\n");
-	printf("  pos: %.2f %.2f %.2f\n", scene->light.pos.x, scene->light.pos.y,
-		scene->light.pos.z);
-	printf("  brightness: %f\n", scene->light.bright);
+	printf("  pos: %.2f %.2f %.2f\n", scene->light_list->light->pos.x, scene->light_list->light->pos.y,
+		scene->light_list->light->pos.z);
+	printf("  brightness: %f\n", scene->light_list->light->bright);
 	printf("\nObjects:\n");
 	tmp = scene->obj_list;
 	while (tmp)

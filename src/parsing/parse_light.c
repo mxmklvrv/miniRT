@@ -43,11 +43,11 @@ int	parse_light(char *line, t_scene *scene) // new (need to check parse err)
 		return (error_return(ERR_ALLOC, NULL));
 	res = ft_split(line, ' ');
 	if (!res)
-		return (parse_error_l(scene, ERR_ALLOC, NULL, light));
+		return (parse_error(scene, ERR_ALLOC, NULL, light));
 	if (init_light(light, res, scene))
-		return(parse_error_l(scene, NULL, res, light));
+		return(parse_error(scene, NULL, res, light));
 	if(add_light_to_list(scene, light))
-		return(parse_error_l(scene, "error light list", res, light));
+		return(parse_error(scene, "error light list", res, light));
 	free_array(res);
 	return (0);
 }
