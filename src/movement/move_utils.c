@@ -79,7 +79,7 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 
 int	is_exeption(t_data *data, t_exeption action)
 {
-	t_olist *selected;
+	t_olist	*selected;
 
 	if (!data || !data->scene)
 		return (1);

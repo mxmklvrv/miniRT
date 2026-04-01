@@ -16,7 +16,7 @@ int	handle_translation(t_data *data)
 		if (data->control_cam)
 			translate_cam(&data->scene->cam, move_vec);
 		else if (data->control_light && data->scene->light_selected)
-            translate_light(data->scene->light_selected, move_vec);
+			translate_light(data->scene->light_selected, move_vec);
 		else if (data->scene->obj_selected)
 			translate_object(data->scene->obj_selected, move_vec);
 		return (1);
@@ -44,9 +44,9 @@ void	translate_cam(t_cam *cam, t_vec3 move_vec)
 	cam->orient.origin = vector_add(cam->orient.origin, move_vec);
 }
 
-void translate_light(t_llist *node, t_vec3 move_vec) // new for multiple lights
+void	translate_light(t_llist *node, t_vec3 move_vec)
 {
-    if(!node || !node->light)
-        return ;
-    node->light->pos = vector_add(node->light->pos, move_vec);
+	if (!node || !node->light)
+		return ;
+	node->light->pos = vector_add(node->light->pos, move_vec);
 }

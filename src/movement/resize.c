@@ -42,7 +42,7 @@ int	resize_diameter(t_olist *node, float value)
 
 int	resize_height(t_olist *node, float value)
 {
-	t_shape *obj;
+	t_shape	*obj;
 
 	if (!node || !node->shape)
 		return (0);

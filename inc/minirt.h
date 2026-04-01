@@ -73,7 +73,7 @@ void	select_object(t_data *data);
 int	handle_translation(t_data *data);
 void	translate_object(t_olist *node, t_vec3 move_vec);
 void	translate_cam(t_cam *cam, t_vec3 move_vec);
-//void	translate_light(t_light *light, t_vec3 move_vec);
+
 
 /* ===== Render ============================================================= */
 void	draw_scene(t_data *data);

@@ -9,7 +9,7 @@ int	parse_int(char *str, int min, int max, int *res)
 
 	overflow = 0;
 	temp = 0;
-	if (!str || is_valid_int(str) == 1)
+	if (!str || is_valid_int(str))
 		return (1);
 	temp = ft_atoi_and_overflow(str, &overflow);
 	if (temp < min || temp > max || overflow == 1)
@@ -20,7 +20,7 @@ int	parse_int(char *str, int min, int max, int *res)
 
 int	parse_float(char *str, float min, float max, float *res)
 {
-	if (!str || is_valid_float(str) == 1)
+	if (!str || is_valid_float(str))
 		return (1);
 	if (ft_atof(str, res))
 		return (1);
@@ -40,8 +40,8 @@ int	parse_vector(char *str, t_vec3 *vector, float min, float max)
 		return (error_return(ERR_ALLOC, NULL));
 	if (!res[0] || !res[1] || !res[2] || res[3])
 		return (free_array(res), 1);
-	if (parse_float(res[0], min, max, &vector->x) == 1 || parse_float(res[1], min, max,
-			&vector->y) == 1 || parse_float(res[2], min, max, &vector->z) == 1)
+	if (parse_float(res[0], min, max, &vector->x) || parse_float(res[1], min,
+			max, &vector->y) || parse_float(res[2], min, max, &vector->z))
 		return (free_array(res), 1);
 	free_array(res);
 	if (vector_is_zero(*vector))
@@ -66,8 +66,8 @@ int	parse_rgb(char *str, int *color)
 	r = 0;
 	g = 0;
 	b = 0;
-	if (parse_int(rgb[0], 0, 255, &r) == 1 || parse_int(rgb[1], 0, 255, &g) == 1
-		|| parse_int(rgb[2], 0, 255, &b) == 1)
+	if (parse_int(rgb[0], 0, 255, &r) || parse_int(rgb[1], 0, 255, &g)
+		|| parse_int(rgb[2], 0, 255, &b))
 		return (free_array(rgb), 1);
 	*color = ft_rgbtoint(255, r, g, b);
 	free_array(rgb);

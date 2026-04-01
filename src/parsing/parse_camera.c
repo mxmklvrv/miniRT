@@ -14,13 +14,13 @@ int	parse_cam(char *line, t_scene *scene)
 	if (!res)
 		return (error_return(ERR_ALLOC, NULL));
 	scene->cam.orient.origin.w = 1;
-	if (parse_vector(res[0], &scene->cam.orient.origin, MIN_RANGE, MAX_RANGE) == 1)
+	if (parse_vector(res[0], &scene->cam.orient.origin, MIN_RANGE, MAX_RANGE))
 		return (parse_error(scene, ERR_CAM_VIEW, res, NULL));
 	scene->cam.orient.direction.w = 0;
-	if (parse_vector(res[1], &scene->cam.orient.direction, -1.0f, 1.0f) == 1)
+	if (parse_vector(res[1], &scene->cam.orient.direction, -1.0f, 1.0f))
 		return (parse_error(scene, ERR_CAM_ORIT, res, NULL));
 	fov = 0;
-	if (parse_float(res[2], 0.0f, 180.0f, &fov) == 1 || fov <= 0)
+	if (parse_float(res[2], 0.0f, 180.0f, &fov))
 		return (parse_error(scene, ERR_CAM_FOV, res, NULL));
 	scene->cam.fov = fov;
 	scene->cam.yaw = atan2f(scene->cam.orient.direction.x,

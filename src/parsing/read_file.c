@@ -22,7 +22,7 @@ int	parse_input_file(char *file, t_scene *scene)
 		free(line);
 		line = get_next_line(fd);
 	}
-	if (postpars_validation(scene) == 1)
+	if (postpars_validation(scene))
 		return (parse_fatal(scene, fd));
 	close(fd);
 	return (0);

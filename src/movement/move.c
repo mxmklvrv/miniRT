@@ -1,6 +1,5 @@
 #include "minirt.h"
 
-
 void	apply_movement(t_data *data)
 {
 	int	need_redraw;
@@ -15,4 +14,3 @@ void	apply_movement(t_data *data)
 	if (need_redraw)
 		redraw_scene(data);
 }
-

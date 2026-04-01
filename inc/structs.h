@@ -128,9 +128,8 @@ typedef struct s_lighting
 typedef struct s_scene
 {
 	t_olist			*obj_list;
-    t_llist         *light_list;// bonus
+    t_llist         *light_list;
 	t_ambient		ambient;
-	//t_light			light;
 	t_cam			cam;
 	int				qt_ambiant;
 	int				qt_cam;
@@ -139,7 +138,7 @@ typedef struct s_scene
 	int             next_light_id;
 	char			*error_line;
 	t_olist			*obj_selected;
-    t_llist         *light_selected;// bonus
+    t_llist         *light_selected;
 }					t_scene;
 
 typedef struct s_data

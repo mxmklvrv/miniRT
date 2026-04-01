@@ -40,9 +40,9 @@ void	select_object(t_data *data)
 	print_pos(data->scene);
 }
 
-void    select_light(t_data *data)
+void	select_light(t_data *data)
 {
-	if(!data->scene->light_selected)
+	if (!data->scene->light_selected)
 		data->scene->light_selected = data->scene->light_list;
 	else if (data->scene->light_selected->next)
 		data->scene->light_selected = data->scene->light_selected->next;

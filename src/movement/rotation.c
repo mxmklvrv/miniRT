@@ -1,3 +1,4 @@
+
 #include "minirt.h"
 
 int	handle_rotation(t_data *data)
@@ -21,7 +22,6 @@ int	handle_rotation(t_data *data)
 		|| move->rotate_down);
 }
 
-// need to add light
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis)
 {
 	t_cam	*cam;
@@ -62,10 +62,10 @@ void	rotate_objects(t_olist *node, float angle, t_axis axis)
 	else if (obj->obj_type == CY)
 	{
 		if (axis == Y_AXIS)
-			obj->normal.direction = vector_normalize(
-				rotate_z(obj->normal.direction, angle));
+			obj->normal.direction = vector_normalize(rotate_z(obj->normal.direction,
+						angle));
 		else
-			obj->normal.direction = vector_normalize(
-				rotate_x(obj->normal.direction, angle));
+			obj->normal.direction = vector_normalize(rotate_x(obj->normal.direction,
+						angle));
 	}
 }
