@@ -1,10 +1,6 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-void	setup_camera_angle(t_cam *cam);// i need this not static
-
-
-
 int	confirm_input(int ac, char **av);
 int	parse_input_file(char *file, t_scene *scene);
 int	dispatch(char *line, t_scene *scene);
@@ -23,7 +19,6 @@ int	parse_vector(char *str, t_vec3 *vector, float min, float max);
 int	parse_rgb(char *str, int *color);
 
 int	parse_error(t_scene *scene, char *msg, char **res, void *ptr);
-//int	parse_error_l(t_scene *scene, char *msg, char **res, t_light *light);
 int	parse_fatal(t_scene *scene, int fd);
 int	error_return(char *msg, char *line);
 void error_msg(char *msg, char *line);

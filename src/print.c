@@ -91,8 +91,8 @@ void	print_cam_light_pos(t_data *data)
 	if (data->control_light == 1)
 	{
 		printf("Controlling Light Nº%d, origin: x=%.2f y=%.2f z=%.2f\n", data->scene->light_selected->light->light_id,
-			data->scene->light_list->light->pos.x, data->scene->light_list->light->pos.y,
-			data->scene->light_list->light->pos.z);
+			data->scene->light_selected->light->pos.x, data->scene->light_selected->light->pos.y,
+			data->scene->light_selected->light->pos.z);
 	}
 }
 

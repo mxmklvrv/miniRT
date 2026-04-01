@@ -4,7 +4,6 @@ static void	dirty_thoughts(t_scene *scene, t_shape *shape, t_light *light);
 
 int	add_to_list(t_scene *scene, t_shape *shape)
 {
-	printf("123");
 	t_olist	*new;
 	t_olist	*temp;
 
@@ -31,7 +30,6 @@ int	add_light_to_list(t_scene *scene, t_light *light)
 	t_llist	*new;
 	t_llist	*temp;
 
-	printf("123");
 	new = malloc(sizeof(t_llist));
 	if (!new)
 		return (1);

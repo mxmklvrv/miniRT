@@ -1,29 +1,16 @@
 #include "minirt.h"
 
-//void	set_general_keys(int key, t_data *data)
-//{
-//	if (key == KEY_TAB)
-//	{
-//		if (data->control_cam || data->control_light)
-//			switch_to_obj(data);
-//		else
-//			select_object(data);
-//	}
-//	else if (key == KEY_C)
-//		toggle_cam(data);
-//	else if (key == KEY_L)
-//		toggle_light(data);
-//	if (key == KEY_ESC)
-//		mlx_loop_end(data->mlx);
-//}
-
-// new for multiple lights
 void	set_general_keys(int key, t_data *data)
 {
 	if (key == KEY_TAB)
 	{
 		if (data->control_light)
-			select_light(data);
+		{
+			if (data->scene->qt_light > 1)
+				select_light(data);
+			else
+				switch_to_obj(data);
+		}
 		else if (data->control_cam)
 			switch_to_obj(data);
 		else
@@ -36,8 +23,6 @@ void	set_general_keys(int key, t_data *data)
 	if (key == KEY_ESC)
 		mlx_loop_end(data->mlx);
 }
-// new for multiple lights up
-
 
 void	set_translation_keys(int key, t_move_state *move, int value)
 {
