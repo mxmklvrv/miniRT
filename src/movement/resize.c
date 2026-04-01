@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   resize.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/01 21:54:19 by akolupae          #+#    #+#             */
+/*   Updated: 2026/04/01 21:54:20 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minirt.h"
 
@@ -42,7 +53,7 @@ int	resize_diameter(t_olist *node, float value)
 
 int	resize_height(t_olist *node, float value)
 {
-	t_shape *obj;
+	t_shape	*obj;
 
 	if (!node || !node->shape)
 		return (0);

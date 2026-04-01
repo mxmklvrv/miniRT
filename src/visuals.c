@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   visuals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/01 21:43:41 by akolupae          #+#    #+#             */
+/*   Updated: 2026/04/01 21:43:42 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static bool	set_controls(t_data *data, t_scene *scene);
@@ -11,7 +23,7 @@ bool	visuals_loop(t_scene *scene)
 	if (!set_controls(&data, scene))
 		return (false);
 	set_hooks(&data);
-	draw_scene(&data); // show scene here
+	draw_scene(&data);
 	mlx_loop(data.mlx);
 	free_visuals(&data);
 	return (true);
@@ -39,6 +51,7 @@ bool	set_visuals(t_data *data)
 			&data->line_length, &data->endian);
 	return (true);
 }
+
 static bool	set_controls(t_data *data, t_scene *scene)
 {
 	data->scene = scene;
@@ -52,7 +65,6 @@ static bool	set_controls(t_data *data, t_scene *scene)
 	data->control_cam = 0;
 	data->control_light = 0;
 	data->scene->obj_selected = data->scene->obj_list;
-	// add here light
 	data->scene->light_selected = data->scene->light_list;
 	return (true);
 }

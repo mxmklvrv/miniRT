@@ -1,9 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/01 21:31:26 by akolupae          #+#    #+#             */
+/*   Updated: 2026/04/01 21:31:29 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static int		get_pixels_to_render(int render_cycles);
-static void		draw_one_render_cycle(t_data *data, int pixels_to_render, bool *first_cycle);
+static void		draw_one_render_cycle(t_data *data, int pixels_to_render,
+					bool *first_cycle);
 static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam);
-static void		fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_render, bool *first_cycle);
+static void		fill_pixels_for_cycle(t_data *data, t_pixel pixel,
+					int pixels_to_render, bool *first_cycle);
 
 void	draw_scene(t_data *data)
 {
@@ -24,14 +38,15 @@ void	draw_scene(t_data *data)
 	}
 }
 
-static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *first_cycle)
+static void	draw_one_render_cycle(t_data *data, int pixels_to_render,
+	bool *first_cycle)
 {
 	t_pixel	pixel;
 	t_ray	ray;
 
 	ray.origin = data->scene->cam.orient.origin;
 	pixel.j = 0;
-	while (pixel.j < HEIGHT)//TODO: add multi threading
+	while (pixel.j < HEIGHT)
 	{
 		pixel.i = 0;
 		while (pixel.i < WIDTH)
@@ -45,29 +60,9 @@ static void	draw_one_render_cycle(t_data *data, int pixels_to_render, bool *firs
 	}
 }
 
-/*
- * Returns normalized vector from camera origin to pixel in 3d coordinates
+/* Returns normalized vector from camera origin to pixel in 3d coordinates
+ * dir = forward + (right * x) + (up * y)
  */
-// static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
-// {
-// 	t_vec3		direction;
-// 	t_matrix	rotation_i;
-// 	t_matrix	rotation_j;
-// 	t_matrix	rotation;
-// 	float		angle;
-
-// 	angle = -atanf((pixel.i - WIDTH / 2) * cam.pixel_size);
-// 	rotation_i = new_rotation_z_matrix(angle);
-// 	angle = atanf((pixel.j - HEIGHT / 2) * cam.pixel_size);
-// 	rotation_j = new_rotation_x_matrix(-angle);
-// 	rotation = chain_matrices(rotation_i, rotation_j);
-// 	direction = matrix_multiply_by_vector(rotation, cam.orient.direction);
-// 	free_matrix(rotation);
-// 	direction = vector_normalize(direction);
-// 	return (direction);
-// }
-
-// dir = forward + (right * x) + (up * y)
 static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 {
 	float	x;
@@ -77,13 +72,12 @@ static t_vec3	get_direction_for_position(t_pixel pixel, t_cam cam)
 	x = (pixel.i - WIDTH / 2.0f) * cam.pixel_size;
 	y = (HEIGHT / 2.0f - pixel.j) * cam.pixel_size;
 	direction = vector_add(
-		cam.orient.direction,
-		vector_add(
-			vector_multiply(cam.right, x),
-			vector_multiply(cam.up, y)
-		)
-	);
-
+			cam.orient.direction,
+			vector_add(
+				vector_multiply(cam.right, x),
+				vector_multiply(cam.up, y)
+				)
+			);
 	return (vector_normalize(direction));
 }
 
@@ -100,7 +94,8 @@ static int	get_pixels_to_render(int render_cycles)
 	return (res);
 }
 
-static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_render, bool *first_cycle)
+static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel,
+	int pixels_to_render, bool *first_cycle)
 {
 	int	max_i;
 	int	max_j;
@@ -115,11 +110,12 @@ static void	fill_pixels_for_cycle(t_data *data, t_pixel pixel, int pixels_to_ren
 		pixel.i = start_i;
 		if (*first_cycle)
 			*first_cycle = false;
-		else if (pixel.i % pixels_to_render == 0 && pixel.j % pixels_to_render == 0)
+		else if (pixel.i % pixels_to_render == 0
+			&& pixel.j % pixels_to_render == 0)
 			pixel.i++;
 		while (pixel.i <= max_i && pixel.i < WIDTH)
 		{
-			ft_mlx_put_pixel(data, pixel);//TODO: add writting to ppm(?)
+			ft_mlx_put_pixel(data, pixel);
 			pixel.i++;
 		}
 		pixel.j++;

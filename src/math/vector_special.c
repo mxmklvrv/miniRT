@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector_special.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/01 21:10:52 by akolupae          #+#    #+#             */
+/*   Updated: 2026/04/01 21:10:53 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 /* If magnitude equals 1 - it is a unit vector. */
 float	vector_magnitude(t_vec3 v)
 {
 	if (is_point(v))
-		ft_putendl_fd("Error: calculating magnitude of a point", STDERR_FILENO);
+		error_msg("Calculating magnitude of a point", NULL);
 	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z));
 }
 
@@ -19,29 +31,33 @@ t_vec3	vector_normalize(t_vec3 v)
 }
 
 /* The smaller the dot product - the larger the angle between the vectors.
- For unit vectors: 
-  Dot product is cosine of the angle between vectors.
-  1 - vectors are identical;
- -1 - vectors are opposite.
- For other vectors:
-  v1 * v2 = |v1||v2|cos(angle)
-*/
+ * For unit vectors: 
+ * Dot product is cosine of the angle between vectors.
+ * 1 - vectors are identical;
+ *-1 - vectors are opposite.
+ * For other vectors:
+ * v1 * v2 = |v1||v2|cos(angle)
+ */
 float	vector_dot(t_vec3 v1, t_vec3 v2)
 {
 	if (is_point(v1) || is_point(v2))
-		ft_putendl_fd("Error: calculating dot product of a point", STDERR_FILENO);
+		error_msg("Calculating dot product of a point", NULL);
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
+/* Returns vector perpendicular to given vectors. If given vectors are parallel,
+ * v1 || v2 -> resulting vector magnitude = 0;
+ * v1 ⟂ v2 -> resulting vector magnitude = max.
+ */
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2)
 {
 	if (is_point(v1) || is_point(v2))
-		ft_putendl_fd("Error: calculating cross product of a point", STDERR_FILENO);
+		error_msg("Calculating cross product of a point", NULL);
 	return (new_vector(
-		v1.y * v2.z - v1.z * v2.y,
-		v1.z * v2.x - v1.x * v2.z,
-		v1.x * v2.y - v1.y * v2.x
-	));
+			v1.y * v2.z - v1.z * v2.y,
+			v1.z * v2.x - v1.x * v2.z,
+			v1.x * v2.y - v1.y * v2.x
+		));
 }
 
 t_vec3	vector_reflect(t_vec3 v, t_vec3 normal)

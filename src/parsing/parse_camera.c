@@ -20,7 +20,7 @@ int	parse_cam(char *line, t_scene *scene)
 	if (parse_vector(res[1], &scene->cam.orient.direction, -1.0f, 1.0f) == 1)
 		return (parse_error(scene, ERR_CAM_ORIT, res, NULL));
 	fov = 0;
-	if (parse_float(res[2], 0.0f, 180.0f, &fov) == 1 || fov <= 0)
+	if (parse_float(res[2], 0.0f, 180.0f, &fov) == 1 || fov < 0)
 		return (parse_error(scene, ERR_CAM_FOV, res, NULL));
 	scene->cam.fov = fov;
 	scene->cam.yaw = atan2f(scene->cam.orient.direction.x,

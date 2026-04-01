@@ -50,7 +50,9 @@ MATH_SRC := \
 	color_operations.c \
 	color.c \
 	ray.c \
-	shapes_intersection.c \
+	shapes_hit_cy.c \
+	shapes_hit.c \
+	shapes_is_inside.c \
 	shapes_normal.c \
 	math_utils.c \
 	vector_operations.c \

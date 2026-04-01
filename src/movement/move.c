@@ -1,10 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/01 21:54:06 by akolupae          #+#    #+#             */
+/*   Updated: 2026/04/01 21:54:07 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
-
-// new functions for multiple lights down
-void    select_light(t_data *data)
+void	select_light(t_data *data)
 {
-	if(!data->scene->light_selected)
+	if (!data->scene->light_selected)
 		data->scene->light_selected = data->scene->light_list;
 	else if (data->scene->light_selected->next)
 		data->scene->light_selected = data->scene->light_selected->next;
@@ -13,11 +23,11 @@ void    select_light(t_data *data)
 	print_cam_light_pos(data);
 }
 
-void translate_light(t_llist *node, t_vec3 move_vec) // new for multiple lights
+void	translate_light(t_llist *node, t_vec3 move_vec)
 {
-    if(!node || !node->light)
-        return ;
-    node->light->pos = vector_add(node->light->pos, move_vec);
+	if (!node || !node->light)
+		return ;
+	node->light->pos = vector_add(node->light->pos, move_vec);
 }
 
 int	handle_translation(t_data *data)
@@ -36,14 +46,13 @@ int	handle_translation(t_data *data)
 		if (data->control_cam)
 			translate_cam(&data->scene->cam, move_vec);
 		else if (data->control_light && data->scene->light_selected)
-            translate_light(data->scene->light_selected, move_vec);
+			translate_light(data->scene->light_selected, move_vec);
 		else if (data->scene->obj_selected)
 			translate_object(data->scene->obj_selected, move_vec);
 		return (1);
 	}
 	return (0);
 }
-
 
 void	apply_movement(t_data *data)
 {
@@ -57,6 +66,5 @@ void	apply_movement(t_data *data)
 	if (handle_resize(data))
 		need_redraw = 1;
 	if (need_redraw)
-		redraw_scene(data);
+		draw_scene(data);
 }
-
