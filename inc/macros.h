@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   macros.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/01 21:02:36 by akolupae          #+#    #+#             */
+/*   Updated: 2026/04/01 21:02:39 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MACROS_H
 # define MACROS_H
 
@@ -44,7 +56,6 @@
 # define ERR_CAM_ORIT "Invalid camera orientation"
 # define ERR_CAM_FOV "Invalid camera FOV"
 
-
 # define ERR_AMB_QTY "Only 1 Ambient is allowed"
 # define ERR_AMB_SPEC "Invalid Ambient specs"
 # define ERR_AMB_RATI "Invalid Ambient ratio"
@@ -56,9 +67,6 @@
 # define ERR_LIGT_BRIT "Invalid light brightness"
 # define ERR_LIGT_COLOR "Invalid light color"
 
-
-
-
 # define ESCAPE 0xFF1B
 # define ON_PRESS 2
 # define ON_RELEASE 3
@@ -67,31 +75,53 @@
 # define EPSILON 0.001
 # define BACKGROUNG 0x000000
 
-#define MOVE_SPEED 0.5f
-#define ROTATE_SPEED 0.1f
-#define RESIZE_SPEED 0.2f
+# define MOVE_SPEED 0.5f
+# define ROTATE_SPEED 0.1f
+# define RESIZE_SPEED 0.2f
 
-#define KEY_W 119       // forward
-#define KEY_A 97        // left
-#define KEY_S 115       // back
-#define KEY_D 100       // right
-#define KEY_Q 113       // up
-#define KEY_E 101       // down
-#define KEY_C 99        // cam
-#define KEY_L 108
-#define KEY_TAB 65289   // switch obj
-#define KEY_LEFT 65361  // rotate left
-#define KEY_RIGHT 65363 // rotate right
-#define KEY_UP 65362	// rotate up
-#define KEY_DOWN 65364  // rotate down
-#define KEY_PLUS 61	 // resize up
-#define KEY_MINUS 45	// resize down
-#define KEY_ESC 65307   // esc
-#define KEY_H 104	   // height up
-#define KEY_J 106	   // height down
+/*
+ * KEY_W 119		forward
+ * KEY_A 97			left
+ * KEY_S 115		back
+ * KEY_D 100		right
+ * KEY_Q 113		up
+ * KEY_E 101		down
+ * KEY_C 99			cam
+ * KEY_L 108		light
+ * KEY_TAB 65289	switch obj
+ * KEY_LEFT 65361	rotate left
+ * KEY_RIGHT 65363	rotate right
+ * KEY_UP 65362		rotate up
+ * KEY_DOWN 65364	rotate down
+ * KEY_PLUS 61		resize up
+ * KEY_MINUS 45		resize down
+ * KEY_ESC 65307	esc
+ * KEY_H 104		height up
+ * KEY_J 106		height down
+ */
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115
+# define KEY_D 100
+# define KEY_Q 113
+# define KEY_E 101
+# define KEY_C 99
+# define KEY_L 108
+# define KEY_TAB 65289
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+# define KEY_UP 65362
+# define KEY_DOWN 65364
+# define KEY_PLUS 61
+# define KEY_MINUS 45
+# define KEY_ESC 65307
+# define KEY_H 104
+# define KEY_J 106
 
-// to pass as value pressed or no
-#define KEY_ON 1
-#define KEY_OFF 0
+# define KEY_ON 1
+# define KEY_OFF 0
+
+# define MIN_RANGE -1000.0f
+# define MAX_RANGE 1000.0f
 
 #endif

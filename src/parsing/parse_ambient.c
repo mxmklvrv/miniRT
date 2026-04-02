@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_ambient.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/02 16:51:34 by mklevero          #+#    #+#             */
+/*   Updated: 2026/04/02 16:53:33 by mklevero         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 int	parse_ambient(char *line, t_scene *scene)
@@ -15,9 +27,9 @@ int	parse_ambient(char *line, t_scene *scene)
 		return (error_return(ERR_ALLOC, NULL));
 	ratio = 0.0f;
 	color = 0;
-	if (parse_float(res[0], 0.0f, 1.0f, &ratio) == 1)
+	if (parse_float(res[0], 0.0f, 1.0f, &ratio))
 		return (parse_error(scene, ERR_AMB_RATI, res, NULL));
-	if (parse_rgb(res[1], &color) == 1)
+	if (parse_rgb(res[1], &color))
 		return (parse_error(scene, ERR_AMB_COLR, res, NULL));
 	scene->ambient.amb = ratio;
 	scene->ambient.color = color;

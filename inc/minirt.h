@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minirt.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/01 21:01:50 by akolupae          #+#    #+#             */
+/*   Updated: 2026/04/01 21:01:54 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINIRT_H
 # define MINIRT_H
 
@@ -15,51 +27,30 @@
 # include <stdbool.h>
 # include <float.h>
 
-
-void translate_light(t_llist *node, t_vec3 move_vec); // new for multiple lights;
-void    select_light(t_data *data);
-void free_lights(t_llist *list);
-
-
-
-// test print functions
-void	print_cam_light_pos(t_data *data);
-int		is_exeption(t_data *data, t_exeption action);
-void	print_pos(t_scene *scene);
-void	print_vars(t_scene *scene);
-void	print_list(t_scene *scene);
-void	print_vector(t_vec3	vector);
-void	print_ray(t_ray	ray);
-void	print_color(int color);
-void	print_intersection(t_intersection intersection);
-void	print_scene(t_scene *scene);
-void	user_manual(void);
-// test
-
-/* ===== Visuals ============================================================ */
+/* ===== VISUALS ============================================================ */
 bool	visuals_loop(t_scene *scene);
 bool	set_visuals(t_data *data);
 void	free_visuals(t_data *data);
 void	ft_mlx_put_pixel(t_data *data, t_pixel pixel);
 void	set_hooks(t_data *data);
-void	redraw_scene(t_data *data);
 
-/* ===== Hooks ============================================================== */
-int	key_press_hook(int key, t_data *data);
-int	key_release_hook(int key, t_data *data);
-int	render_hook(t_data *data);
+/* ===== HOOKS ============================================================== */
+int		key_press_hook(int key, t_data *data);
+int		key_release_hook(int key, t_data *data);
+int		render_hook(t_data *data);
 
-/* ===== MOVEMENT ============================================================= */
-void	cam_move_calculation(t_data *data, t_vec3 *move_vec, t_move_state *move);
+/* ===== MOVEMENT =========================================================== */
+void	cam_move_calculation(t_data *data, t_vec3 *move_vec,
+			t_move_state *move);
 void	obj_light_move_calculation(t_vec3 *move_vec, t_move_state *move);
 t_vec3	rotate_z(t_vec3 current, float angle);
 t_vec3	rotate_x(t_vec3 current, float angle);
-int	is_exeption(t_data *data, t_exeption action);
+int		is_exeption(t_data *data, t_exeption action);
 void	apply_movement(t_data *data);
-int	handle_resize(t_data *data);
-int	resize_diameter(t_olist *node, float value);
-int	resize_height(t_olist *node, float value);
-int	handle_rotation(t_data *data);
+int		handle_resize(t_data *data);
+int		resize_diameter(t_olist *node, float value);
+int		resize_height(t_olist *node, float value);
+int		handle_rotation(t_data *data);
 void	rotate_obj_or_cam(t_data *data, float angle, t_axis axis);
 void	rotate_objects(t_olist *node, float angle, t_axis axis);
 void	set_general_keys(int key, t_data *data);
@@ -70,21 +61,23 @@ void	switch_to_obj(t_data *data);
 void	toggle_cam(t_data *data);
 void	toggle_light(t_data *data);
 void	select_object(t_data *data);
-int	handle_translation(t_data *data);
+void	select_light(t_data *data);
+int		handle_translation(t_data *data);
 void	translate_object(t_olist *node, t_vec3 move_vec);
 void	translate_cam(t_cam *cam, t_vec3 move_vec);
-//void	translate_light(t_light *light, t_vec3 move_vec);
+void	translate_light(t_llist *node, t_vec3 move_vec);
+void	free_lights(t_llist *list);
 
-/* ===== Render ============================================================= */
+/* ===== RENDER ============================================================= */
 void	draw_scene(t_data *data);
 void	setup_scene(t_scene *scene);
 void	setup_camera_angle(t_cam *cam);
 int		trace_color(t_ray ray, t_scene *scene);
-void	find_closest_intersection(t_ray ray, t_shape *shape, t_intersection *closest);
-float	get_closest_hit(t_intersection intersection);
-int		lighting(t_scene *scene, t_intersection intersection, t_ray ray);
+void	find_closest_hit(t_ray ray, t_shape *shape, t_hit *closest);
+float	get_closest_hit(t_hit hit);
+int		lighting(t_scene *scene, t_hit hit, t_ray ray);
 
-/* ===== Vector math ======================================================== */
+/* ===== VECTOR MATH ======================================================== */
 t_vec3	new_vector(float x, float y, float z);
 t_vec3	new_point(float x, float y, float z);
 bool	is_point(t_vec3 v);
@@ -100,15 +93,17 @@ float	vector_dot(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_cross(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_reflect(t_vec3 v, t_vec3 normal);
 
-/* ===== Shapes math ======================================================== */
-t_intersection	get_intersection(t_ray ray, t_shape *shape);
-t_vec3			get_normal(t_shape *shape, t_vec3 point);
+/* ===== SHAPES MATH ======================================================== */
+t_hit	get_hit(t_ray ray, t_shape *shape);
+void	hit_cy(t_ray ray, t_shape *cy, t_hit *hit);
+t_vec3	get_normal(t_shape *shape, t_vec3 point);
+bool	is_inside(t_vec3 point, t_shape *shape);
 
-/* ===== Rays =============================================================== */
+/* ===== RAYS =============================================================== */
 t_ray	new_ray(t_vec3 origin, t_vec3 direction);
 t_vec3	get_ray_point(t_ray ray, float scalar);
 
-/* ===== Color ============================================================== */
+/* ===== COLOR ============================================================== */
 int		new_color(int opacity, int red, int green, int blue);
 int		get_opacity(int color);
 int		get_red(int color);
@@ -120,9 +115,15 @@ int		color_multiply(int c, float scalar);
 int		color_mix(int c1, int c2, float intencity);
 int		color_mix_light(int c1, int c2);
 
-/* ===== Utils ============================================================== */
+/* ===== UTILS ============================================================== */
 float	degrees_to_radians(float degrees);
 bool	is_equalf(float f1, float f2);
-void	solve_quadratic_equasion(t_quad quad, t_intersection *intersection);
+void	solve_quadratic_equasion(t_quad quad, t_hit *hit);
+
+/* ===== PRINT ============================================================== */
+void	print_cam_light_pos(t_data *data);
+int		is_exeption(t_data *data, t_exeption action);
+void	print_pos(t_scene *scene);
+void	user_manual(void);
 
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   structs.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/01 21:02:20 by akolupae          #+#    #+#             */
+/*   Updated: 2026/04/01 21:02:22 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
@@ -30,14 +42,21 @@ typedef struct s_ray
 	t_vec3	direction;
 }	t_ray;
 
+/* Structure used for calculating hits with shapes.
+ * vec_to_obj - vector from ray origin to obj normal origin;
+ * ray_proj - projection of ray direction on obj normal axis;
+ * obj_proj - projection of vec_to_obj on obj normal axis.
+*/
 typedef struct s_quad
 {
 	t_vec3	vec_to_obj;
+	float	ray_proj;
+	float	obj_proj;
 	float	a;
 	float	b;
 	float	c;
 	float	discriminant;
-} t_quad;
+}	t_quad;
 
 typedef enum e_otype
 {
@@ -55,35 +74,34 @@ typedef enum e_otype
  */
 typedef struct s_shape
 {
-	t_otype			obj_type;
-	int				obj_id;
-	t_vec3			center;
-	t_ray			normal;
-	float			radius;
-	float			half_height;
-	int				color;
+	t_otype	obj_type;
+	int		obj_id;
+	t_vec3	center;
+	t_ray	normal;
+	float	radius;
+	float	half_height;
+	int		color;
 }	t_shape;
 
-/* List of shapes.
- */
+/* List of shapes */
 typedef struct s_olist
 {
 	t_shape			*shape;
 	struct s_olist	*next;
 }	t_olist;
 
-/* Struct for intersections.
- * Expected intersection count for shapes:
+/* Struct for hits.
+ * Expected hit count for shapes:
  * PL - 1;
  * SP - 2;
  * CY - 4.
  */
-typedef struct s_intersection
+typedef struct s_hit
 {
 	int		count;
 	float	val[4];
 	t_shape	*shape;
-}	t_intersection;
+}	t_hit;
 
 typedef struct s_cam
 {
@@ -98,18 +116,19 @@ typedef struct s_cam
 
 typedef struct s_ambient
 {
-	float			amb;
-	int				color;
+	float	amb;
+	int		color;
 }	t_ambient;
 
 typedef struct s_light
 {
-	t_vec3			pos;
-	float			bright;
-	int				color;
-	int				light_id;
+	t_vec3	pos;
+	float	bright;
+	int		color;
+	int		light_id;
 }	t_light;
 
+/* List of lights */
 typedef struct s_llist
 {
 	t_light			*light;
@@ -124,23 +143,22 @@ typedef struct s_lighting
 	t_ray	normal;
 }	t_lighting;
 
-// main struct
+/* Main struct */
 typedef struct s_scene
 {
-	t_olist			*obj_list;
-    t_llist         *light_list;// bonus
-	t_ambient		ambient;
-	//t_light			light;
-	t_cam			cam;
-	int				qt_ambiant;
-	int				qt_cam;
-	int				qt_light;
-    int             next_obj_id;
-	int             next_light_id;
-	char			*error_line;
-	t_olist			*obj_selected;
-    t_llist         *light_selected;// bonus
-}					t_scene;
+	t_olist		*obj_list;
+	t_llist		*light_list;
+	t_ambient	ambient;
+	t_cam		cam;
+	int			qt_ambiant;
+	int			qt_cam;
+	int			qt_light;
+	int			next_obj_id;
+	int			next_light_id;
+	char		*error_line;
+	t_olist		*obj_selected;
+	t_llist		*light_selected;
+}	t_scene;
 
 typedef struct s_data
 {
@@ -152,7 +170,7 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 	float	aspect_ratio;
-	t_scene *scene;
+	t_scene	*scene;
 	void	*move_state;
 	int		control_cam;
 	int		control_light;
@@ -162,7 +180,7 @@ typedef enum e_axis
 {
 	Y_AXIS,
 	X_AXIS
-}		t_axis;
+}	t_axis;
 
 typedef enum e_exeption
 {
@@ -187,6 +205,6 @@ typedef struct s_move_state
 	int	resize_down;
 	int	height_up;
 	int	height_down;
-}		t_move_state;
+}	t_move_state;
 
 #endif

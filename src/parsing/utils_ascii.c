@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_ascii.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/02 16:52:36 by mklevero          #+#    #+#             */
+/*   Updated: 2026/04/02 16:54:14 by mklevero         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static void	get_whole_part(const char *line, int *i, float *temp,
@@ -24,8 +36,8 @@ int	ft_atoi_and_overflow(const char *nptr, int *overflow)
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
 		num = num * 10 + (nptr[i] - '0');
-		if ((num > INT_MAX && neg == 1) || (num > (long)INT_MAX + 1 && neg ==
-				-1))
+		if ((num > INT_MAX && neg == 1)
+			|| (num > (long)INT_MAX + 1 && neg == -1))
 			*overflow = 1;
 		i++;
 	}

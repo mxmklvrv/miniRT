@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_pl.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/02 16:52:06 by mklevero          #+#    #+#             */
+/*   Updated: 2026/04/02 16:53:27 by mklevero         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static int	init_plane(t_shape *shape, char **res, t_scene *scene);
@@ -27,10 +39,10 @@ static int	init_plane(t_shape *shape, char **res, t_scene *scene)
 {
 	shape->obj_type = PL;
 	shape->normal.origin.w = 1;
-	if (parse_vector(res[0], &shape->normal.origin, -100.0f, 100.0f) == 1)
+	if (parse_vector(res[0], &shape->normal.origin, MIN_RANGE, MAX_RANGE))
 		return (error_return(ERR_PL_POINT, scene->error_line));
 	shape->normal.direction.w = 0;
-	if (parse_vector(res[1], &shape->normal.direction, -1.0f, 1.0f) == 1)
+	if (parse_vector(res[1], &shape->normal.direction, -1.0f, 1.0f))
 		return (error_return(ERR_PL_NORM, scene->error_line));
 	if (parse_rgb(res[2], &shape->color) == 1)
 		return (error_return(ERR_PL_COLR, scene->error_line));

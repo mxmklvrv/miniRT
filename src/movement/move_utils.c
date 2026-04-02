@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akolupae <akolupae@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/01 21:53:56 by akolupae          #+#    #+#             */
+/*   Updated: 2026/04/01 21:53:58 by akolupae         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 void	cam_move_calculation(t_data *data, t_vec3 *move_vec, t_move_state *move)
@@ -41,9 +53,7 @@ void	obj_light_move_calculation(t_vec3 *move_vec, t_move_state *move)
 
 /* To look up-down we change Z and Y coordinates, so rotate around 0X axis;
  * To look left-right we change X and Y coordinates, so rotate around 0Z axis;
- * Should it be named rotate_z?
  */
-// anna
 t_vec3	rotate_z(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
@@ -59,17 +69,14 @@ t_vec3	rotate_z(t_vec3 current, float angle)
 	return (rotated);
 }
 
-/* Changed 'angle' to '-angle' to invert vertical rotation.
- */
-// anna
 t_vec3	rotate_x(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
 	float	cosinus;
 	float	sinus;
 
-	cosinus = cosf(-angle); // anna
-	sinus = sinf(-angle);   // anna
+	cosinus = cosf(-angle);
+	sinus = sinf(-angle);
 	rotated.x = current.x;
 	rotated.y = current.y * cosinus - current.z * sinus;
 	rotated.z = current.y * sinus + current.z * cosinus;
@@ -79,7 +86,7 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 
 int	is_exeption(t_data *data, t_exeption action)
 {
-	t_olist *selected;
+	t_olist	*selected;
 
 	if (!data || !data->scene)
 		return (1);

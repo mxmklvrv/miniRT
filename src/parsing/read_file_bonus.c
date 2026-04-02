@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_file.c                                        :+:      :+:    :+:   */
+/*   read_file_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -63,8 +63,6 @@ static int	postpars_validation(t_scene *scene)
 		return (error_return(ERR_NO_OBJ, NULL));
 	if (scene->qt_cam != 1)
 		return (error_return(ERR_CAM_NOCAM, NULL));
-	if (scene->qt_light > 1)
-		return (error_return(ERR_LIGT_QTY, NULL));
 	if (scene->qt_ambiant == 0)
 	{
 		scene->ambient.color = 0;
@@ -72,7 +70,5 @@ static int	postpars_validation(t_scene *scene)
 	}
 	if (scene->qt_ambiant == 0 && scene->qt_light == 0)
 		return (error_return("Absolute darkness detected", NULL));
-	if (scene->qt_light == 1)
-		scene->light_list->light->color = new_color(255, 255, 255, 255);
 	return (0);
 }
