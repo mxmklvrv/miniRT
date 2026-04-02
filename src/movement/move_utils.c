@@ -43,7 +43,6 @@ void	obj_light_move_calculation(t_vec3 *move_vec, t_move_state *move)
  * To look left-right we change X and Y coordinates, so rotate around 0Z axis;
  * Should it be named rotate_z?
  */
-// anna
 t_vec3	rotate_z(t_vec3 current, float angle)
 {
 	t_vec3	rotated;
@@ -68,8 +67,8 @@ t_vec3	rotate_x(t_vec3 current, float angle)
 	float	cosinus;
 	float	sinus;
 
-	cosinus = cosf(-angle); // anna
-	sinus = sinf(-angle);   // anna
+	cosinus = cosf(-angle);
+	sinus = sinf(-angle);
 	rotated.x = current.x;
 	rotated.y = current.y * cosinus - current.z * sinus;
 	rotated.z = current.y * sinus + current.z * cosinus;

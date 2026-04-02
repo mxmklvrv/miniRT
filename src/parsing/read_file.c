@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_file.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/02 16:52:25 by mklevero          #+#    #+#             */
+/*   Updated: 2026/04/02 16:53:25 by mklevero         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static int	parse_line(char *line, t_scene *scene);
@@ -47,14 +59,20 @@ static int	parse_line(char *line, t_scene *scene)
 
 static int	postpars_validation(t_scene *scene)
 {
+	if (!scene->obj_list)
+		return (error_return(ERR_NO_OBJ, NULL));
 	if (scene->qt_cam != 1)
 		return (error_return(ERR_CAM_NOCAM, NULL));
+	if (scene->qt_light > 1)
+		return (error_return(ERR_LIGT_QTY, NULL));
 	if (scene->qt_ambiant == 0)
 	{
 		scene->ambient.color = 0;
 		scene->ambient.amb = 0;
 	}
-	if (!scene->obj_list)
-		return (error_return(ERR_NO_OBJ, NULL));
+	if (scene->qt_ambiant == 0 && scene->qt_light == 0)
+		return (error_return("Absolute darkness detected", NULL));
+	if (scene->qt_light == 1)
+		scene->light_list->light->color = new_color(255, 255, 255, 255);
 	return (0);
 }

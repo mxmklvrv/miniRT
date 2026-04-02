@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 int	handle_rotation(t_data *data)

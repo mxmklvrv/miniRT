@@ -1,4 +1,3 @@
-
 #include "minirt.h"
 
 int	handle_resize(t_data *data)
