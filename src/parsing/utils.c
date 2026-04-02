@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/02 16:53:11 by mklevero          #+#    #+#             */
+/*   Updated: 2026/04/02 16:53:21 by mklevero         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 int	count_elements(char *line)
@@ -45,10 +57,6 @@ int	is_valid_int(char *line)
 		return (1);
 	return (0);
 }
-// checks the validity of the float nubmer
-// '-' accepted, also '+';
-// ony digits before and after '.'
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 0. fix
 
 int	is_valid_float(char *line)
 {

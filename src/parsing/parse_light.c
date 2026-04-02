@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_light.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/02 16:51:58 by mklevero          #+#    #+#             */
+/*   Updated: 2026/04/02 16:53:28 by mklevero         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static int	init_light(t_light *light, char **res, t_scene *scene);
@@ -32,6 +44,5 @@ static int	init_light(t_light *light, char **res, t_scene *scene)
 		return (error_return(ERR_LIGT_BRIT, scene->error_line));
 	if (parse_rgb(res[2], &light->color))
 		return (error_return(ERR_LIGT_COLOR, scene->error_line));
-	// light->color = new_color(255, 255, 255, 255); // for mandatory
 	return (0);
 }
