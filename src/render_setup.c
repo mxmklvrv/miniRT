@@ -50,6 +50,8 @@ void setup_camera_angle(t_cam *cam)
 	t_vec3 right;
 	t_vec3 up;
 
+	if(cam->fov == 180)
+		cam->fov = 179.9;
 	cam->pixel_size = tanf(degrees_to_radians(cam->fov) / 2) * 2 / ft_max(2, WIDTH, HEIGHT);
 
 	forward.x = cosf(cam->pitch) * sinf(cam->yaw);
