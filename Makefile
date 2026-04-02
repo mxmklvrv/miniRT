@@ -36,7 +36,6 @@ PARS_SRC := \
 	parse_light.c \
 	parse_pl.c \
 	parse_sp.c \
-	read_file.c \
 	utils_ascii.c\
 	utils_digits.c \
 	utils_error.c \
@@ -74,6 +73,15 @@ SRC += $(PARS_SRC) $(MATH_SRC) $(MOVE_SRC)
 OBJ_DIR := obj
 OBJ := $(SRC:%.c=$(OBJ_DIR)/%.o)
 
+SRC_MANDATORY := read_file.c
+OBJ_MANDATORY := $(SRC_MANDATORY:%.c=$(OBJ_DIR)/%.o)
+
+# ------------  BONUS  ------------------------------------------------------- #
+NAME_BONUS := miniRT_bonus
+
+SRC_BONUS := read_file_bonus.c
+OBJ_BONUS := $(SRC_BONUS:%.c=$(OBJ_DIR)/%.o)
+
 # ------------  VPATH  ------------------------------------------------------- #
 VPATH := $(addprefix $(SRC_DIR)/, \
 	.: \
@@ -94,8 +102,13 @@ MLX := $(MLX_DIR)/libmlx_Linux.a
 # ------------  RULES  ------------------------------------------------------- #
 all: $(NAME)
 
-$(NAME): $(OBJ_DIR) $(OBJ) $(LIBFT) $(MLX)
-	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LINKDIR) $(LINKFLAGS)
+$(NAME): $(OBJ_DIR) $(OBJ) $(OBJ_MANDATORY) $(LIBFT) $(MLX)
+	$(CC) $(CFLAGS) $(OBJ) $(OBJ_MANDATORY) -o $@ $(LINKDIR) $(LINKFLAGS)
+
+bonus: $(NAME_BONUS)
+
+$(NAME_BONUS): $(OBJ_DIR) $(OBJ) $(OBJ_BONUS) $(LIBFT) $(MLX)
+	$(CC) $(CFLAGS) $(OBJ) $(OBJ_BONUS) -o $@ $(LINKDIR) $(LINKFLAGS)
 
 $(LIBFT):
 	make -C $(LIBFT_DIR)
@@ -120,5 +133,5 @@ fclean: clean
 re: fclean all
 
 # ------------  EXTRA  ------------------------------------------------------- #
-.SECONDARY: $(OBJ_DIR) $(OBJ)
-.PHONY: all re clean fclean
+.SECONDARY: $(OBJ_DIR) $(OBJ) $(OBJ_MANDATORY) $(OBJ_BONUS)
+.PHONY: all re clean fclean bonus
