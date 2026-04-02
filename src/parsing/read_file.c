@@ -22,7 +22,7 @@ int	parse_input_file(char *file, t_scene *scene)
 		free(line);
 		line = get_next_line(fd);
 	}
-	if (postpars_validation(scene) == 1)
+	if (postpars_validation(scene))
 		return (parse_fatal(scene, fd));
 	close(fd);
 	return (0);
@@ -49,12 +49,6 @@ static int	postpars_validation(t_scene *scene)
 {
 	if (scene->qt_cam != 1)
 		return (error_return(ERR_CAM_NOCAM, NULL));
-	if (scene->qt_light == 0)
-	{
-		//scene->light.pos = new_point(0, 0, 0);
-		//scene->light.color = 0;
-		//scene->light.bright = 0;
-	}
 	if (scene->qt_ambiant == 0)
 	{
 		scene->ambient.color = 0;

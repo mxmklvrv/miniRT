@@ -18,10 +18,10 @@ int	main(int argc, char **argv)
 {
 	t_scene	scene;
 
-	if (confirm_input(argc, argv) == 1)
+	if (confirm_input(argc, argv))
 		return (EXIT_FAILURE);
 	init_scene(&scene);
-	if (parse_input_file(argv[1], &scene) == 1)
+	if (parse_input_file(argv[1], &scene))
 	{
 		free_scene(&scene);
 		return (EXIT_FAILURE);

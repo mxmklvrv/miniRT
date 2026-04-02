@@ -41,10 +41,6 @@ void	toggle_light(t_data *data)
 		print_pos(data->scene);
 }
 
-/**
- * If there is next obj - select it
- * Otherwise select the first one
- */
 void	select_object(t_data *data)
 {
 	if (!data->scene->obj_selected)
@@ -54,4 +50,15 @@ void	select_object(t_data *data)
 	else
 		data->scene->obj_selected = data->scene->obj_list;
 	print_pos(data->scene);
+}
+
+void	select_light(t_data *data)
+{
+	if (!data->scene->light_selected)
+		data->scene->light_selected = data->scene->light_list;
+	else if (data->scene->light_selected->next)
+		data->scene->light_selected = data->scene->light_selected->next;
+	else
+		data->scene->light_selected = data->scene->light_list;
+	print_cam_light_pos(data);
 }

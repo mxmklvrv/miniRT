@@ -39,6 +39,7 @@ void	error_msg(char *msg, char *line);
 
 void	free_array(char **arr);
 void	free_scene(t_scene *scene);
+
 void	free_list(t_olist *list);
 
 int		add_to_list(t_scene *scene, t_shape *shape);

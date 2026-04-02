@@ -15,9 +15,9 @@ int	parse_ambient(char *line, t_scene *scene)
 		return (error_return(ERR_ALLOC, NULL));
 	ratio = 0.0f;
 	color = 0;
-	if (parse_float(res[0], 0.0f, 1.0f, &ratio) == 1)
+	if (parse_float(res[0], 0.0f, 1.0f, &ratio))
 		return (parse_error(scene, ERR_AMB_RATI, res, NULL));
-	if (parse_rgb(res[1], &color) == 1)
+	if (parse_rgb(res[1], &color))
 		return (parse_error(scene, ERR_AMB_COLR, res, NULL));
 	scene->ambient.amb = ratio;
 	scene->ambient.color = color;
