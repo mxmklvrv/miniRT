@@ -6,11 +6,13 @@
 /*   By: mklevero <mklevero@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/02 16:51:42 by mklevero          #+#    #+#             */
-/*   Updated: 2026/04/02 16:53:31 by mklevero         ###   ########.fr       */
+/*   Updated: 2026/04/02 18:00:41 by mklevero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+static void	init_cam(t_scene *scene, float fov);
 
 int	parse_cam(char *line, t_scene *scene)
 {
@@ -33,10 +35,17 @@ int	parse_cam(char *line, t_scene *scene)
 	fov = 0;
 	if (parse_float(res[2], 0.0f, 180.0f, &fov))
 		return (parse_error(scene, ERR_CAM_FOV, res, NULL));
+	init_cam(scene, fov);
+	free_array(res);
+	return (0);
+}
+
+static void	init_cam(t_scene *scene, float fov)
+{
+	if (fov == 180)
+		fov = fov - EPSILON;
 	scene->cam.fov = fov;
 	scene->cam.yaw = atan2f(scene->cam.orient.direction.x,
 			scene->cam.orient.direction.z);
 	scene->cam.pitch = asinf(scene->cam.orient.direction.y);
-	free_array(res);
-	return (0);
 }

@@ -25,11 +25,11 @@ void	setup_scene(t_scene *scene)
 }
 
 /* Calculates local axes (forward, right, up) */
-void	setup_camera_angle(t_cam *cam)
+void setup_camera_angle(t_cam *cam)
 {
-	t_vec3	forward;
-	t_vec3	right;
-	t_vec3	up;
+	t_vec3 forward;
+	t_vec3 right;
+	t_vec3 up;
 
 	cam->pixel_size = tanf(degrees_to_radians(cam->fov) / 2) * 2
 		/ ft_max(2, WIDTH, HEIGHT);

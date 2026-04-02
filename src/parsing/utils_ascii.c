@@ -36,8 +36,8 @@ int	ft_atoi_and_overflow(const char *nptr, int *overflow)
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
 		num = num * 10 + (nptr[i] - '0');
-		if ((num > INT_MAX && neg == 1) || (num > (long)INT_MAX + 1 && neg ==
-				-1))
+		if ((num > INT_MAX && neg == 1)
+			|| (num > (long)INT_MAX + 1 && neg == -1))
 			*overflow = 1;
 		i++;
 	}
