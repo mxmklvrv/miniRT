@@ -127,7 +127,7 @@ clean:
 	make clean -C $(LIBFT_DIR)
 
 fclean: clean
-	rm -f $(NAME) $(LIBFT)
+	rm -f $(NAME) $(NAME_BONUS) $(LIBFT)
 	make clean -C $(MLX_DIR)
 
 re: fclean all
