@@ -12,6 +12,7 @@
 
 #include "minirt.h"
 
+static void	check_side_hits(t_quad quad, t_hit *hit, float half_height);
 static void	hit_cy_caps(t_ray ray, t_shape *cy, t_hit *hit);
 static void	check_cap_hit(t_ray ray, t_ray normal, float *hit, float radius);
 
@@ -32,16 +33,22 @@ void	hit_cy(t_ray ray, t_shape *cy, t_hit *hit)
 	quad.a = vector_dot(ray_perp, ray_perp);
 	quad.b = 2 * (vector_dot(ray_perp, obj_perp));
 	quad.c = vector_dot(obj_perp, obj_perp) - cy->radius * cy->radius;
+	hit->val[0] = -1;
+	hit->val[1] = -1;
 	solve_quadratic_equasion(quad, hit);
+	check_side_hits(quad, hit, cy->half_height);
+	if (fabsf(quad.ray_proj) >= EPSILON)
+		hit_cy_caps(ray, cy, hit);
+}
+
+static void	check_side_hits(t_quad quad, t_hit *hit, float half_height)
+{
 	if (hit->count == 0)
 		return ;
-	if (fabsf(quad.ray_proj * hit->val[0] + quad.obj_proj) > cy->half_height)
+	if (fabsf(quad.ray_proj * hit->val[0] + quad.obj_proj) > half_height)
 		hit->val[0] = -1;
-	if (fabsf(quad.ray_proj * hit->val[1] + quad.obj_proj) > cy->half_height)
+	if (fabsf(quad.ray_proj * hit->val[1] + quad.obj_proj) > half_height)
 		hit->val[1] = -1;
-	if (fabsf(quad.ray_proj) < EPSILON)
-		return ;
-	hit_cy_caps(ray, cy, hit);
 }
 
 static void	hit_cy_caps(t_ray ray, t_shape *cy, t_hit *hit)
@@ -67,6 +74,8 @@ static void	check_cap_hit(t_ray ray, t_ray normal, float *hit, float radius)
 
 	vec_to_obj = vector_substract(normal.origin, ray.origin);
 	ray_proj = vector_dot(ray.direction, normal.direction);
+	if (ray_proj < EPSILON)
+		*hit = -1;
 	*hit = vector_dot(vec_to_obj, normal.direction) / ray_proj;
 	center_to_hit = vector_substract(get_ray_point(ray, *hit), normal.origin);
 	if (vector_magnitude(center_to_hit) > radius)

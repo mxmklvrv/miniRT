@@ -37,9 +37,9 @@ int	parse_light(char *line, t_scene *scene)
 
 static int	init_light(t_light *light, char **res, t_scene *scene)
 {
+	light->pos.w = 1;
 	if (parse_vector(res[0], &light->pos, MIN_RANGE, MAX_RANGE))
 		return (error_return(ERR_LIGT_POS, scene->error_line));
-	light->pos.w = 1;
 	if (parse_float(res[1], 0.0f, 1.0f, &light->bright))
 		return (error_return(ERR_LIGT_BRIT, scene->error_line));
 	if (parse_rgb(res[2], &light->color))
